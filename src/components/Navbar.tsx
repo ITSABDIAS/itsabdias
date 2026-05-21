@@ -35,7 +35,7 @@ export function Navbar() {
         </nav>
         <div className="flex items-center gap-2">
           <a
-            href="https://youtube.com/@ItsaBDias"
+            href="https://youtube.com/@ITSABDIAS"
             target="_blank"
             rel="noreferrer"
             className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gradient-neon text-primary-foreground font-semibold text-sm hover:shadow-neon-purple transition-shadow"

@@ -51,7 +51,7 @@ function About() {
               ))}
             </div>
             <a
-              href="https://youtube.com/@ItsaBDias"
+              href="https://youtube.com/@ITSABDIAS"
               target="_blank"
               rel="noreferrer"
               className="mt-8 inline-flex items-center gap-2 px-6 py-3 rounded-md bg-gradient-neon text-primary-foreground font-bold shadow-neon-purple"

@@ -21,10 +21,17 @@ export function Footer() {
         <div>
           <h4 className="font-semibold mb-3 text-sm uppercase tracking-wider">Síguenos</h4>
           <div className="flex gap-3">
-            {[Youtube, Twitch, Github, Twitter].map((Icon, i) => (
+            {[
+              { Icon: Youtube, href: "https://youtube.com/@ITSABDIAS" },
+              { Icon: Twitch, href: "#" },
+              { Icon: Github, href: "#" },
+              { Icon: Twitter, href: "#" },
+            ].map(({ Icon, href }, i) => (
               <a
                 key={i}
-                href="#"
+                href={href}
+                target={href.startsWith("http") ? "_blank" : undefined}
+                rel="noopener noreferrer"
                 className="p-2 rounded-md glass hover:shadow-neon-blue hover:scale-110 transition-all"
               >
                 <Icon className="h-4 w-4" />
