@@ -73,7 +73,7 @@ function Home() {
               <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Link>
             <a
-              href="https://youtube.com/@ItsaBDias"
+              href="https://youtube.com/@ITSABDIAS"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-md glass border border-neon-purple/40 hover:border-neon-purple font-semibold transition-all hover:shadow-neon-purple"
