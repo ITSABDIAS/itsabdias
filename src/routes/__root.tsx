@@ -72,14 +72,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "ItsaBDias — Aprende tecnología, crea el futuro" },
+      { title: "ITSABDIAS— Aprende tecnología, crea el futuro" },
       { name: "description", content: "Comunidad gamer y tecnológica: programación, IA, hardware, Roblox y desarrollo de videojuegos." },
       { name: "author", content: "ItsaBDias" },
-      { property: "og:title", content: "ItsaBDias — Comunidad Tech & Gamer" },
-      { property: "og:description", content: "Aprende tecnología, crea el futuro." },
+      { property: "og:title", content: "ITSABDIAS— Aprende tecnología, crea el futuro" },
+      { property: "og:description", content: "Comunidad gamer y tecnológica: programación, IA, hardware, Roblox y desarrollo de videojuegos." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@ItsaBDias" },
+      { name: "twitter:title", content: "ITSABDIAS— Aprende tecnología, crea el futuro" },
+      { name: "twitter:description", content: "Comunidad gamer y tecnológica: programación, IA, hardware, Roblox y desarrollo de videojuegos." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6380d8c9-e5fc-4150-aaf0-2c36428b90d1/id-preview-2a09b5aa--7e6d4983-b05d-42ee-9e21-73cc61b2d361.lovable.app-1779339299213.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6380d8c9-e5fc-4150-aaf0-2c36428b90d1/id-preview-2a09b5aa--7e6d4983-b05d-42ee-9e21-73cc61b2d361.lovable.app-1779339299213.png" },
     ],
     links: [
       {
