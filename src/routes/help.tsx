@@ -1,8 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import { Send, LifeBuoy, MessageSquare, Code2, BrainCircuit, Cpu, Gamepad2, Wrench } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/help")({
   head: () => ({
@@ -24,21 +27,68 @@ const cats = [
   { icon: MessageSquare, label: "Tecnología" },
 ];
 
-type Ticket = { id: number; cat: string; title: string; body: string; date: string };
+type Ticket = { id: string; user_id: string; category: string; title: string; body: string; created_at: string; username?: string };
+
+const timeAgo = (iso: string) => {
+  const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (s < 60) return "ahora";
+  if (s < 3600) return `hace ${Math.floor(s / 60)}m`;
+  if (s < 86400) return `hace ${Math.floor(s / 3600)}h`;
+  return `hace ${Math.floor(s / 86400)}d`;
+};
 
 function Help() {
+  const { user } = useAuth();
   const [cat, setCat] = useState("Programación");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [tickets, setTickets] = useState<Ticket[]>([
-    { id: 1, cat: "IA", title: "¿Cómo entrenar mi propio modelo?", body: "Quiero crear un asistente personal con datos propios.", date: "hace 2h" },
-    { id: 2, cat: "Roblox", title: "Script de teletransporte no funciona", body: "El RemoteEvent no se dispara en el cliente.", date: "hace 5h" },
-  ]);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const submit = (e: React.FormEvent) => {
+  const load = async () => {
+    const { data, error } = await supabase
+      .from("help_tickets")
+      .select("id, user_id, category, title, body, created_at")
+      .order("created_at", { ascending: false })
+      .limit(50);
+    if (error) {
+      toast.error(error.message);
+      setLoading(false);
+      return;
+    }
+    const userIds = Array.from(new Set((data ?? []).map((t) => t.user_id)));
+    const { data: profiles } = await supabase
+      .from("profiles")
+      .select("id, username")
+      .in("id", userIds.length ? userIds : ["00000000-0000-0000-0000-000000000000"]);
+    const map = new Map((profiles ?? []).map((p) => [p.id, p.username]));
+    setTickets((data ?? []).map((t) => ({ ...t, username: map.get(t.user_id) })));
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    load();
+    const ch = supabase
+      .channel("tickets")
+      .on("postgres_changes", { event: "*", schema: "public", table: "help_tickets" }, load)
+      .subscribe();
+    return () => {
+      supabase.removeChannel(ch);
+    };
+  }, []);
+
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) return toast.error("Inicia sesión para enviar un ticket");
     if (!title.trim() || !body.trim()) return;
-    setTickets([{ id: Date.now(), cat, title, body, date: "ahora" }, ...tickets]);
+    const { error } = await supabase.from("help_tickets").insert({
+      user_id: user.id,
+      category: cat,
+      title: title.trim(),
+      body: body.trim(),
+    });
+    if (error) return toast.error(error.message);
+    toast.success("Ticket enviado");
     setTitle("");
     setBody("");
   };
@@ -56,6 +106,12 @@ function Help() {
           {/* Form */}
           <form onSubmit={submit} className="glass rounded-2xl p-6 neon-border space-y-5 h-fit">
             <h3 className="font-display text-xl font-bold">Nuevo ticket</h3>
+
+            {!user && (
+              <p className="text-xs text-muted-foreground">
+                <Link to="/auth" className="text-neon-cyan hover:underline">Inicia sesión</Link> para enviar un ticket.
+              </p>
+            )}
 
             <div>
               <label className="text-xs font-mono uppercase tracking-widest text-neon-cyan">Categoría</label>
@@ -101,7 +157,8 @@ function Help() {
 
             <button
               type="submit"
-              className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-md bg-gradient-neon text-primary-foreground font-bold shadow-neon-purple hover:shadow-neon-blue transition-all"
+              disabled={!user}
+              className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-md bg-gradient-neon text-primary-foreground font-bold shadow-neon-purple hover:shadow-neon-blue transition-all disabled:opacity-50"
             >
               <Send className="h-4 w-4" /> Enviar Ticket
             </button>
@@ -110,17 +167,22 @@ function Help() {
           {/* Tickets list */}
           <div className="space-y-4">
             <h3 className="font-display text-xl font-bold">Tickets recientes</h3>
+            {loading && <p className="text-muted-foreground text-sm">Cargando...</p>}
+            {!loading && tickets.length === 0 && (
+              <p className="text-muted-foreground text-sm">Aún no hay tickets. ¡Sé el primero!</p>
+            )}
             {tickets.map((t) => (
               <div key={t.id} className="glass rounded-xl p-5 hover:border-neon-purple/60 transition-all">
                 <div className="flex items-start justify-between gap-3">
-                  <div>
+                  <div className="flex-1">
                     <span className="text-xs px-2 py-0.5 rounded-full bg-neon-purple/20 text-neon-purple border border-neon-purple/40">
-                      {t.cat}
+                      {t.category}
                     </span>
                     <h4 className="mt-2 font-bold text-lg">{t.title}</h4>
-                    <p className="mt-1 text-sm text-muted-foreground">{t.body}</p>
+                    <p className="mt-1 text-sm text-muted-foreground whitespace-pre-wrap">{t.body}</p>
+                    {t.username && <p className="mt-2 text-xs text-neon-cyan">por {t.username}</p>}
                   </div>
-                  <span className="text-xs text-muted-foreground whitespace-nowrap">{t.date}</span>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">{timeAgo(t.created_at)}</span>
                 </div>
               </div>
             ))}

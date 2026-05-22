@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Menu, X, Youtube } from "lucide-react";
+import { Menu, X, Youtube, LogOut, User as UserIcon } from "lucide-react";
 import logo from "@/assets/logo.png";
+import { useAuth } from "@/hooks/useAuth";
 
 const links = [
   { to: "/", label: "Inicio" },
@@ -14,6 +15,7 @@ const links = [
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const { user, signOut } = useAuth();
   return (
     <header className="fixed top-0 inset-x-0 z-50 glass">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 flex items-center justify-between h-16">
@@ -34,6 +36,27 @@ export function Navbar() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
+          {user ? (
+            <>
+              <span className="hidden md:inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                <UserIcon className="h-3.5 w-3.5 text-neon-cyan" />
+                {user.email?.split("@")[0]}
+              </span>
+              <button
+                onClick={() => signOut()}
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-md border border-border hover:border-neon-purple/60 text-xs font-semibold"
+              >
+                <LogOut className="h-3.5 w-3.5" /> Salir
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/auth"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-md border border-border hover:border-neon-blue/60 text-xs font-semibold"
+            >
+              Entrar
+            </Link>
+          )}
           <a
             href="https://youtube.com/@ITSABDIAS"
             target="_blank"

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as CommunityRouteImport } from './routes/community'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiRouteImport } from './routes/ai'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -29,6 +30,11 @@ const HelpRoute = HelpRouteImport.update({
 const CommunityRoute = CommunityRouteImport.update({
   id: '/community',
   path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AiRoute = AiRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/ai': typeof AiRoute
+  '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
   '/help': typeof HelpRoute
   '/projects': typeof ProjectsRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/ai': typeof AiRoute
+  '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
   '/help': typeof HelpRoute
   '/projects': typeof ProjectsRoute
@@ -68,22 +76,39 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/ai': typeof AiRoute
+  '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
   '/help': typeof HelpRoute
   '/projects': typeof ProjectsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/ai' | '/community' | '/help' | '/projects'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/ai'
+    | '/auth'
+    | '/community'
+    | '/help'
+    | '/projects'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/ai' | '/community' | '/help' | '/projects'
-  id: '__root__' | '/' | '/about' | '/ai' | '/community' | '/help' | '/projects'
+  to: '/' | '/about' | '/ai' | '/auth' | '/community' | '/help' | '/projects'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/ai'
+    | '/auth'
+    | '/community'
+    | '/help'
+    | '/projects'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AiRoute: typeof AiRoute
+  AuthRoute: typeof AuthRoute
   CommunityRoute: typeof CommunityRoute
   HelpRoute: typeof HelpRoute
   ProjectsRoute: typeof ProjectsRoute
@@ -110,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/community'
       fullPath: '/community'
       preLoaderRoute: typeof CommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ai': {
@@ -140,6 +172,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AiRoute: AiRoute,
+  AuthRoute: AuthRoute,
   CommunityRoute: CommunityRoute,
   HelpRoute: HelpRoute,
   ProjectsRoute: ProjectsRoute,
