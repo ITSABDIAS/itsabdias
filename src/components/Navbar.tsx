@@ -38,10 +38,13 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           {user ? (
             <>
-              <span className="hidden md:inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Link
+                to="/profile"
+                className="hidden md:inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
                 <UserIcon className="h-3.5 w-3.5 text-neon-cyan" />
                 {user.email?.split("@")[0]}
-              </span>
+              </Link>
               <button
                 onClick={() => signOut()}
                 className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-md border border-border hover:border-neon-purple/60 text-xs font-semibold"
