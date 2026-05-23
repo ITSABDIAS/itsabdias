@@ -27,7 +27,20 @@ const cats = [
   { icon: MessageSquare, label: "Tecnología" },
 ];
 
-type Ticket = { id: string; user_id: string; category: string; title: string; body: string; created_at: string; username?: string };
+type Ticket = { id: string; user_id: string; category: string; title: string; body: string; status: string; admin_response: string | null; created_at: string; username?: string };
+
+const STATUS_BADGES: Record<string, string> = {
+  open: "text-yellow-400 border-yellow-400/40 bg-yellow-400/10",
+  in_progress: "text-neon-blue border-neon-blue/40 bg-neon-blue/10",
+  resolved: "text-green-400 border-green-400/40 bg-green-400/10",
+  closed: "text-muted-foreground border-border bg-secondary/40",
+};
+const STATUS_LABELS: Record<string, string> = {
+  open: "Abierto",
+  in_progress: "En progreso",
+  resolved: "Resuelto",
+  closed: "Cerrado",
+};
 
 const timeAgo = (iso: string) => {
   const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
