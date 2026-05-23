@@ -188,12 +188,23 @@ function Help() {
               <div key={t.id} className="glass rounded-xl p-5 hover:border-neon-purple/60 transition-all">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1">
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-neon-purple/20 text-neon-purple border border-neon-purple/40">
-                      {t.category}
-                    </span>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-neon-purple/20 text-neon-purple border border-neon-purple/40">
+                        {t.category}
+                      </span>
+                      <span className={`text-xs px-2 py-0.5 rounded-full border ${STATUS_BADGES[t.status] ?? STATUS_BADGES.open}`}>
+                        {STATUS_LABELS[t.status] ?? "Abierto"}
+                      </span>
+                    </div>
                     <h4 className="mt-2 font-bold text-lg">{t.title}</h4>
                     <p className="mt-1 text-sm text-muted-foreground whitespace-pre-wrap">{t.body}</p>
                     {t.username && <p className="mt-2 text-xs text-neon-cyan">por {t.username}</p>}
+                    {t.admin_response && (
+                      <div className="mt-3 rounded-md border border-neon-cyan/40 bg-neon-cyan/5 p-3 text-sm">
+                        <p className="text-xs font-mono text-neon-cyan mb-1">RESPUESTA OFICIAL</p>
+                        <p className="whitespace-pre-wrap">{t.admin_response}</p>
+                      </div>
+                    )}
                   </div>
                   <span className="text-xs text-muted-foreground whitespace-nowrap">{timeAgo(t.created_at)}</span>
                 </div>
