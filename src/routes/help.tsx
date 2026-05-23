@@ -61,7 +61,7 @@ function Help() {
   const load = async () => {
     const { data, error } = await supabase
       .from("help_tickets")
-      .select("id, user_id, category, title, body, created_at")
+      .select("id, user_id, category, title, body, status, admin_response, created_at")
       .order("created_at", { ascending: false })
       .limit(50);
     if (error) {
