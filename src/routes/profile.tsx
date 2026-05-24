@@ -88,18 +88,16 @@ function ProfilePage() {
                 <UserIcon className="h-10 w-10 text-primary-foreground" />
               )}
             </div>
-            <div>
-              <p className="font-display text-xl font-bold">{username || "Sin nombre"}</p>
-              <p className="text-xs text-muted-foreground">{user?.email}</p>
-              {topRank && (() => {
-                const meta = RANK_META[topRank];
-                const Icon = meta.Icon;
-                return (
-                  <span className={`mt-1 inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded border ${meta.color}`}>
-                    <Icon className="h-3 w-3" /> {meta.label}
-                  </span>
-                );
-              })()}
+            <div className="flex-1 min-w-0">
+              <p className="font-display text-xl font-bold truncate">{username || "Sin nombre"}</p>
+              <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+              {sortedRoles.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {sortedRoles.map((r) => (
+                    <RankBadge key={r} slug={r} size="sm" />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
