@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Sparkles, Crown, Check, Zap } from "lucide-react";
+import { RankBadge, type RankSlug } from "@/components/RankBadge";
 
 export const Route = createFileRoute("/premium")({
   head: () => ({
