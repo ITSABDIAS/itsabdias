@@ -152,6 +152,7 @@ function Help() {
               <input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                maxLength={200}
                 placeholder="Ej: Mi PC se reinicia al jugar..."
                 className="mt-2 w-full bg-input/40 border border-border rounded-md px-4 py-2.5 focus:outline-none focus:border-neon-blue focus:shadow-neon-blue transition-all"
               />
@@ -163,6 +164,7 @@ function Help() {
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
                 rows={5}
+                maxLength={5000}
                 placeholder="Describe qué pasa, qué intentaste, mensajes de error..."
                 className="mt-2 w-full bg-input/40 border border-border rounded-md px-4 py-2.5 focus:outline-none focus:border-neon-blue focus:shadow-neon-blue transition-all resize-none"
               />

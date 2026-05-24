@@ -156,6 +156,7 @@ function Community() {
                   value={text}
                   onChange={(e) => setText(e.target.value)}
                   rows={2}
+                  maxLength={2000}
                   placeholder="¿Qué estás creando hoy?"
                   className="flex-1 bg-transparent border-0 focus:outline-none resize-none placeholder:text-muted-foreground"
                 />
@@ -233,6 +234,7 @@ function Community() {
                         value={commentDraft[p.id] ?? ""}
                         onChange={(e) => setCommentDraft((d) => ({ ...d, [p.id]: e.target.value }))}
                         onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), submitComment(p))}
+                        maxLength={1000}
                         placeholder="Escribe un comentario..."
                         className="flex-1 bg-input/40 border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:border-neon-blue"
                       />
