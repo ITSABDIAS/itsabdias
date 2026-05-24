@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { User as UserIcon, Save, Shield } from "lucide-react";
-import { RankBadge, RANK_PRIORITY, topRank, type RankSlug } from "@/components/RankBadge";
+import { RankBadge, RANK_PRIORITY, type RankSlug } from "@/components/RankBadge";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
