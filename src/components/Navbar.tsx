@@ -11,6 +11,7 @@ const links = [
   { to: "/ai", label: "IA" },
   { to: "/projects", label: "Proyectos" },
   { to: "/community", label: "Comunidad" },
+  { to: "/staff", label: "Staff" },
   { to: "/premium", label: "Premium" },
 ] as const;
 
