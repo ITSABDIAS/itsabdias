@@ -26,7 +26,6 @@ function ProfilePage() {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [roles, setRoles] = useState<RankSlug[]>([]);
   const isStaff = roles.includes("admin") || roles.includes("founder");
-  const myTopRank = topRank(roles);
   const sortedRoles = [...roles].sort((a, b) => RANK_PRIORITY.indexOf(a) - RANK_PRIORITY.indexOf(b));
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
