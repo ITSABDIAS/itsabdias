@@ -24,9 +24,10 @@ function ProfilePage() {
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
-  const [roles, setRoles] = useState<string[]>([]);
+  const [roles, setRoles] = useState<RankSlug[]>([]);
   const isStaff = roles.includes("admin") || roles.includes("founder");
-  const topRank = RANK_PRIORITY.find((r) => roles.includes(r));
+  const myTopRank = topRank(roles);
+  const sortedRoles = [...roles].sort((a, b) => RANK_PRIORITY.indexOf(a) - RANK_PRIORITY.indexOf(b));
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
