@@ -5,7 +5,15 @@ import { SectionTitle } from "@/components/SectionTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
-import { User as UserIcon, Save, Shield } from "lucide-react";
+import { User as UserIcon, Save, Shield, Crown, Sparkles } from "lucide-react";
+
+const RANK_META: Record<string, { label: string; color: string; Icon: any }> = {
+  founder:   { label: "Founder",       color: "text-[#ff00aa] border-[#ff00aa]/50 bg-[#ff00aa]/10", Icon: Crown },
+  admin:     { label: "Administrador", color: "text-neon-purple border-neon-purple/50 bg-neon-purple/10", Icon: Shield },
+  moderator: { label: "Moderador",     color: "text-neon-blue border-neon-blue/50 bg-neon-blue/10", Icon: Shield },
+  premium:   { label: "Premium",       color: "text-yellow-400 border-yellow-400/50 bg-yellow-400/10", Icon: Sparkles },
+};
+const RANK_PRIORITY = ["founder", "admin", "moderator", "premium"];
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -23,7 +31,9 @@ function ProfilePage() {
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [roles, setRoles] = useState<string[]>([]);
+  const isStaff = roles.includes("admin") || roles.includes("founder");
+  const topRank = RANK_PRIORITY.find((r) => roles.includes(r));
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -43,7 +53,7 @@ function ProfilePage() {
         setBio(profile.bio ?? "");
         setAvatarUrl(profile.avatar_url ?? "");
       }
-      setIsAdmin((roles ?? []).some((r) => r.role === "admin"));
+      setRoles((roles ?? []).map((r: any) => r.role));
       setLoading(false);
     })();
   }, [user, authLoading, nav]);
@@ -87,11 +97,15 @@ function ProfilePage() {
             <div>
               <p className="font-display text-xl font-bold">{username || "Sin nombre"}</p>
               <p className="text-xs text-muted-foreground">{user?.email}</p>
-              {isAdmin && (
-                <span className="mt-1 inline-flex items-center gap-1 text-xs text-neon-cyan">
-                  <Shield className="h-3 w-3" /> Administrador
-                </span>
-              )}
+              {topRank && (() => {
+                const meta = RANK_META[topRank];
+                const Icon = meta.Icon;
+                return (
+                  <span className={`mt-1 inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded border ${meta.color}`}>
+                    <Icon className="h-3 w-3" /> {meta.label}
+                  </span>
+                );
+              })()}
             </div>
           </div>
 
@@ -135,7 +149,7 @@ function ProfilePage() {
               >
                 <Save className="h-4 w-4" /> {saving ? "Guardando..." : "Guardar cambios"}
               </button>
-              {isAdmin && (
+              {isStaff && (
                 <Link
                   to="/admin"
                   className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-md border border-neon-cyan/60 text-neon-cyan hover:bg-neon-cyan/10 font-semibold text-sm"
