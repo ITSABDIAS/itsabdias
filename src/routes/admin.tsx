@@ -52,7 +52,7 @@ function AdminPage() {
       return;
     }
     (async () => {
-      const { data } = await supabase.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin");
+      const { data } = await supabase.from("user_roles").select("role").eq("user_id", user.id).in("role", ["admin", "founder"]);
       const admin = (data ?? []).length > 0;
       setIsAdmin(admin);
       setChecking(false);
