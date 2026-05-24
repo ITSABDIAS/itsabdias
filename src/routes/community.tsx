@@ -234,7 +234,11 @@ function Community() {
                         {(c.profile?.username ?? "?")[0]}
                       </div>
                       <div className="flex-1 bg-input/30 rounded-lg px-3 py-2">
-                        <div className="text-xs font-semibold">{c.profile?.username ?? "anónimo"} · <span className="text-muted-foreground font-normal">{timeAgo(c.created_at)}</span></div>
+                        <div className="text-xs font-semibold flex items-center gap-1.5 flex-wrap">
+                          <span>{c.profile?.username ?? "anónimo"}</span>
+                          {(() => { const t = topRank(rolesMap.get(c.user_id)); return t ? <RankBadge slug={t} size="xs" /> : null; })()}
+                          <span className="text-muted-foreground font-normal">· {timeAgo(c.created_at)}</span>
+                        </div>
                         <div className="mt-0.5 text-foreground/90 whitespace-pre-wrap">{c.content}</div>
                       </div>
                     </div>
