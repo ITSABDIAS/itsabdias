@@ -6,6 +6,8 @@ import { Heart, MessageCircle, Send, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { RankBadge, topRank } from "@/components/RankBadge";
+import { useUserRoles } from "@/hooks/useUserRoles";
 
 export const Route = createFileRoute("/community")({
   head: () => ({
