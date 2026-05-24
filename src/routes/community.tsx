@@ -141,6 +141,12 @@ function Community() {
     setCommentDraft((d) => ({ ...d, [p.id]: "" }));
   };
 
+  const allUserIds = Array.from(new Set([
+    ...posts.map((p) => p.user_id),
+    ...posts.flatMap((p) => p.comments.map((c) => c.user_id)),
+  ]));
+  const rolesMap = useUserRoles(allUserIds);
+
   return (
     <PageShell>
       <section className="py-20 px-6">
