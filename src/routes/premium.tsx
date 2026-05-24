@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Sparkles, Crown, Check, Zap } from "lucide-react";
+import { RankBadge, type RankSlug } from "@/components/RankBadge";
 
 export const Route = createFileRoute("/premium")({
   head: () => ({
@@ -106,14 +107,16 @@ function PremiumPage() {
               {ranks.map((r) => (
                 <div
                   key={r.slug}
-                  className="flex items-center justify-between rounded-md border border-border bg-secondary/30 px-4 py-3"
+                  className="flex items-center justify-between gap-3 rounded-md border border-border bg-secondary/30 px-4 py-3"
                   style={{ borderColor: `${r.color}55` }}
                 >
-                  <div>
-                    <p className="font-semibold" style={{ color: r.color }}>{r.name}</p>
-                    {r.description && <p className="text-xs text-muted-foreground">{r.description}</p>}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <RankBadge slug={r.slug as RankSlug} size="sm" />
+                    </div>
+                    {r.description && <p className="mt-1.5 text-xs text-muted-foreground">{r.description}</p>}
                   </div>
-                  <span className="text-xs font-mono text-muted-foreground">#{r.priority}</span>
+                  <span className="text-xs font-mono text-muted-foreground shrink-0">#{r.priority}</span>
                 </div>
               ))}
             </div>

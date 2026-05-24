@@ -5,15 +5,8 @@ import { SectionTitle } from "@/components/SectionTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
-import { User as UserIcon, Save, Shield, Crown, Sparkles } from "lucide-react";
-
-const RANK_META: Record<string, { label: string; color: string; Icon: any }> = {
-  founder:   { label: "Founder",       color: "text-[#ff00aa] border-[#ff00aa]/50 bg-[#ff00aa]/10", Icon: Crown },
-  admin:     { label: "Administrador", color: "text-neon-purple border-neon-purple/50 bg-neon-purple/10", Icon: Shield },
-  moderator: { label: "Moderador",     color: "text-neon-blue border-neon-blue/50 bg-neon-blue/10", Icon: Shield },
-  premium:   { label: "Premium",       color: "text-yellow-400 border-yellow-400/50 bg-yellow-400/10", Icon: Sparkles },
-};
-const RANK_PRIORITY = ["founder", "admin", "moderator", "premium"];
+import { User as UserIcon, Save, Shield } from "lucide-react";
+import { RankBadge, RANK_PRIORITY, type RankSlug } from "@/components/RankBadge";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -31,9 +24,9 @@ function ProfilePage() {
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
-  const [roles, setRoles] = useState<string[]>([]);
+  const [roles, setRoles] = useState<RankSlug[]>([]);
   const isStaff = roles.includes("admin") || roles.includes("founder");
-  const topRank = RANK_PRIORITY.find((r) => roles.includes(r));
+  const sortedRoles = [...roles].sort((a, b) => RANK_PRIORITY.indexOf(a) - RANK_PRIORITY.indexOf(b));
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -94,18 +87,16 @@ function ProfilePage() {
                 <UserIcon className="h-10 w-10 text-primary-foreground" />
               )}
             </div>
-            <div>
-              <p className="font-display text-xl font-bold">{username || "Sin nombre"}</p>
-              <p className="text-xs text-muted-foreground">{user?.email}</p>
-              {topRank && (() => {
-                const meta = RANK_META[topRank];
-                const Icon = meta.Icon;
-                return (
-                  <span className={`mt-1 inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded border ${meta.color}`}>
-                    <Icon className="h-3 w-3" /> {meta.label}
-                  </span>
-                );
-              })()}
+            <div className="flex-1 min-w-0">
+              <p className="font-display text-xl font-bold truncate">{username || "Sin nombre"}</p>
+              <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+              {sortedRoles.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {sortedRoles.map((r) => (
+                    <RankBadge key={r} slug={r} size="sm" />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 

@@ -6,6 +6,8 @@ import { Heart, MessageCircle, Send, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { RankBadge, topRank } from "@/components/RankBadge";
+import { useUserRoles } from "@/hooks/useUserRoles";
 
 export const Route = createFileRoute("/community")({
   head: () => ({
@@ -139,6 +141,12 @@ function Community() {
     setCommentDraft((d) => ({ ...d, [p.id]: "" }));
   };
 
+  const allUserIds = Array.from(new Set([
+    ...posts.map((p) => p.user_id),
+    ...posts.flatMap((p) => p.comments.map((c) => c.user_id)),
+  ]));
+  const rolesMap = useUserRoles(allUserIds);
+
   return (
     <PageShell>
       <section className="py-20 px-6">
@@ -187,8 +195,11 @@ function Community() {
                 <div className="h-11 w-11 rounded-full bg-gradient-neon flex items-center justify-center font-bold text-primary-foreground uppercase">
                   {(p.profile?.username ?? "?")[0]}
                 </div>
-                <div className="flex-1">
-                  <div className="font-bold">{p.profile?.username ?? "anónimo"}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-bold truncate">{p.profile?.username ?? "anónimo"}</span>
+                    {(() => { const t = topRank(rolesMap.get(p.user_id)); return t ? <RankBadge slug={t} size="xs" /> : null; })()}
+                  </div>
                   <div className="text-xs text-muted-foreground">{timeAgo(p.created_at)}</div>
                 </div>
                 {user?.id === p.user_id && (
@@ -223,7 +234,11 @@ function Community() {
                         {(c.profile?.username ?? "?")[0]}
                       </div>
                       <div className="flex-1 bg-input/30 rounded-lg px-3 py-2">
-                        <div className="text-xs font-semibold">{c.profile?.username ?? "anónimo"} · <span className="text-muted-foreground font-normal">{timeAgo(c.created_at)}</span></div>
+                        <div className="text-xs font-semibold flex items-center gap-1.5 flex-wrap">
+                          <span>{c.profile?.username ?? "anónimo"}</span>
+                          {(() => { const t = topRank(rolesMap.get(c.user_id)); return t ? <RankBadge slug={t} size="xs" /> : null; })()}
+                          <span className="text-muted-foreground font-normal">· {timeAgo(c.created_at)}</span>
+                        </div>
                         <div className="mt-0.5 text-foreground/90 whitespace-pre-wrap">{c.content}</div>
                       </div>
                     </div>
