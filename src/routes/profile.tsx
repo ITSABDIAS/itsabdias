@@ -5,15 +5,8 @@ import { SectionTitle } from "@/components/SectionTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
-import { User as UserIcon, Save, Shield, Crown, Sparkles } from "lucide-react";
-
-const RANK_META: Record<string, { label: string; color: string; Icon: any }> = {
-  founder:   { label: "Founder",       color: "text-[#ff00aa] border-[#ff00aa]/50 bg-[#ff00aa]/10", Icon: Crown },
-  admin:     { label: "Administrador", color: "text-neon-purple border-neon-purple/50 bg-neon-purple/10", Icon: Shield },
-  moderator: { label: "Moderador",     color: "text-neon-blue border-neon-blue/50 bg-neon-blue/10", Icon: Shield },
-  premium:   { label: "Premium",       color: "text-yellow-400 border-yellow-400/50 bg-yellow-400/10", Icon: Sparkles },
-};
-const RANK_PRIORITY = ["founder", "admin", "moderator", "premium"];
+import { User as UserIcon, Save, Shield } from "lucide-react";
+import { RankBadge, RANK_PRIORITY, topRank, type RankSlug } from "@/components/RankBadge";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
