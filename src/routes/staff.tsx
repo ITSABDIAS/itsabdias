@@ -73,8 +73,10 @@ function StaffPage() {
   const grouped = PUBLIC_RANKS.map((slug) => ({
     slug,
     meta: RANK_META[slug],
-    members: members.filter((m) => (m.roles.find((r) => PUBLIC_RANKS.includes(r))) === slug ||
-      (RANK_PRIORITY.find((r) => m.roles.includes(r)) === slug)),
+    members: members.filter((m) => {
+      const top = RANK_PRIORITY.find((r) => m.roles.includes(r) && PUBLIC_RANKS.includes(r));
+      return top === slug;
+    }),
   })).filter((g) => g.members.length > 0);
 
   return (
