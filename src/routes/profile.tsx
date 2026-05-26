@@ -29,6 +29,8 @@ function ProfilePage() {
   const sortedRoles = [...roles].sort((a, b) => RANK_PRIORITY.indexOf(a) - RANK_PRIORITY.indexOf(b));
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [activitySec, setActivitySec] = useState(0);
+  const [projectCount, setProjectCount] = useState(0);
 
   useEffect(() => {
     if (authLoading) return;
@@ -37,9 +39,11 @@ function ProfilePage() {
       return;
     }
     (async () => {
-      const [{ data: profile }, { data: roles }] = await Promise.all([
+      const [{ data: profile }, { data: roles }, { data: activity }, { count: pCount }] = await Promise.all([
         supabase.from("profiles").select("username, bio, avatar_url").eq("id", user.id).maybeSingle(),
         supabase.from("user_roles").select("role").eq("user_id", user.id),
+        supabase.from("user_activity").select("total_seconds").eq("user_id", user.id).maybeSingle(),
+        supabase.from("projects").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       ]);
       if (profile) {
         setUsername(profile.username ?? "");
@@ -47,6 +51,8 @@ function ProfilePage() {
         setAvatarUrl(profile.avatar_url ?? "");
       }
       setRoles((roles ?? []).map((r: any) => r.role));
+      setActivitySec((activity as any)?.total_seconds ?? 0);
+      setProjectCount(pCount ?? 0);
       setLoading(false);
     })();
   }, [user, authLoading, nav]);
