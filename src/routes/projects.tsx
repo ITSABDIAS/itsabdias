@@ -425,6 +425,8 @@ function ProjectForm({
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Proyecto publicado ✨");
+    // Trigger rank check (e.g. Developer at 5 projects)
+    checkRankUnlocksNow(userId);
     onCreated();
   };
 
