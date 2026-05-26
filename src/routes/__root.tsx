@@ -8,6 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { Toaster } from "sonner";
+import { useRankProgress } from "@/hooks/useRankProgress";
 
 import appCss from "../styles.css?url";
 
