@@ -41,11 +41,12 @@ function ProfilePage() {
       return;
     }
     (async () => {
-      const [{ data: profile }, { data: roles }, { data: activity }, { count: pCount }] = await Promise.all([
+      const [{ data: profile }, { data: roles }, { data: activity }, { count: pCount }, { count: aiCount }] = await Promise.all([
         supabase.from("profiles").select("username, bio, avatar_url").eq("id", user.id).maybeSingle(),
         supabase.from("user_roles").select("role").eq("user_id", user.id),
         supabase.from("user_activity").select("total_seconds").eq("user_id", user.id).maybeSingle(),
         supabase.from("projects").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+        supabase.from("projects").select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("category", "IA"),
       ]);
       if (profile) {
         setUsername(profile.username ?? "");
@@ -55,6 +56,7 @@ function ProfilePage() {
       setRoles((roles ?? []).map((r: any) => r.role));
       setActivitySec((activity as any)?.total_seconds ?? 0);
       setProjectCount(pCount ?? 0);
+      setAiProjectCount(aiCount ?? 0);
       setLoading(false);
     })();
   }, [user, authLoading, nav]);
