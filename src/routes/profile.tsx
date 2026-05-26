@@ -32,6 +32,7 @@ function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [activitySec, setActivitySec] = useState(0);
   const [projectCount, setProjectCount] = useState(0);
+  const [aiProjectCount, setAiProjectCount] = useState(0);
 
   useEffect(() => {
     if (authLoading) return;
