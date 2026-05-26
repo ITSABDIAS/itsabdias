@@ -255,8 +255,6 @@ function ProfilePage() {
           </div>
           <RankGuide userRoles={roles} />
         </div>
-          })()}
-        </div>
       </section>
     </PageShell>
   );
