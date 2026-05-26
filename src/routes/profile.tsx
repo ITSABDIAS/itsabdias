@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { User as UserIcon, Save, Shield } from "lucide-react";
 import { RankBadge, RANK_PRIORITY, type RankSlug } from "@/components/RankBadge";
+import { RankGuide } from "@/components/RankGuide";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
