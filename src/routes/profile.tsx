@@ -29,6 +29,8 @@ function ProfilePage() {
   const sortedRoles = [...roles].sort((a, b) => RANK_PRIORITY.indexOf(a) - RANK_PRIORITY.indexOf(b));
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [activitySec, setActivitySec] = useState(0);
+  const [projectCount, setProjectCount] = useState(0);
 
   useEffect(() => {
     if (authLoading) return;
@@ -37,9 +39,11 @@ function ProfilePage() {
       return;
     }
     (async () => {
-      const [{ data: profile }, { data: roles }] = await Promise.all([
+      const [{ data: profile }, { data: roles }, { data: activity }, { count: pCount }] = await Promise.all([
         supabase.from("profiles").select("username, bio, avatar_url").eq("id", user.id).maybeSingle(),
         supabase.from("user_roles").select("role").eq("user_id", user.id),
+        supabase.from("user_activity").select("total_seconds").eq("user_id", user.id).maybeSingle(),
+        supabase.from("projects").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       ]);
       if (profile) {
         setUsername(profile.username ?? "");
@@ -47,6 +51,8 @@ function ProfilePage() {
         setAvatarUrl(profile.avatar_url ?? "");
       }
       setRoles((roles ?? []).map((r: any) => r.role));
+      setActivitySec((activity as any)?.total_seconds ?? 0);
+      setProjectCount(pCount ?? 0);
       setLoading(false);
     })();
   }, [user, authLoading, nav]);
@@ -150,6 +156,75 @@ function ProfilePage() {
               )}
             </div>
           </form>
+        </div>
+
+        {/* Rank progression panel */}
+        <div className="mx-auto max-w-2xl mt-8 glass rounded-2xl p-6 border border-neon-cyan/30 shadow-neon-blue">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-display text-lg font-bold tracking-wide">
+              <span className="text-neon-cyan">//</span> progreso de rangos
+            </h3>
+            <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">auto-unlock</span>
+          </div>
+
+          {(() => {
+            const memberUnlocked = roles.includes("member");
+            const devUnlocked = roles.includes("developer");
+            const actPct = Math.min(100, Math.round((activitySec / 1800) * 100));
+            const devPct = Math.min(100, Math.round((projectCount / 5) * 100));
+            const mins = Math.floor(activitySec / 60);
+            const secs = activitySec % 60;
+            return (
+              <div className="space-y-5">
+                {/* Member */}
+                <div>
+                  <div className="flex items-center justify-between text-sm mb-1.5">
+                    <div className="flex items-center gap-2">
+                      <RankBadge slug="member" size="xs" />
+                      <span className="text-muted-foreground">30 min de actividad</span>
+                    </div>
+                    <span className={`font-mono ${memberUnlocked ? "text-neon-green" : "text-neon-cyan"}`}>
+                      {memberUnlocked ? "DESBLOQUEADO" : `${mins}m ${secs}s / 30m`}
+                    </span>
+                  </div>
+                  <div className="h-2 rounded-full bg-input/40 overflow-hidden border border-border">
+                    <div
+                      className="h-full bg-gradient-to-r from-[#22d3ee] to-[#a855f7] transition-all"
+                      style={{ width: `${memberUnlocked ? 100 : actPct}%`, boxShadow: "0 0 12px #22d3ee88" }}
+                    />
+                  </div>
+                </div>
+
+                {/* Developer */}
+                <div>
+                  <div className="flex items-center justify-between text-sm mb-1.5">
+                    <div className="flex items-center gap-2">
+                      <RankBadge slug="developer" size="xs" />
+                      <span className="text-muted-foreground">5 proyectos creados</span>
+                    </div>
+                    <span className={`font-mono ${devUnlocked ? "text-neon-green" : "text-neon-cyan"}`}>
+                      {devUnlocked ? "DESBLOQUEADO" : `${projectCount} / 5`}
+                    </span>
+                  </div>
+                  <div className="h-2 rounded-full bg-input/40 overflow-hidden border border-border">
+                    <div
+                      className="h-full bg-gradient-to-r from-[#22d3ee] to-[#06b6d4] transition-all"
+                      style={{ width: `${devUnlocked ? 100 : devPct}%`, boxShadow: "0 0 12px #22d3ee88" }}
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-border/60 grid sm:grid-cols-2 gap-2 text-xs text-muted-foreground font-mono">
+                  <p>· <span className="text-[#fbbf24]">Premium</span>: vía suscripción</p>
+                  <p>· <span className="text-[#06b6d4]">Verificado</span>: asignado por staff</p>
+                  <p>· <span className="text-[#10b981]">Experto IA</span>: asignado por staff</p>
+                  <p>· <span className="text-[#3b82f6]">Moderador</span>: asignado por admins</p>
+                  <p>· <span className="text-[#a855f7]">Administrador</span>: asignado por founder</p>
+                  <p>· <span className="text-[#ff00aa]">Founder</span>: rango exclusivo</p>
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </section>
     </PageShell>

@@ -328,6 +328,27 @@ export type Database = {
         }
         Relationships: []
       }
+      user_activity: {
+        Row: {
+          last_heartbeat: string
+          total_seconds: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          last_heartbeat?: string
+          total_seconds?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          last_heartbeat?: string
+          total_seconds?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -354,6 +375,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_rank_unlocks: {
+        Args: { _user_id: string }
+        Returns: Database["public"]["Enums"]["app_role"][]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -361,6 +386,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      record_activity: { Args: { _seconds: number }; Returns: number }
     }
     Enums: {
       app_role:

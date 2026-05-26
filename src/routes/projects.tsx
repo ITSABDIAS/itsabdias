@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import { supabase } from "@/integrations/supabase/client";
+import { checkRankUnlocksNow } from "@/hooks/useRankProgress";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRoles } from "@/hooks/useUserRoles";
 import { RankBadge, topRank, type RankSlug } from "@/components/RankBadge";
@@ -425,6 +426,8 @@ function ProjectForm({
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Proyecto publicado ✨");
+    // Trigger rank check (e.g. Developer at 5 projects)
+    checkRankUnlocksNow(userId);
     onCreated();
   };
 

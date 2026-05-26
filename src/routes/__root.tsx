@@ -8,6 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { Toaster } from "sonner";
+import { useRankProgress } from "@/hooks/useRankProgress";
 
 import appCss from "../styles.css?url";
 
@@ -115,6 +116,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useRankProgress();
 
   return (
     <QueryClientProvider client={queryClient}>
