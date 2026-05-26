@@ -174,8 +174,10 @@ function ProfilePage() {
           {(() => {
             const memberUnlocked = roles.includes("member");
             const devUnlocked = roles.includes("developer");
+            const aiUnlocked = roles.includes("ai_expert");
             const actPct = Math.min(100, Math.round((activitySec / 1800) * 100));
             const devPct = Math.min(100, Math.round((projectCount / 5) * 100));
+            const aiPct = Math.min(100, Math.round((aiProjectCount / 3) * 100));
             const mins = Math.floor(activitySec / 60);
             const secs = activitySec % 60;
             return (
@@ -218,16 +220,41 @@ function ProfilePage() {
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-border/60 grid sm:grid-cols-2 gap-2 text-xs text-muted-foreground font-mono">
-                  <p>· <span className="text-[#fbbf24]">Premium</span>: vía suscripción</p>
-                  <p>· <span className="text-[#06b6d4]">Verificado</span>: asignado por staff</p>
-                  <p>· <span className="text-[#10b981]">Experto IA</span>: asignado por staff</p>
-                  <p>· <span className="text-[#3b82f6]">Moderador</span>: asignado por admins</p>
-                  <p>· <span className="text-[#a855f7]">Administrador</span>: asignado por founder</p>
-                  <p>· <span className="text-[#ff00aa]">Founder</span>: rango exclusivo</p>
+                {/* Experto IA */}
+                <div>
+                  <div className="flex items-center justify-between text-sm mb-1.5">
+                    <div className="flex items-center gap-2">
+                      <RankBadge slug="ai_expert" size="xs" />
+                      <span className="text-muted-foreground">3 proyectos de categoría IA</span>
+                    </div>
+                    <span className={`font-mono ${aiUnlocked ? "text-neon-green" : "text-neon-cyan"}`}>
+                      {aiUnlocked ? "DESBLOQUEADO" : `${aiProjectCount} / 3`}
+                    </span>
+                  </div>
+                  <div className="h-2 rounded-full bg-input/40 overflow-hidden border border-border">
+                    <div
+                      className="h-full bg-gradient-to-r from-[#10b981] to-[#22d3ee] transition-all"
+                      style={{ width: `${aiUnlocked ? 100 : aiPct}%`, boxShadow: "0 0 12px #10b98188" }}
+                    />
+                  </div>
                 </div>
               </div>
             );
+          })()}
+        </div>
+
+        {/* Rank guide / how to unlock */}
+        <div className="mx-auto max-w-4xl mt-8">
+          <div className="flex items-end justify-between mb-4 px-1">
+            <h3 className="font-display text-lg font-bold tracking-wide">
+              <span className="text-neon-cyan">//</span> guía de rangos
+            </h3>
+            <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+              cómo se desbloquea cada rango
+            </span>
+          </div>
+          <RankGuide userRoles={roles} />
+        </div>
           })()}
         </div>
       </section>
