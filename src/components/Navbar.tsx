@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Menu, X, Youtube, LogOut, User as UserIcon } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/hooks/useAuth";
+import { NotificationBell } from "@/components/NotificationBell";
 
 const links = [
   { to: "/", label: "Inicio" },
@@ -40,6 +41,7 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           {user ? (
             <>
+              <NotificationBell />
               <Link
                 to="/profile"
                 className="hidden md:inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
