@@ -1,14 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
+import ReactMarkdown from "react-markdown";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
-import { BrainCircuit, Sparkles, Zap, Bot, Send } from "lucide-react";
+import { BrainCircuit, Sparkles, Zap, Bot, Send, Loader2 } from "lucide-react";
+import { aiChat } from "@/lib/ai.functions";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/ai")({
   head: () => ({
     meta: [
       { title: "Inteligencia Artificial — ItsaBDias" },
-      { name: "description", content: "Explora IA, herramientas y noticias futuristas en ItsaBDias." },
+      { name: "description", content: "Chat IA real con Gemini, herramientas y noticias futuristas en ItsaBDias." },
     ],
   }),
   component: AI,
@@ -29,26 +34,44 @@ const news = [
   { tag: "IA + GAMING", title: "NPCs con LLMs en mundos de Roblox", date: "Esta semana" },
 ];
 
-type Msg = { role: "user" | "ai"; text: string };
+type Msg = { role: "user" | "assistant"; content: string };
 
 function AI() {
+  const { user } = useAuth();
+  const callAi = useServerFn(aiChat);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([
-    { role: "ai", text: "Hola, soy el asistente neural de ItsaBDias. ¿En qué quieres construir el futuro hoy?" },
+    { role: "assistant", content: "Hola, soy **NEXUS**, el asistente neural de ItsaBDias. ¿En qué quieres construir el futuro hoy?" },
   ]);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  const send = (e: React.FormEvent) => {
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+  }, [msgs, loading]);
+
+  const send = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) return;
-    const u = input.trim();
-    setMsgs((m) => [...m, { role: "user", text: u }]);
+    if (!input.trim() || loading) return;
+    if (!user) {
+      toast.error("Inicia sesión para chatear con NEXUS");
+      return;
+    }
+    const userMsg: Msg = { role: "user", content: input.trim() };
+    const next = [...msgs, userMsg];
+    setMsgs(next);
     setInput("");
-    setTimeout(() => {
-      setMsgs((m) => [
-        ...m,
-        { role: "ai", text: `Interesante: "${u}". Próximamente este chat conectará con IA real — por ahora soy una demo neón ✨.` },
-      ]);
-    }, 600);
+    setLoading(true);
+    try {
+      const res = await callAi({ data: { messages: next.slice(-20) } });
+      setMsgs((m) => [...m, { role: "assistant", content: res.content || "..." }]);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Error desconocido";
+      toast.error(message);
+      setMsgs((m) => [...m, { role: "assistant", content: `⚠️ ${message}` }]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -73,7 +96,6 @@ function AI() {
         </div>
       </section>
 
-      {/* Tools */}
       <section className="py-12 px-6">
         <div className="mx-auto max-w-6xl">
           <h3 className="font-display text-2xl font-bold mb-6 flex items-center gap-2">
@@ -93,7 +115,6 @@ function AI() {
         </div>
       </section>
 
-      {/* News */}
       <section className="py-12 px-6">
         <div className="mx-auto max-w-6xl">
           <h3 className="font-display text-2xl font-bold mb-6">Noticias del futuro</h3>
@@ -110,37 +131,55 @@ function AI() {
       </section>
 
       {/* Chat */}
-      <section className="py-16 px-6">
+      <section id="chat" className="py-16 px-6">
         <div className="mx-auto max-w-3xl glass rounded-2xl p-6 neon-border">
           <div className="flex items-center gap-2 mb-4">
-            <Bot className="h-5 w-5 text-neon-cyan" />
-            <h3 className="font-display font-bold text-xl">Chat de IA</h3>
-            <span className="ml-auto text-xs font-mono text-muted-foreground">demo · beta</span>
+            <Bot className="h-5 w-5 text-neon-cyan animate-glow-pulse" />
+            <h3 className="font-display font-bold text-xl">NEXUS · Chat IA</h3>
+            <span className="ml-auto text-xs font-mono text-muted-foreground">gemini · 2.5 pro</span>
           </div>
-          <div className="space-y-3 max-h-80 overflow-y-auto pr-2 mb-4">
+          <div ref={scrollRef} className="space-y-3 max-h-[28rem] overflow-y-auto pr-2 mb-4">
             {msgs.map((m, i) => (
               <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[80%] px-4 py-2.5 rounded-2xl text-sm ${
+                <div className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm prose prose-sm prose-invert prose-pre:bg-black/60 prose-pre:border prose-pre:border-neon-cyan/20 prose-code:text-neon-cyan ${
                   m.role === "user"
                     ? "bg-gradient-neon text-primary-foreground rounded-br-sm"
                     : "glass border border-neon-cyan/30 rounded-bl-sm"
                 }`}>
-                  {m.text}
+                  <ReactMarkdown>{m.content}</ReactMarkdown>
                 </div>
               </div>
             ))}
+            {loading && (
+              <div className="flex justify-start">
+                <div className="glass border border-neon-cyan/30 rounded-2xl rounded-bl-sm px-4 py-2.5 text-sm flex items-center gap-2 text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin text-neon-cyan" />
+                  NEXUS está pensando...
+                </div>
+              </div>
+            )}
           </div>
           <form onSubmit={send} className="flex gap-2">
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Pregúntale algo a la IA..."
-              className="flex-1 bg-input/40 border border-border rounded-md px-4 py-2.5 focus:outline-none focus:border-neon-blue focus:shadow-neon-blue transition-all"
+              placeholder={user ? "Pregúntale algo a NEXUS..." : "Inicia sesión para chatear..."}
+              disabled={loading || !user}
+              className="flex-1 bg-input/40 border border-border rounded-md px-4 py-2.5 focus:outline-none focus:border-neon-blue focus:shadow-neon-blue transition-all disabled:opacity-50"
             />
-            <button className="px-4 rounded-md bg-gradient-neon text-primary-foreground shadow-neon-purple">
-              <Send className="h-4 w-4" />
+            <button
+              type="submit"
+              disabled={loading || !user || !input.trim()}
+              className="px-4 rounded-md bg-gradient-neon text-primary-foreground shadow-neon-purple disabled:opacity-50"
+            >
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
             </button>
           </form>
+          {!user && (
+            <p className="mt-3 text-xs text-muted-foreground text-center">
+              NEXUS requiere cuenta para evitar abuso y rastrear uso. Es gratis.
+            </p>
+          )}
         </div>
       </section>
     </PageShell>
