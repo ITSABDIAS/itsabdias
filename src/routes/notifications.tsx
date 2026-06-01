@@ -185,9 +185,9 @@ function NotificationsPage() {
                 return (
                   <li key={n.id}>
                     {n.link ? (
-                      <Link to={n.link} onClick={() => !n.read && markRead(n.id)} className="block">
+                      <a href={n.link} onClick={() => !n.read && markRead(n.id)} className="block">
                         {inner}
-                      </Link>
+                      </a>
                     ) : (
                       inner
                     )}
