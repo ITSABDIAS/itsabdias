@@ -111,6 +111,39 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          link: string | null
+          read: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read?: boolean
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read?: boolean
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       posts: {
         Row: {
           content: string
@@ -378,6 +411,16 @@ export type Database = {
       check_rank_unlocks: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"][]
+      }
+      create_notification: {
+        Args: {
+          _body?: string
+          _link?: string
+          _title: string
+          _type: string
+          _user_id: string
+        }
+        Returns: string
       }
       has_role: {
         Args: {
