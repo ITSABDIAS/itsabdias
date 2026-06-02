@@ -17,9 +17,9 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const categories = [
+const categories: { icon: typeof Code2; title: string; desc: string; to?: string }[] = [
   { icon: Code2, title: "Programación", desc: "Lenguajes, frameworks y buenas prácticas." },
-  { icon: BrainCircuit, title: "Inteligencia Artificial", desc: "IA, ML y herramientas del futuro." },
+  { icon: BrainCircuit, title: "Inteligencia Artificial", desc: "IA, ML y herramientas del futuro.", to: "/ai" },
   { icon: Cpu, title: "Hardware & PCs", desc: "Builds, componentes y overclocking." },
   { icon: Gamepad2, title: "Roblox Studio", desc: "Scripts, mundos y monetización." },
   { icon: Sparkles, title: "Desarrollo de Juegos", desc: "Unity, Unreal y motores 2D/3D." },
@@ -108,17 +108,27 @@ function Home() {
             subtitle="Cada nodo es una puerta a nuevo conocimiento. Elige tu ruta."
           />
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {categories.map((c) => (
-              <div
-                key={c.title}
-                className="group relative rounded-xl p-6 bg-gradient-card border border-border hover:border-neon-blue/60 hover:-translate-y-1 transition-all overflow-hidden"
-              >
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-br from-neon-blue/10 to-neon-purple/10" />
-                <c.icon className="h-8 w-8 text-neon-cyan relative" />
-                <h3 className="mt-4 font-bold text-lg relative">{c.title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground relative">{c.desc}</p>
-              </div>
-            ))}
+            {categories.map((c) => {
+              const inner = (
+                <>
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-br from-neon-blue/10 to-neon-purple/10" />
+                  <c.icon className="h-8 w-8 text-neon-cyan relative" />
+                  <h3 className="mt-4 font-bold text-lg relative">{c.title}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground relative">{c.desc}</p>
+                </>
+              );
+              const cls =
+                "group relative rounded-xl p-6 bg-gradient-card border border-border hover:border-neon-blue/60 hover:-translate-y-1 transition-all overflow-hidden block";
+              return c.to ? (
+                <Link key={c.title} to={c.to} className={cls}>
+                  {inner}
+                </Link>
+              ) : (
+                <div key={c.title} className={cls}>
+                  {inner}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
