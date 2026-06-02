@@ -227,6 +227,17 @@ function AI() {
             <Bot className="h-5 w-5 text-neon-cyan animate-glow-pulse" />
             <h3 className="font-display font-bold text-lg sm:text-xl">NEXUS · Chat IA</h3>
             <span className="ml-auto text-[10px] sm:text-xs font-mono text-muted-foreground">gemini · 2.5 pro</span>
+            {user && msgs.length > 1 && (
+              <button
+                type="button"
+                onClick={handleClearHistory}
+                title="Borrar historial"
+                className="p-1.5 rounded-md hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors"
+                aria-label="Borrar historial"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            )}
           </div>
 
           <div
