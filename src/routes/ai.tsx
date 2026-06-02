@@ -21,6 +21,7 @@ import {
   Newspaper,
 } from "lucide-react";
 import { aiChat } from "@/lib/ai.functions";
+import { getChatHistory, saveChatMessage, clearChatHistory } from "@/lib/chat.functions";
 import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/ai")({
