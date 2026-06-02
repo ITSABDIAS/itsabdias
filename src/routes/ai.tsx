@@ -94,14 +94,44 @@ type Msg = { role: "user" | "assistant"; content: string };
 function AI() {
   const { user } = useAuth();
   const callAi = useServerFn(aiChat);
+  const fetchHistory = useServerFn(getChatHistory);
+  const persistMsg = useServerFn(saveChatMessage);
+  const doClearHistory = useServerFn(clearChatHistory);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [historyLoading, setHistoryLoading] = useState(true);
   const [msgs, setMsgs] = useState<Msg[]>([{ role: "assistant", content: WELCOME }]);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [msgs, loading]);
+
+  // Load chat history on mount
+  useEffect(() => {
+    if (!user) {
+      setHistoryLoading(false);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const { messages } = await fetchHistory({});
+        if (!cancelled) {
+          if (messages.length > 0) {
+            setMsgs([{ role: "assistant", content: WELCOME }, ...messages]);
+          } else {
+            setMsgs([{ role: "assistant", content: WELCOME }]);
+          }
+        }
+      } catch {
+        if (!cancelled) setMsgs([{ role: "assistant", content: WELCOME }]);
+      } finally {
+        if (!cancelled) setHistoryLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [user, fetchHistory]);
 
   const submit = async (text: string) => {
     if (!text.trim() || loading) return;
@@ -114,13 +144,29 @@ function AI() {
     setMsgs(next);
     setInput("");
     setLoading(true);
+
+    // Persist user message
+    try {
+      await persistMsg({ data: userMsg });
+    } catch {
+      // Silently fail persistence; message is still in UI
+    }
+
     try {
       const res = await callAi({ data: { messages: next.slice(-20) } });
-      setMsgs((m) => [...m, { role: "assistant", content: res.content || "..." }]);
+      const assistantMsg: Msg = { role: "assistant", content: res.content || "..." };
+      setMsgs((m) => [...m, assistantMsg]);
+      // Persist assistant message
+      try {
+        await persistMsg({ data: assistantMsg });
+      } catch {
+        // Silently fail persistence
+      }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Error desconocido";
       toast.error(message);
-      setMsgs((m) => [...m, { role: "assistant", content: `⚠️ ${message}` }]);
+      const errorMsg: Msg = { role: "assistant", content: `⚠️ ${message}` };
+      setMsgs((m) => [...m, errorMsg]);
     } finally {
       setLoading(false);
     }
@@ -129,6 +175,18 @@ function AI() {
   const send = (e: React.FormEvent) => {
     e.preventDefault();
     submit(input);
+  };
+
+  const handleClearHistory = async () => {
+    if (!user) return;
+    if (!confirm("¿Borrar todo tu historial de conversaciones con NEXUS?")) return;
+    try {
+      await doClearHistory({});
+      setMsgs([{ role: "assistant", content: WELCOME }]);
+      toast.success("Historial borrado");
+    } catch {
+      toast.error("No se pudo borrar el historial");
+    }
   };
 
   return (
