@@ -19,6 +19,8 @@ import {
   Cog,
   Rocket,
   Newspaper,
+  History,
+  Trash2,
 } from "lucide-react";
 import { aiChat } from "@/lib/ai.functions";
 import { getChatHistory, saveChatMessage, clearChatHistory } from "@/lib/chat.functions";
