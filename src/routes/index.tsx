@@ -17,9 +17,9 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const categories = [
+const categories: { icon: typeof Code2; title: string; desc: string; to?: string }[] = [
   { icon: Code2, title: "Programación", desc: "Lenguajes, frameworks y buenas prácticas." },
-  { icon: BrainCircuit, title: "Inteligencia Artificial", desc: "IA, ML y herramientas del futuro." },
+  { icon: BrainCircuit, title: "Inteligencia Artificial", desc: "IA, ML y herramientas del futuro.", to: "/ai" },
   { icon: Cpu, title: "Hardware & PCs", desc: "Builds, componentes y overclocking." },
   { icon: Gamepad2, title: "Roblox Studio", desc: "Scripts, mundos y monetización." },
   { icon: Sparkles, title: "Desarrollo de Juegos", desc: "Unity, Unreal y motores 2D/3D." },
