@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StaffRouteImport } from './routes/staff'
+import { Route as SoftwareRouteImport } from './routes/software'
 import { Route as RobloxRouteImport } from './routes/roblox'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ProgramacionRouteImport } from './routes/programacion'
@@ -30,6 +31,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const StaffRoute = StaffRouteImport.update({
   id: '/staff',
   path: '/staff',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SoftwareRoute = SoftwareRouteImport.update({
+  id: '/software',
+  path: '/software',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RobloxRoute = RobloxRouteImport.update({
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/programacion': typeof ProgramacionRoute
   '/projects': typeof ProjectsRoute
   '/roblox': typeof RobloxRoute
+  '/software': typeof SoftwareRoute
   '/staff': typeof StaffRoute
 }
 export interface FileRoutesByTo {
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/programacion': typeof ProgramacionRoute
   '/projects': typeof ProjectsRoute
   '/roblox': typeof RobloxRoute
+  '/software': typeof SoftwareRoute
   '/staff': typeof StaffRoute
 }
 export interface FileRoutesById {
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/programacion': typeof ProgramacionRoute
   '/projects': typeof ProjectsRoute
   '/roblox': typeof RobloxRoute
+  '/software': typeof SoftwareRoute
   '/staff': typeof StaffRoute
 }
 export interface FileRouteTypes {
@@ -190,6 +199,7 @@ export interface FileRouteTypes {
     | '/programacion'
     | '/projects'
     | '/roblox'
+    | '/software'
     | '/staff'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/programacion'
     | '/projects'
     | '/roblox'
+    | '/software'
     | '/staff'
   id:
     | '__root__'
@@ -228,6 +239,7 @@ export interface FileRouteTypes {
     | '/programacion'
     | '/projects'
     | '/roblox'
+    | '/software'
     | '/staff'
   fileRoutesById: FileRoutesById
 }
@@ -248,6 +260,7 @@ export interface RootRouteChildren {
   ProgramacionRoute: typeof ProgramacionRoute
   ProjectsRoute: typeof ProjectsRoute
   RobloxRoute: typeof RobloxRoute
+  SoftwareRoute: typeof SoftwareRoute
   StaffRoute: typeof StaffRoute
 }
 
@@ -258,6 +271,13 @@ declare module '@tanstack/react-router' {
       path: '/staff'
       fullPath: '/staff'
       preLoaderRoute: typeof StaffRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/software': {
+      id: '/software'
+      path: '/software'
+      fullPath: '/software'
+      preLoaderRoute: typeof SoftwareRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/roblox': {
@@ -392,6 +412,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProgramacionRoute: ProgramacionRoute,
   ProjectsRoute: ProjectsRoute,
   RobloxRoute: RobloxRoute,
+  SoftwareRoute: SoftwareRoute,
   StaffRoute: StaffRoute,
 }
 export const routeTree = rootRouteImport
