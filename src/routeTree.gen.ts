@@ -9,7 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TecnologiaRouteImport } from './routes/tecnologia'
 import { Route as StaffRouteImport } from './routes/staff'
+import { Route as SoftwareRouteImport } from './routes/software'
 import { Route as RobloxRouteImport } from './routes/roblox'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ProgramacionRouteImport } from './routes/programacion'
@@ -17,6 +19,9 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PremiumRouteImport } from './routes/premium'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as HelpRouteImport } from './routes/help'
+import { Route as HardwareRouteImport } from './routes/hardware'
+import { Route as GamedevRouteImport } from './routes/gamedev'
+import { Route as ElectricidadRouteImport } from './routes/electricidad'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiRouteImport } from './routes/ai'
@@ -24,9 +29,19 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TecnologiaRoute = TecnologiaRouteImport.update({
+  id: '/tecnologia',
+  path: '/tecnologia',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StaffRoute = StaffRouteImport.update({
   id: '/staff',
   path: '/staff',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SoftwareRoute = SoftwareRouteImport.update({
+  id: '/software',
+  path: '/software',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RobloxRoute = RobloxRouteImport.update({
@@ -62,6 +77,21 @@ const NotificationsRoute = NotificationsRouteImport.update({
 const HelpRoute = HelpRouteImport.update({
   id: '/help',
   path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HardwareRoute = HardwareRouteImport.update({
+  id: '/hardware',
+  path: '/hardware',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GamedevRoute = GamedevRouteImport.update({
+  id: '/gamedev',
+  path: '/gamedev',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ElectricidadRoute = ElectricidadRouteImport.update({
+  id: '/electricidad',
+  path: '/electricidad',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CommunityRoute = CommunityRouteImport.update({
@@ -102,6 +132,9 @@ export interface FileRoutesByFullPath {
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
+  '/electricidad': typeof ElectricidadRoute
+  '/gamedev': typeof GamedevRoute
+  '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
@@ -109,7 +142,9 @@ export interface FileRoutesByFullPath {
   '/programacion': typeof ProgramacionRoute
   '/projects': typeof ProjectsRoute
   '/roblox': typeof RobloxRoute
+  '/software': typeof SoftwareRoute
   '/staff': typeof StaffRoute
+  '/tecnologia': typeof TecnologiaRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -118,6 +153,9 @@ export interface FileRoutesByTo {
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
+  '/electricidad': typeof ElectricidadRoute
+  '/gamedev': typeof GamedevRoute
+  '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
@@ -125,7 +163,9 @@ export interface FileRoutesByTo {
   '/programacion': typeof ProgramacionRoute
   '/projects': typeof ProjectsRoute
   '/roblox': typeof RobloxRoute
+  '/software': typeof SoftwareRoute
   '/staff': typeof StaffRoute
+  '/tecnologia': typeof TecnologiaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -135,6 +175,9 @@ export interface FileRoutesById {
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
+  '/electricidad': typeof ElectricidadRoute
+  '/gamedev': typeof GamedevRoute
+  '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
@@ -142,7 +185,9 @@ export interface FileRoutesById {
   '/programacion': typeof ProgramacionRoute
   '/projects': typeof ProjectsRoute
   '/roblox': typeof RobloxRoute
+  '/software': typeof SoftwareRoute
   '/staff': typeof StaffRoute
+  '/tecnologia': typeof TecnologiaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -153,6 +198,9 @@ export interface FileRouteTypes {
     | '/ai'
     | '/auth'
     | '/community'
+    | '/electricidad'
+    | '/gamedev'
+    | '/hardware'
     | '/help'
     | '/notifications'
     | '/premium'
@@ -160,7 +208,9 @@ export interface FileRouteTypes {
     | '/programacion'
     | '/projects'
     | '/roblox'
+    | '/software'
     | '/staff'
+    | '/tecnologia'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -169,6 +219,9 @@ export interface FileRouteTypes {
     | '/ai'
     | '/auth'
     | '/community'
+    | '/electricidad'
+    | '/gamedev'
+    | '/hardware'
     | '/help'
     | '/notifications'
     | '/premium'
@@ -176,7 +229,9 @@ export interface FileRouteTypes {
     | '/programacion'
     | '/projects'
     | '/roblox'
+    | '/software'
     | '/staff'
+    | '/tecnologia'
   id:
     | '__root__'
     | '/'
@@ -185,6 +240,9 @@ export interface FileRouteTypes {
     | '/ai'
     | '/auth'
     | '/community'
+    | '/electricidad'
+    | '/gamedev'
+    | '/hardware'
     | '/help'
     | '/notifications'
     | '/premium'
@@ -192,7 +250,9 @@ export interface FileRouteTypes {
     | '/programacion'
     | '/projects'
     | '/roblox'
+    | '/software'
     | '/staff'
+    | '/tecnologia'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -202,6 +262,9 @@ export interface RootRouteChildren {
   AiRoute: typeof AiRoute
   AuthRoute: typeof AuthRoute
   CommunityRoute: typeof CommunityRoute
+  ElectricidadRoute: typeof ElectricidadRoute
+  GamedevRoute: typeof GamedevRoute
+  HardwareRoute: typeof HardwareRoute
   HelpRoute: typeof HelpRoute
   NotificationsRoute: typeof NotificationsRoute
   PremiumRoute: typeof PremiumRoute
@@ -209,16 +272,32 @@ export interface RootRouteChildren {
   ProgramacionRoute: typeof ProgramacionRoute
   ProjectsRoute: typeof ProjectsRoute
   RobloxRoute: typeof RobloxRoute
+  SoftwareRoute: typeof SoftwareRoute
   StaffRoute: typeof StaffRoute
+  TecnologiaRoute: typeof TecnologiaRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tecnologia': {
+      id: '/tecnologia'
+      path: '/tecnologia'
+      fullPath: '/tecnologia'
+      preLoaderRoute: typeof TecnologiaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/staff': {
       id: '/staff'
       path: '/staff'
       fullPath: '/staff'
       preLoaderRoute: typeof StaffRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/software': {
+      id: '/software'
+      path: '/software'
+      fullPath: '/software'
+      preLoaderRoute: typeof SoftwareRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/roblox': {
@@ -268,6 +347,27 @@ declare module '@tanstack/react-router' {
       path: '/help'
       fullPath: '/help'
       preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hardware': {
+      id: '/hardware'
+      path: '/hardware'
+      fullPath: '/hardware'
+      preLoaderRoute: typeof HardwareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gamedev': {
+      id: '/gamedev'
+      path: '/gamedev'
+      fullPath: '/gamedev'
+      preLoaderRoute: typeof GamedevRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/electricidad': {
+      id: '/electricidad'
+      path: '/electricidad'
+      fullPath: '/electricidad'
+      preLoaderRoute: typeof ElectricidadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/community': {
@@ -322,6 +422,9 @@ const rootRouteChildren: RootRouteChildren = {
   AiRoute: AiRoute,
   AuthRoute: AuthRoute,
   CommunityRoute: CommunityRoute,
+  ElectricidadRoute: ElectricidadRoute,
+  GamedevRoute: GamedevRoute,
+  HardwareRoute: HardwareRoute,
   HelpRoute: HelpRoute,
   NotificationsRoute: NotificationsRoute,
   PremiumRoute: PremiumRoute,
@@ -329,7 +432,9 @@ const rootRouteChildren: RootRouteChildren = {
   ProgramacionRoute: ProgramacionRoute,
   ProjectsRoute: ProjectsRoute,
   RobloxRoute: RobloxRoute,
+  SoftwareRoute: SoftwareRoute,
   StaffRoute: StaffRoute,
+  TecnologiaRoute: TecnologiaRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

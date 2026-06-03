@@ -7,12 +7,17 @@ import { NotificationBell } from "@/components/NotificationBell";
 
 const links = [
   { to: "/", label: "Inicio" },
-  { to: "/about", label: "Sobre mí" },
-  { to: "/help", label: "Centro de Ayuda" },
+  { to: "/programacion", label: "Programación" },
   { to: "/ai", label: "IA" },
+  { to: "/hardware", label: "Hardware" },
+  { to: "/roblox", label: "Roblox" },
+  { to: "/gamedev", label: "GameDev" },
+  { to: "/electricidad", label: "Electricidad" },
+  { to: "/software", label: "Software" },
+  { to: "/tecnologia", label: "Tecnología" },
   { to: "/projects", label: "Proyectos" },
   { to: "/community", label: "Comunidad" },
-  { to: "/staff", label: "Staff" },
+  { to: "/help", label: "Ayuda" },
   { to: "/premium", label: "Premium" },
 ] as const;
 
