@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TecnologiaRouteImport } from './routes/tecnologia'
 import { Route as StaffRouteImport } from './routes/staff'
 import { Route as SoftwareRouteImport } from './routes/software'
 import { Route as RobloxRouteImport } from './routes/roblox'
@@ -28,6 +29,11 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TecnologiaRoute = TecnologiaRouteImport.update({
+  id: '/tecnologia',
+  path: '/tecnologia',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StaffRoute = StaffRouteImport.update({
   id: '/staff',
   path: '/staff',
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/roblox': typeof RobloxRoute
   '/software': typeof SoftwareRoute
   '/staff': typeof StaffRoute
+  '/tecnologia': typeof TecnologiaRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -158,6 +165,7 @@ export interface FileRoutesByTo {
   '/roblox': typeof RobloxRoute
   '/software': typeof SoftwareRoute
   '/staff': typeof StaffRoute
+  '/tecnologia': typeof TecnologiaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -179,6 +187,7 @@ export interface FileRoutesById {
   '/roblox': typeof RobloxRoute
   '/software': typeof SoftwareRoute
   '/staff': typeof StaffRoute
+  '/tecnologia': typeof TecnologiaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -201,6 +210,7 @@ export interface FileRouteTypes {
     | '/roblox'
     | '/software'
     | '/staff'
+    | '/tecnologia'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -221,6 +231,7 @@ export interface FileRouteTypes {
     | '/roblox'
     | '/software'
     | '/staff'
+    | '/tecnologia'
   id:
     | '__root__'
     | '/'
@@ -241,6 +252,7 @@ export interface FileRouteTypes {
     | '/roblox'
     | '/software'
     | '/staff'
+    | '/tecnologia'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -262,10 +274,18 @@ export interface RootRouteChildren {
   RobloxRoute: typeof RobloxRoute
   SoftwareRoute: typeof SoftwareRoute
   StaffRoute: typeof StaffRoute
+  TecnologiaRoute: typeof TecnologiaRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tecnologia': {
+      id: '/tecnologia'
+      path: '/tecnologia'
+      fullPath: '/tecnologia'
+      preLoaderRoute: typeof TecnologiaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/staff': {
       id: '/staff'
       path: '/staff'
@@ -414,6 +434,7 @@ const rootRouteChildren: RootRouteChildren = {
   RobloxRoute: RobloxRoute,
   SoftwareRoute: SoftwareRoute,
   StaffRoute: StaffRoute,
+  TecnologiaRoute: TecnologiaRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
