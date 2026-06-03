@@ -18,10 +18,10 @@ export const Route = createFileRoute("/")({
 });
 
 const categories: { icon: typeof Code2; title: string; desc: string; to?: string }[] = [
-  { icon: Code2, title: "Programación", desc: "Lenguajes, frameworks y buenas prácticas." },
+  { icon: Code2, title: "Programación", desc: "Lenguajes, frameworks y buenas prácticas.", to: "/programacion" },
   { icon: BrainCircuit, title: "Inteligencia Artificial", desc: "IA, ML y herramientas del futuro.", to: "/ai" },
   { icon: Cpu, title: "Hardware & PCs", desc: "Builds, componentes y overclocking." },
-  { icon: Gamepad2, title: "Roblox Studio", desc: "Scripts, mundos y monetización." },
+  { icon: Gamepad2, title: "Roblox Studio", desc: "Scripts, mundos y monetización.", to: "/roblox" },
   { icon: Sparkles, title: "Desarrollo de Juegos", desc: "Unity, Unreal y motores 2D/3D." },
   { icon: Zap, title: "Electricidad Básica", desc: "Circuitos, sensores y proyectos DIY." },
   { icon: Wrench, title: "Software & Ingeniería", desc: "DevOps, arquitectura y sistemas." },
