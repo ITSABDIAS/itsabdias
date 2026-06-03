@@ -10,7 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StaffRouteImport } from './routes/staff'
+import { Route as RobloxRouteImport } from './routes/roblox'
 import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as ProgramacionRouteImport } from './routes/programacion'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PremiumRouteImport } from './routes/premium'
 import { Route as NotificationsRouteImport } from './routes/notifications'
@@ -27,9 +29,19 @@ const StaffRoute = StaffRouteImport.update({
   path: '/staff',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RobloxRoute = RobloxRouteImport.update({
+  id: '/roblox',
+  path: '/roblox',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectsRoute = ProjectsRouteImport.update({
   id: '/projects',
   path: '/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgramacionRoute = ProgramacionRouteImport.update({
+  id: '/programacion',
+  path: '/programacion',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -94,7 +106,9 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
   '/profile': typeof ProfileRoute
+  '/programacion': typeof ProgramacionRoute
   '/projects': typeof ProjectsRoute
+  '/roblox': typeof RobloxRoute
   '/staff': typeof StaffRoute
 }
 export interface FileRoutesByTo {
@@ -108,7 +122,9 @@ export interface FileRoutesByTo {
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
   '/profile': typeof ProfileRoute
+  '/programacion': typeof ProgramacionRoute
   '/projects': typeof ProjectsRoute
+  '/roblox': typeof RobloxRoute
   '/staff': typeof StaffRoute
 }
 export interface FileRoutesById {
@@ -123,7 +139,9 @@ export interface FileRoutesById {
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
   '/profile': typeof ProfileRoute
+  '/programacion': typeof ProgramacionRoute
   '/projects': typeof ProjectsRoute
+  '/roblox': typeof RobloxRoute
   '/staff': typeof StaffRoute
 }
 export interface FileRouteTypes {
@@ -139,7 +157,9 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/premium'
     | '/profile'
+    | '/programacion'
     | '/projects'
+    | '/roblox'
     | '/staff'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -153,7 +173,9 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/premium'
     | '/profile'
+    | '/programacion'
     | '/projects'
+    | '/roblox'
     | '/staff'
   id:
     | '__root__'
@@ -167,7 +189,9 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/premium'
     | '/profile'
+    | '/programacion'
     | '/projects'
+    | '/roblox'
     | '/staff'
   fileRoutesById: FileRoutesById
 }
@@ -182,7 +206,9 @@ export interface RootRouteChildren {
   NotificationsRoute: typeof NotificationsRoute
   PremiumRoute: typeof PremiumRoute
   ProfileRoute: typeof ProfileRoute
+  ProgramacionRoute: typeof ProgramacionRoute
   ProjectsRoute: typeof ProjectsRoute
+  RobloxRoute: typeof RobloxRoute
   StaffRoute: typeof StaffRoute
 }
 
@@ -195,11 +221,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/roblox': {
+      id: '/roblox'
+      path: '/roblox'
+      fullPath: '/roblox'
+      preLoaderRoute: typeof RobloxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects': {
       id: '/projects'
       path: '/projects'
       fullPath: '/projects'
       preLoaderRoute: typeof ProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programacion': {
+      id: '/programacion'
+      path: '/programacion'
+      fullPath: '/programacion'
+      preLoaderRoute: typeof ProgramacionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -286,19 +326,11 @@ const rootRouteChildren: RootRouteChildren = {
   NotificationsRoute: NotificationsRoute,
   PremiumRoute: PremiumRoute,
   ProfileRoute: ProfileRoute,
+  ProgramacionRoute: ProgramacionRoute,
   ProjectsRoute: ProjectsRoute,
+  RobloxRoute: RobloxRoute,
   StaffRoute: StaffRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
