@@ -17,6 +17,7 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PremiumRouteImport } from './routes/premium'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as HelpRouteImport } from './routes/help'
+import { Route as HardwareRouteImport } from './routes/hardware'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiRouteImport } from './routes/ai'
@@ -64,6 +65,11 @@ const HelpRoute = HelpRouteImport.update({
   path: '/help',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HardwareRoute = HardwareRouteImport.update({
+  id: '/hardware',
+  path: '/hardware',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CommunityRoute = CommunityRouteImport.update({
   id: '/community',
   path: '/community',
@@ -102,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
+  '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
@@ -118,6 +125,7 @@ export interface FileRoutesByTo {
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
+  '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
@@ -135,6 +143,7 @@ export interface FileRoutesById {
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
+  '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
@@ -153,6 +162,7 @@ export interface FileRouteTypes {
     | '/ai'
     | '/auth'
     | '/community'
+    | '/hardware'
     | '/help'
     | '/notifications'
     | '/premium'
@@ -169,6 +179,7 @@ export interface FileRouteTypes {
     | '/ai'
     | '/auth'
     | '/community'
+    | '/hardware'
     | '/help'
     | '/notifications'
     | '/premium'
@@ -185,6 +196,7 @@ export interface FileRouteTypes {
     | '/ai'
     | '/auth'
     | '/community'
+    | '/hardware'
     | '/help'
     | '/notifications'
     | '/premium'
@@ -202,6 +214,7 @@ export interface RootRouteChildren {
   AiRoute: typeof AiRoute
   AuthRoute: typeof AuthRoute
   CommunityRoute: typeof CommunityRoute
+  HardwareRoute: typeof HardwareRoute
   HelpRoute: typeof HelpRoute
   NotificationsRoute: typeof NotificationsRoute
   PremiumRoute: typeof PremiumRoute
@@ -270,6 +283,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HelpRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hardware': {
+      id: '/hardware'
+      path: '/hardware'
+      fullPath: '/hardware'
+      preLoaderRoute: typeof HardwareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/community': {
       id: '/community'
       path: '/community'
@@ -322,6 +342,7 @@ const rootRouteChildren: RootRouteChildren = {
   AiRoute: AiRoute,
   AuthRoute: AuthRoute,
   CommunityRoute: CommunityRoute,
+  HardwareRoute: HardwareRoute,
   HelpRoute: HelpRoute,
   NotificationsRoute: NotificationsRoute,
   PremiumRoute: PremiumRoute,
@@ -334,3 +355,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
