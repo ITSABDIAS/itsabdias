@@ -19,6 +19,7 @@ import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as HardwareRouteImport } from './routes/hardware'
 import { Route as GamedevRouteImport } from './routes/gamedev'
+import { Route as ElectricidadRouteImport } from './routes/electricidad'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiRouteImport } from './routes/ai'
@@ -76,6 +77,11 @@ const GamedevRoute = GamedevRouteImport.update({
   path: '/gamedev',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ElectricidadRoute = ElectricidadRouteImport.update({
+  id: '/electricidad',
+  path: '/electricidad',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CommunityRoute = CommunityRouteImport.update({
   id: '/community',
   path: '/community',
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
+  '/electricidad': typeof ElectricidadRoute
   '/gamedev': typeof GamedevRoute
   '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
@@ -132,6 +139,7 @@ export interface FileRoutesByTo {
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
+  '/electricidad': typeof ElectricidadRoute
   '/gamedev': typeof GamedevRoute
   '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
@@ -151,6 +159,7 @@ export interface FileRoutesById {
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
+  '/electricidad': typeof ElectricidadRoute
   '/gamedev': typeof GamedevRoute
   '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
@@ -171,6 +180,7 @@ export interface FileRouteTypes {
     | '/ai'
     | '/auth'
     | '/community'
+    | '/electricidad'
     | '/gamedev'
     | '/hardware'
     | '/help'
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/ai'
     | '/auth'
     | '/community'
+    | '/electricidad'
     | '/gamedev'
     | '/hardware'
     | '/help'
@@ -207,6 +218,7 @@ export interface FileRouteTypes {
     | '/ai'
     | '/auth'
     | '/community'
+    | '/electricidad'
     | '/gamedev'
     | '/hardware'
     | '/help'
@@ -226,6 +238,7 @@ export interface RootRouteChildren {
   AiRoute: typeof AiRoute
   AuthRoute: typeof AuthRoute
   CommunityRoute: typeof CommunityRoute
+  ElectricidadRoute: typeof ElectricidadRoute
   GamedevRoute: typeof GamedevRoute
   HardwareRoute: typeof HardwareRoute
   HelpRoute: typeof HelpRoute
@@ -310,6 +323,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GamedevRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/electricidad': {
+      id: '/electricidad'
+      path: '/electricidad'
+      fullPath: '/electricidad'
+      preLoaderRoute: typeof ElectricidadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/community': {
       id: '/community'
       path: '/community'
@@ -362,6 +382,7 @@ const rootRouteChildren: RootRouteChildren = {
   AiRoute: AiRoute,
   AuthRoute: AuthRoute,
   CommunityRoute: CommunityRoute,
+  ElectricidadRoute: ElectricidadRoute,
   GamedevRoute: GamedevRoute,
   HardwareRoute: HardwareRoute,
   HelpRoute: HelpRoute,
