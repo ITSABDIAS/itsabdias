@@ -16,17 +16,17 @@ export const Route = createFileRoute("/software")({
 });
 
 const topics = [
-  { icon: Network, name: "APIs", desc: "REST, GraphQL, autenticación y rate limiting.", color: "text-neon-cyan" },
-  { icon: Database, name: "Bases de datos", desc: "SQL, NoSQL, índices y optimización.", color: "text-neon-purple" },
-  { icon: Cloud, name: "DevOps", desc: "CI/CD, Docker, Kubernetes y observabilidad.", color: "text-neon-blue" },
-  { icon: GitBranch, name: "Arquitectura", desc: "Patrones, DDD, microservicios y monolitos.", color: "text-neon-cyan" },
-  { icon: Server, name: "Backend", desc: "Node, Python, Go y servidores escalables.", color: "text-neon-purple" },
-  { icon: Layout, name: "Frontend", desc: "React, SSR, performance y accesibilidad.", color: "text-neon-cyan" },
+  { icon: Network, name: "APIs", slug: "apis", desc: "REST, GraphQL, autenticación y rate limiting.", color: "text-neon-cyan" },
+  { icon: Database, name: "Bases de datos", slug: "bases-de-datos", desc: "SQL, NoSQL, índices y optimización.", color: "text-neon-purple" },
+  { icon: Cloud, name: "DevOps", slug: "devops", desc: "CI/CD, Docker, Kubernetes y observabilidad.", color: "text-neon-blue" },
+  { icon: GitBranch, name: "Arquitectura", slug: "arquitectura", desc: "Patrones, DDD, microservicios y monolitos.", color: "text-neon-cyan" },
+  { icon: Server, name: "Backend", slug: "backend", desc: "Node, Python, Go y servidores escalables.", color: "text-neon-purple" },
+  { icon: Layout, name: "Frontend", slug: "frontend", desc: "React, SSR, performance y accesibilidad.", color: "text-neon-cyan" },
 ];
 
 const extra = [
-  { icon: Network, title: "Sistemas distribuidos", desc: "Colas, eventos, consistencia y tolerancia a fallos." },
-  { icon: Wrench, title: "Buenas prácticas", desc: "Testing, code review, clean code y SOLID." },
+  { icon: Network, title: "Sistemas distribuidos", slug: "distribuidos", desc: "Colas, eventos, consistencia y tolerancia a fallos." },
+  { icon: Wrench, title: "Buenas prácticas", slug: "arquitectura", desc: "Testing, code review, clean code y SOLID." },
 ];
 
 function Software() {
