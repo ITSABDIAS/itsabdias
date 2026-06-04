@@ -35,48 +35,12 @@ export const Route = createFileRoute("/programacion")({
 });
 
 const langs = [
-  {
-    icon: FileCode,
-    name: "HTML",
-    desc: "La estructura semántica de la web moderna.",
-    snippet: `<section>\n  <h1>Hola mundo</h1>\n</section>`,
-    color: "text-neon-cyan",
-  },
-  {
-    icon: Palette,
-    name: "CSS",
-    desc: "Diseño, animaciones, grid, flex y variables.",
-    snippet: `.btn {\n  background: linear-gradient(90deg,#0ff,#a0f);\n}`,
-    color: "text-neon-purple",
-  },
-  {
-    icon: Braces,
-    name: "JavaScript",
-    desc: "El lenguaje del navegador, async, ES2025.",
-    snippet: `const sum = (a, b) => a + b;\nconsole.log(sum(2, 3));`,
-    color: "text-neon-cyan",
-  },
-  {
-    icon: Terminal,
-    name: "Python",
-    desc: "IA, scripts, automatización y data science.",
-    snippet: `def saludo(n):\n  return f"Hola, {n}"\nprint(saludo("Dev"))`,
-    color: "text-neon-blue",
-  },
-  {
-    icon: Code2,
-    name: "Lua",
-    desc: "Ligero y poderoso. Roblox, Love2D y embebidos.",
-    snippet: `local function hello(n)\n  print("Hola, "..n)\nend\nhello("Dev")`,
-    color: "text-neon-purple",
-  },
-  {
-    icon: Atom,
-    name: "React",
-    desc: "Componentes, hooks y UI declarativa.",
-    snippet: `function App() {\n  return <h1>Hola Mundo</h1>;\n}`,
-    color: "text-neon-cyan",
-  },
+  { icon: FileCode, name: "HTML", slug: "html", desc: "La estructura semántica de la web moderna.", snippet: `<section>\n  <h1>Hola mundo</h1>\n</section>`, color: "text-neon-cyan" },
+  { icon: Palette, name: "CSS", slug: "css", desc: "Diseño, animaciones, grid, flex y variables.", snippet: `.btn {\n  background: linear-gradient(90deg,#0ff,#a0f);\n}`, color: "text-neon-purple" },
+  { icon: Braces, name: "JavaScript", slug: "javascript", desc: "El lenguaje del navegador, async, ES2025.", snippet: `const sum = (a, b) => a + b;\nconsole.log(sum(2, 3));`, color: "text-neon-cyan" },
+  { icon: Terminal, name: "Python", slug: "python", desc: "IA, scripts, automatización y data science.", snippet: `def saludo(n):\n  return f"Hola, {n}"\nprint(saludo("Dev"))`, color: "text-neon-blue" },
+  { icon: Code2, name: "Lua", slug: "lua", desc: "Ligero y poderoso. Roblox, Love2D y embebidos.", snippet: `local function hello(n)\n  print("Hola, "..n)\nend\nhello("Dev")`, color: "text-neon-purple" },
+  { icon: Atom, name: "React", slug: "react", desc: "Componentes, hooks y UI declarativa.", snippet: `function App() {\n  return <h1>Hola Mundo</h1>;\n}`, color: "text-neon-cyan" },
 ];
 
 const blocks = [
