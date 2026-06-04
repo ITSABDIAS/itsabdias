@@ -75,11 +75,14 @@ function Electricidad() {
           </h3>
           <div className="grid sm:grid-cols-3 gap-4">
             {tools.map((t) => (
-              <div key={t.title} className="glass rounded-xl p-6 neon-border hover:-translate-y-1 transition-all">
-                <t.icon className="h-7 w-7 text-neon-cyan" />
+              <Link key={t.title} to="/tema/$category/$slug" params={{ category: "electricidad", slug: t.slug }} className="glass rounded-xl p-6 neon-border hover:-translate-y-1 transition-all block group">
+                <div className="flex items-start justify-between">
+                  <t.icon className="h-7 w-7 text-neon-cyan" />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-neon-cyan transition-colors" />
+                </div>
                 <h4 className="mt-3 font-bold text-lg">{t.title}</h4>
                 <p className="mt-1 text-sm text-muted-foreground">{t.desc}</p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
