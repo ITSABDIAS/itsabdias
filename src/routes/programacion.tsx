@@ -103,19 +103,22 @@ function Programacion() {
           </h3>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {langs.map((l) => (
-              <article
+              <Link
                 key={l.name}
-                className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-purple/60 hover:-translate-y-1 transition-all"
+                to="/tema/$category/$slug"
+                params={{ category: "programacion", slug: l.slug }}
+                className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-purple/60 hover:-translate-y-1 transition-all block"
               >
                 <div className="flex items-center gap-2">
                   <l.icon className={`h-6 w-6 ${l.color}`} />
                   <h4 className="font-bold text-lg">{l.name}</h4>
+                  <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground group-hover:text-neon-cyan transition-colors" />
                 </div>
                 <p className="mt-2 text-sm text-muted-foreground">{l.desc}</p>
                 <pre className="mt-3 text-[11px] sm:text-xs font-mono bg-black/60 border border-neon-purple/20 rounded-md p-3 overflow-x-auto text-neon-cyan/90 whitespace-pre">
                   {l.snippet}
                 </pre>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
