@@ -16,12 +16,12 @@ export const Route = createFileRoute("/tecnologia")({
 });
 
 const categories = [
-  { icon: Newspaper, name: "Noticias", desc: "Lo último de la industria tech.", color: "text-neon-cyan" },
-  { icon: BrainCircuit, name: "IA", desc: "Modelos, agentes y avances de IA.", color: "text-neon-purple" },
-  { icon: Cpu, name: "Hardware", desc: "Chips, GPUs y nuevos componentes.", color: "text-neon-blue" },
-  { icon: Gamepad2, name: "Gaming", desc: "Consolas, lanzamientos y esports.", color: "text-neon-cyan" },
-  { icon: Smartphone, name: "Gadgets", desc: "Móviles, wearables y dispositivos.", color: "text-neon-purple" },
-  { icon: Rocket, name: "Futuro", desc: "Robótica, espacio y biotecnología.", color: "text-neon-blue" },
+  { icon: Newspaper, name: "Noticias", slug: "noticias", desc: "Lo último de la industria tech.", color: "text-neon-cyan" },
+  { icon: BrainCircuit, name: "IA", slug: "ia", desc: "Modelos, agentes y avances de IA.", color: "text-neon-purple" },
+  { icon: Cpu, name: "Hardware", slug: "hardware", desc: "Chips, GPUs y nuevos componentes.", color: "text-neon-blue" },
+  { icon: Gamepad2, name: "Gaming", slug: "gaming", desc: "Consolas, lanzamientos y esports.", color: "text-neon-cyan" },
+  { icon: Smartphone, name: "Gadgets", slug: "gadgets", desc: "Móviles, wearables y dispositivos.", color: "text-neon-purple" },
+  { icon: Rocket, name: "Futuro", slug: "futuro", desc: "Robótica, espacio y biotecnología.", color: "text-neon-blue" },
 ];
 
 const news = [
@@ -58,11 +58,14 @@ function Tecnologia() {
           </h3>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {categories.map((c) => (
-              <article key={c.name} className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-purple/60 hover:-translate-y-1 transition-all">
-                <c.icon className={`h-7 w-7 ${c.color}`} />
+              <Link key={c.name} to="/tema/$category/$slug" params={{ category: "tecnologia", slug: c.slug }} className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-purple/60 hover:-translate-y-1 transition-all block">
+                <div className="flex items-start justify-between">
+                  <c.icon className={`h-7 w-7 ${c.color}`} />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-neon-cyan transition-colors" />
+                </div>
                 <h4 className="mt-3 font-bold text-lg">{c.name}</h4>
                 <p className="mt-1 text-sm text-muted-foreground">{c.desc}</p>
-              </article>
+              </Link>
             ))}
           </div>
         </div>

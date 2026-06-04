@@ -16,17 +16,17 @@ export const Route = createFileRoute("/software")({
 });
 
 const topics = [
-  { icon: Network, name: "APIs", desc: "REST, GraphQL, autenticación y rate limiting.", color: "text-neon-cyan" },
-  { icon: Database, name: "Bases de datos", desc: "SQL, NoSQL, índices y optimización.", color: "text-neon-purple" },
-  { icon: Cloud, name: "DevOps", desc: "CI/CD, Docker, Kubernetes y observabilidad.", color: "text-neon-blue" },
-  { icon: GitBranch, name: "Arquitectura", desc: "Patrones, DDD, microservicios y monolitos.", color: "text-neon-cyan" },
-  { icon: Server, name: "Backend", desc: "Node, Python, Go y servidores escalables.", color: "text-neon-purple" },
-  { icon: Layout, name: "Frontend", desc: "React, SSR, performance y accesibilidad.", color: "text-neon-cyan" },
+  { icon: Network, name: "APIs", slug: "apis", desc: "REST, GraphQL, autenticación y rate limiting.", color: "text-neon-cyan" },
+  { icon: Database, name: "Bases de datos", slug: "bases-de-datos", desc: "SQL, NoSQL, índices y optimización.", color: "text-neon-purple" },
+  { icon: Cloud, name: "DevOps", slug: "devops", desc: "CI/CD, Docker, Kubernetes y observabilidad.", color: "text-neon-blue" },
+  { icon: GitBranch, name: "Arquitectura", slug: "arquitectura", desc: "Patrones, DDD, microservicios y monolitos.", color: "text-neon-cyan" },
+  { icon: Server, name: "Backend", slug: "backend", desc: "Node, Python, Go y servidores escalables.", color: "text-neon-purple" },
+  { icon: Layout, name: "Frontend", slug: "frontend", desc: "React, SSR, performance y accesibilidad.", color: "text-neon-cyan" },
 ];
 
 const extra = [
-  { icon: Network, title: "Sistemas distribuidos", desc: "Colas, eventos, consistencia y tolerancia a fallos." },
-  { icon: Wrench, title: "Buenas prácticas", desc: "Testing, code review, clean code y SOLID." },
+  { icon: Network, title: "Sistemas distribuidos", slug: "distribuidos", desc: "Colas, eventos, consistencia y tolerancia a fallos." },
+  { icon: Wrench, title: "Buenas prácticas", slug: "arquitectura", desc: "Testing, code review, clean code y SOLID." },
 ];
 
 function Software() {
@@ -56,11 +56,14 @@ function Software() {
           </h3>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {topics.map((t) => (
-              <article key={t.name} className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-blue/60 hover:-translate-y-1 transition-all">
-                <t.icon className={`h-7 w-7 ${t.color}`} />
+              <Link key={t.name} to="/tema/$category/$slug" params={{ category: "software", slug: t.slug }} className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-blue/60 hover:-translate-y-1 transition-all block">
+                <div className="flex items-start justify-between">
+                  <t.icon className={`h-7 w-7 ${t.color}`} />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-neon-cyan transition-colors" />
+                </div>
                 <h4 className="mt-3 font-bold text-lg">{t.name}</h4>
                 <p className="mt-1 text-sm text-muted-foreground">{t.desc}</p>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
@@ -73,11 +76,14 @@ function Software() {
           </h3>
           <div className="grid sm:grid-cols-2 gap-4">
             {extra.map((b) => (
-              <div key={b.title} className="glass rounded-xl p-6 neon-border hover:-translate-y-1 transition-all">
-                <b.icon className="h-7 w-7 text-neon-cyan" />
+              <Link key={b.title} to="/tema/$category/$slug" params={{ category: "software", slug: b.slug }} className="glass rounded-xl p-6 neon-border hover:-translate-y-1 transition-all block group">
+                <div className="flex items-start justify-between">
+                  <b.icon className="h-7 w-7 text-neon-cyan" />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-neon-cyan transition-colors" />
+                </div>
                 <h4 className="mt-3 font-bold text-lg">{b.title}</h4>
                 <p className="mt-1 text-sm text-muted-foreground">{b.desc}</p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

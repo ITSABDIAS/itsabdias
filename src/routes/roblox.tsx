@@ -35,54 +35,14 @@ export const Route = createFileRoute("/roblox")({
 });
 
 const sections = [
-  {
-    icon: BookOpen,
-    title: "Tutoriales Lua",
-    desc: "Desde variables y bucles hasta OOP, metatables y patrones avanzados.",
-    snippet: `local function greet(name)\n  print("Hola, "..name)\nend\ngreet("Dev")`,
-  },
-  {
-    icon: Code2,
-    title: "Scripts útiles",
-    desc: "Teletransporte, leaderstats, kill bricks, day/night cycle y más.",
-    snippet: `game.Players.PlayerAdded:Connect(function(p)\n  local s = Instance.new("Folder", p)\n  s.Name = "leaderstats"\nend)`,
-  },
-  {
-    icon: Boxes,
-    title: "Sistemas completos",
-    desc: "Inventarios, combate, misiones, economías y mundos persistentes.",
-    snippet: `-- Sistema de inventario\nlocal Inventory = {}\nInventory.__index = Inventory`,
-  },
-  {
-    icon: DollarSign,
-    title: "Monetización",
-    desc: "Gamepasses, Developer Products, Premium payouts y diseño F2P.",
-    snippet: `MarketplaceService:PromptProductPurchase(player, productId)`,
-  },
-  {
-    icon: Database,
-    title: "DataStore",
-    desc: "Guardado seguro con retries, UpdateAsync y prevención de pérdida.",
-    snippet: `local DS = game:GetService("DataStoreService"):GetDataStore("Saves")\nDS:SetAsync(player.UserId, data)`,
-  },
-  {
-    icon: LayoutDashboard,
-    title: "Interfaces UI",
-    desc: "ScreenGui, animaciones con TweenService y diseño responsive.",
-    snippet: `TweenService:Create(frame, TweenInfo.new(0.4), {Position = goal}):Play()`,
-  },
-  {
-    icon: Radio,
-    title: "RemoteEvents",
-    desc: "Comunicación client/server segura con validación anti-exploit.",
-    snippet: `RemoteEvent.OnServerEvent:Connect(function(player, action)\n  -- validar siempre\nend)`,
-  },
-  {
-    icon: Lightbulb,
-    title: "Consejos para devs",
-    desc: "Optimización, performance, organización y publicación de juegos.",
-    snippet: `-- Usa :GetService en lugar de game.Workspace\nlocal Players = game:GetService("Players")`,
-  },
+  { icon: BookOpen, title: "Variables", slug: "variables", desc: "Tipos, locales vs globales y manejo de servicios.", snippet: `local Players = game:GetService("Players")\nlocal maxHP = 100` },
+  { icon: Code2, title: "Leaderstats", slug: "leaderstats", desc: "Crea el ranking de jugadores con monedas y nivel.", snippet: `local stats = Instance.new("Folder")\nstats.Name = "leaderstats"` },
+  { icon: Database, title: "DataStore", slug: "datastore", desc: "Guardado seguro con retries y UpdateAsync.", snippet: `DS:UpdateAsync(player.UserId, function() return data end)` },
+  { icon: Radio, title: "RemoteEvents", slug: "remoteevents", desc: "Comunicación client/server con validación anti-exploit.", snippet: `RemoteEvent.OnServerEvent:Connect(function(player, action)\n  -- validar\nend)` },
+  { icon: LayoutDashboard, title: "Interfaces UI", slug: "ui", desc: "ScreenGui, TweenService y diseño responsive.", snippet: `TweenService:Create(frame, TweenInfo.new(0.4), {Position = goal}):Play()` },
+  { icon: DollarSign, title: "Gamepasses", slug: "gamepasses", desc: "Monetización con Gamepasses y Developer Products.", snippet: `MarketplaceService:UserOwnsGamePassAsync(uid, passId)` },
+  { icon: Boxes, title: "Sistemas completos", slug: "sistemas", desc: "Inventarios, combate, misiones y economía.", snippet: `local Inventory = {}\nInventory.__index = Inventory` },
+  { icon: Lightbulb, title: "Consejos para devs", slug: "sistemas", desc: "Optimización, performance y publicación.", snippet: `-- Usa :GetService en lugar de game.Workspace\nlocal Players = game:GetService("Players")` },
 ];
 
 function Roblox() {
@@ -121,19 +81,22 @@ function Roblox() {
       <section className="py-8 sm:py-12 px-4 sm:px-6">
         <div className="mx-auto max-w-6xl grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {sections.map((s) => (
-            <article
+            <Link
               key={s.title}
-              className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-cyan/60 hover:-translate-y-1 transition-all"
+              to="/tema/$category/$slug"
+              params={{ category: "roblox", slug: s.slug }}
+              className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-cyan/60 hover:-translate-y-1 transition-all block"
             >
               <div className="flex items-center gap-2">
                 <s.icon className="h-6 w-6 text-neon-cyan" />
                 <h3 className="font-bold text-lg">{s.title}</h3>
+                <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground group-hover:text-neon-cyan transition-colors" />
               </div>
               <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
               <pre className="mt-3 text-[11px] sm:text-xs font-mono bg-black/60 border border-neon-cyan/20 rounded-md p-3 overflow-x-auto text-neon-cyan/90 whitespace-pre">
                 {s.snippet}
               </pre>
-            </article>
+            </Link>
           ))}
         </div>
       </section>

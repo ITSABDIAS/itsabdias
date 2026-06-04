@@ -16,16 +16,16 @@ export const Route = createFileRoute("/gamedev")({
 });
 
 const engines = [
-  { icon: Box, name: "Unity", desc: "C#, 2D/3D, móvil, PC y consolas.", color: "text-neon-cyan" },
-  { icon: Boxes, name: "Unreal Engine", desc: "Blueprints, C++, gráficos AAA.", color: "text-neon-purple" },
-  { icon: Gamepad2, name: "Godot", desc: "GDScript, ligero y open-source.", color: "text-neon-blue" },
+  { icon: Box, name: "Unity", slug: "unity", desc: "C#, 2D/3D, móvil, PC y consolas.", color: "text-neon-cyan" },
+  { icon: Boxes, name: "Unreal Engine", slug: "unreal", desc: "Blueprints, C++, gráficos AAA.", color: "text-neon-purple" },
+  { icon: Gamepad2, name: "Godot", slug: "godot", desc: "GDScript, ligero y open-source.", color: "text-neon-blue" },
 ];
 
 const topics = [
-  { icon: Map, title: "Diseño de niveles", desc: "Pacing, flow, retos y progresión." },
-  { icon: Brain, title: "IA para videojuegos", desc: "Pathfinding, FSM, behavior trees, LLM NPCs." },
-  { icon: Palette, title: "Arte 2D & 3D", desc: "Pixel art, sprites, modelado y texturas." },
-  { icon: Upload, title: "Publicación", desc: "Steam, itch.io, Google Play y App Store." },
+  { icon: Map, title: "Diseño de niveles", slug: "niveles", desc: "Pacing, flow, retos y progresión." },
+  { icon: Brain, title: "IA para videojuegos", slug: "ia", desc: "Pathfinding, FSM, behavior trees, LLM NPCs." },
+  { icon: Palette, title: "Arte 2D & 3D", slug: "arte", desc: "Pixel art, sprites, modelado y texturas." },
+  { icon: Upload, title: "Publicación", slug: "niveles", desc: "Steam, itch.io, Google Play y App Store." },
 ];
 
 function GameDev() {
@@ -55,11 +55,14 @@ function GameDev() {
           </h3>
           <div className="grid sm:grid-cols-3 gap-4">
             {engines.map((e) => (
-              <article key={e.name} className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-purple/60 hover:-translate-y-1 transition-all">
-                <e.icon className={`h-7 w-7 ${e.color}`} />
+              <Link key={e.name} to="/tema/$category/$slug" params={{ category: "gamedev", slug: e.slug }} className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-purple/60 hover:-translate-y-1 transition-all block">
+                <div className="flex items-start justify-between">
+                  <e.icon className={`h-7 w-7 ${e.color}`} />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-neon-cyan transition-colors" />
+                </div>
                 <h4 className="mt-3 font-bold text-lg">{e.name}</h4>
                 <p className="mt-1 text-sm text-muted-foreground">{e.desc}</p>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
@@ -72,11 +75,14 @@ function GameDev() {
           </h3>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {topics.map((t) => (
-              <div key={t.title} className="glass rounded-xl p-6 neon-border hover:-translate-y-1 transition-all">
-                <t.icon className="h-7 w-7 text-neon-cyan" />
+              <Link key={t.title} to="/tema/$category/$slug" params={{ category: "gamedev", slug: t.slug }} className="glass rounded-xl p-6 neon-border hover:-translate-y-1 transition-all block group">
+                <div className="flex items-start justify-between">
+                  <t.icon className="h-7 w-7 text-neon-cyan" />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-neon-cyan transition-colors" />
+                </div>
                 <h4 className="mt-3 font-bold text-lg">{t.title}</h4>
                 <p className="mt-1 text-sm text-muted-foreground">{t.desc}</p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

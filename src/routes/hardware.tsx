@@ -16,10 +16,10 @@ export const Route = createFileRoute("/hardware")({
 });
 
 const components = [
-  { icon: Cpu, name: "CPUs", desc: "Intel, AMD, núcleos, hilos y arquitecturas modernas.", color: "text-neon-cyan" },
-  { icon: Monitor, name: "GPUs", desc: "NVIDIA, AMD, ray tracing, DLSS y FSR.", color: "text-neon-purple" },
-  { icon: MemoryStick, name: "RAM", desc: "DDR4, DDR5, latencias y dual channel.", color: "text-neon-blue" },
-  { icon: HardDrive, name: "SSD & Almacenamiento", desc: "NVMe Gen4/Gen5, SATA y HDDs.", color: "text-neon-cyan" },
+  { icon: Cpu, name: "CPUs", slug: "cpu", desc: "Intel, AMD, núcleos, hilos y arquitecturas modernas.", color: "text-neon-cyan" },
+  { icon: Monitor, name: "GPUs", slug: "gpu", desc: "NVIDIA, AMD, ray tracing, DLSS y FSR.", color: "text-neon-purple" },
+  { icon: MemoryStick, name: "RAM", slug: "ram", desc: "DDR4, DDR5, latencias y dual channel.", color: "text-neon-blue" },
+  { icon: HardDrive, name: "SSD & Almacenamiento", slug: "ssd", desc: "NVMe Gen4/Gen5, SATA y HDDs.", color: "text-neon-cyan" },
 ];
 
 const blocks = [
@@ -55,11 +55,14 @@ function Hardware() {
           </h3>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {components.map((c) => (
-              <article key={c.name} className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-blue/60 hover:-translate-y-1 transition-all">
-                <c.icon className={`h-7 w-7 ${c.color}`} />
+              <Link key={c.name} to="/tema/$category/$slug" params={{ category: "hardware", slug: c.slug }} className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-blue/60 hover:-translate-y-1 transition-all block">
+                <div className="flex items-start justify-between">
+                  <c.icon className={`h-7 w-7 ${c.color}`} />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-neon-cyan transition-colors" />
+                </div>
                 <h4 className="mt-3 font-bold text-lg">{c.name}</h4>
                 <p className="mt-1 text-sm text-muted-foreground">{c.desc}</p>
-              </article>
+              </Link>
             ))}
           </div>
         </div>

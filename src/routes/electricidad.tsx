@@ -16,16 +16,16 @@ export const Route = createFileRoute("/electricidad")({
 });
 
 const fundamentals = [
-  { icon: CircuitBoard, name: "Circuitos", desc: "Serie, paralelo, ley de Ohm y Kirchhoff.", color: "text-neon-cyan" },
-  { icon: Activity, name: "Voltaje", desc: "Diferencia de potencial, AC y DC.", color: "text-neon-purple" },
-  { icon: Zap, name: "Corriente", desc: "Amperios, resistencia y potencia.", color: "text-neon-blue" },
-  { icon: Plug, name: "Sensores", desc: "Temperatura, luz, movimiento y más.", color: "text-neon-cyan" },
+  { icon: CircuitBoard, name: "Circuitos", slug: "circuitos", desc: "Serie, paralelo, ley de Ohm y Kirchhoff.", color: "text-neon-cyan" },
+  { icon: Activity, name: "Voltaje", slug: "voltaje", desc: "Diferencia de potencial, AC y DC.", color: "text-neon-purple" },
+  { icon: Zap, name: "Corriente", slug: "corriente", desc: "Amperios, resistencia y potencia.", color: "text-neon-blue" },
+  { icon: Plug, name: "Sensores", slug: "sensores", desc: "Temperatura, luz, movimiento y más.", color: "text-neon-cyan" },
 ];
 
 const tools = [
-  { icon: Cpu, title: "Arduino", desc: "Microcontroladores, sketches y librerías." },
-  { icon: Lightbulb, title: "Electrónica básica", desc: "Resistencias, diodos, transistores y LEDs." },
-  { icon: Sparkles, title: "Proyectos DIY", desc: "Robots, sensores caseros y domótica." },
+  { icon: Cpu, title: "Arduino", slug: "arduino", desc: "Microcontroladores, sketches y librerías." },
+  { icon: Lightbulb, title: "Electrónica básica", slug: "circuitos", desc: "Resistencias, diodos, transistores y LEDs." },
+  { icon: Sparkles, title: "Proyectos DIY", slug: "diy", desc: "Robots, sensores caseros y domótica." },
 ];
 
 function Electricidad() {
@@ -55,11 +55,14 @@ function Electricidad() {
           </h3>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {fundamentals.map((f) => (
-              <article key={f.name} className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-cyan/60 hover:-translate-y-1 transition-all">
-                <f.icon className={`h-7 w-7 ${f.color}`} />
+              <Link key={f.name} to="/tema/$category/$slug" params={{ category: "electricidad", slug: f.slug }} className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-cyan/60 hover:-translate-y-1 transition-all block">
+                <div className="flex items-start justify-between">
+                  <f.icon className={`h-7 w-7 ${f.color}`} />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-neon-cyan transition-colors" />
+                </div>
                 <h4 className="mt-3 font-bold text-lg">{f.name}</h4>
                 <p className="mt-1 text-sm text-muted-foreground">{f.desc}</p>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
@@ -72,11 +75,14 @@ function Electricidad() {
           </h3>
           <div className="grid sm:grid-cols-3 gap-4">
             {tools.map((t) => (
-              <div key={t.title} className="glass rounded-xl p-6 neon-border hover:-translate-y-1 transition-all">
-                <t.icon className="h-7 w-7 text-neon-cyan" />
+              <Link key={t.title} to="/tema/$category/$slug" params={{ category: "electricidad", slug: t.slug }} className="glass rounded-xl p-6 neon-border hover:-translate-y-1 transition-all block group">
+                <div className="flex items-start justify-between">
+                  <t.icon className="h-7 w-7 text-neon-cyan" />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-neon-cyan transition-colors" />
+                </div>
                 <h4 className="mt-3 font-bold text-lg">{t.title}</h4>
                 <p className="mt-1 text-sm text-muted-foreground">{t.desc}</p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
