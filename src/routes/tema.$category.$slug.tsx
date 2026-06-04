@@ -78,7 +78,7 @@ function TemaPage() {
               <BookOpen className="h-5 w-5 text-neon-cyan" /> Explicación
             </h2>
             <div className="grid sm:grid-cols-2 gap-4">
-              {topic.sections.map((s) => (
+              {topic.sections.map((s: TopicSection) => (
                 <article key={s.heading} className="glass rounded-xl p-5 sm:p-6 neon-border">
                   <h3 className="font-bold text-base sm:text-lg text-neon-cyan">{s.heading}</h3>
                   <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.body}</p>
@@ -96,7 +96,7 @@ function TemaPage() {
               <Code2 className="h-5 w-5 text-neon-purple" /> Ejemplos
             </h2>
             <div className="space-y-4">
-              {topic.examples.map((ex) => (
+              {topic.examples.map((ex: TopicExample) => (
                 <div key={ex.label} className="rounded-xl border border-border bg-gradient-card overflow-hidden">
                   <div className="px-4 py-2.5 border-b border-border flex items-center justify-between">
                     <span className="text-sm font-semibold">{ex.label}</span>
@@ -122,7 +122,7 @@ function TemaPage() {
             <Lightbulb className="h-5 w-5 text-neon-cyan" /> Consejos clave
           </h2>
           <ul className="glass rounded-xl p-5 sm:p-6 neon-border space-y-2.5">
-            {topic.tips.map((tip) => (
+            {topic.tips.map((tip: string) => (
               <li key={tip} className="flex gap-2 text-sm text-muted-foreground">
                 <span className="text-neon-purple flex-shrink-0">▸</span>
                 <span>{tip}</span>
