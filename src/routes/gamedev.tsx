@@ -16,16 +16,16 @@ export const Route = createFileRoute("/gamedev")({
 });
 
 const engines = [
-  { icon: Box, name: "Unity", desc: "C#, 2D/3D, móvil, PC y consolas.", color: "text-neon-cyan" },
-  { icon: Boxes, name: "Unreal Engine", desc: "Blueprints, C++, gráficos AAA.", color: "text-neon-purple" },
-  { icon: Gamepad2, name: "Godot", desc: "GDScript, ligero y open-source.", color: "text-neon-blue" },
+  { icon: Box, name: "Unity", slug: "unity", desc: "C#, 2D/3D, móvil, PC y consolas.", color: "text-neon-cyan" },
+  { icon: Boxes, name: "Unreal Engine", slug: "unreal", desc: "Blueprints, C++, gráficos AAA.", color: "text-neon-purple" },
+  { icon: Gamepad2, name: "Godot", slug: "godot", desc: "GDScript, ligero y open-source.", color: "text-neon-blue" },
 ];
 
 const topics = [
-  { icon: Map, title: "Diseño de niveles", desc: "Pacing, flow, retos y progresión." },
-  { icon: Brain, title: "IA para videojuegos", desc: "Pathfinding, FSM, behavior trees, LLM NPCs." },
-  { icon: Palette, title: "Arte 2D & 3D", desc: "Pixel art, sprites, modelado y texturas." },
-  { icon: Upload, title: "Publicación", desc: "Steam, itch.io, Google Play y App Store." },
+  { icon: Map, title: "Diseño de niveles", slug: "niveles", desc: "Pacing, flow, retos y progresión." },
+  { icon: Brain, title: "IA para videojuegos", slug: "ia", desc: "Pathfinding, FSM, behavior trees, LLM NPCs." },
+  { icon: Palette, title: "Arte 2D & 3D", slug: "arte", desc: "Pixel art, sprites, modelado y texturas." },
+  { icon: Upload, title: "Publicación", slug: "niveles", desc: "Steam, itch.io, Google Play y App Store." },
 ];
 
 function GameDev() {
