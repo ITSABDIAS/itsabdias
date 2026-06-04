@@ -56,11 +56,14 @@ function Software() {
           </h3>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {topics.map((t) => (
-              <article key={t.name} className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-blue/60 hover:-translate-y-1 transition-all">
-                <t.icon className={`h-7 w-7 ${t.color}`} />
+              <Link key={t.name} to="/tema/$category/$slug" params={{ category: "software", slug: t.slug }} className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-blue/60 hover:-translate-y-1 transition-all block">
+                <div className="flex items-start justify-between">
+                  <t.icon className={`h-7 w-7 ${t.color}`} />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-neon-cyan transition-colors" />
+                </div>
                 <h4 className="mt-3 font-bold text-lg">{t.name}</h4>
                 <p className="mt-1 text-sm text-muted-foreground">{t.desc}</p>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
