@@ -43,7 +43,7 @@ export const Route = createFileRoute("/tema/$category/$slug")({
 });
 
 function TemaPage() {
-  const { topic } = Route.useLoaderData();
+  const { topic } = Route.useLoaderData() as { topic: Topic };
   const meta = CATEGORY_META[topic.category] ?? { label: topic.category, parentPath: "/", accent: "neon-cyan" };
   const nexusHref = `/ai?q=${encodeURIComponent(topic.nexusPrompt)}#chat`;
 
