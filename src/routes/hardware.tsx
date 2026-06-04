@@ -16,10 +16,10 @@ export const Route = createFileRoute("/hardware")({
 });
 
 const components = [
-  { icon: Cpu, name: "CPUs", desc: "Intel, AMD, núcleos, hilos y arquitecturas modernas.", color: "text-neon-cyan" },
-  { icon: Monitor, name: "GPUs", desc: "NVIDIA, AMD, ray tracing, DLSS y FSR.", color: "text-neon-purple" },
-  { icon: MemoryStick, name: "RAM", desc: "DDR4, DDR5, latencias y dual channel.", color: "text-neon-blue" },
-  { icon: HardDrive, name: "SSD & Almacenamiento", desc: "NVMe Gen4/Gen5, SATA y HDDs.", color: "text-neon-cyan" },
+  { icon: Cpu, name: "CPUs", slug: "cpu", desc: "Intel, AMD, núcleos, hilos y arquitecturas modernas.", color: "text-neon-cyan" },
+  { icon: Monitor, name: "GPUs", slug: "gpu", desc: "NVIDIA, AMD, ray tracing, DLSS y FSR.", color: "text-neon-purple" },
+  { icon: MemoryStick, name: "RAM", slug: "ram", desc: "DDR4, DDR5, latencias y dual channel.", color: "text-neon-blue" },
+  { icon: HardDrive, name: "SSD & Almacenamiento", slug: "ssd", desc: "NVMe Gen4/Gen5, SATA y HDDs.", color: "text-neon-cyan" },
 ];
 
 const blocks = [
