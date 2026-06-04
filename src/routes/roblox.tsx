@@ -81,19 +81,22 @@ function Roblox() {
       <section className="py-8 sm:py-12 px-4 sm:px-6">
         <div className="mx-auto max-w-6xl grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {sections.map((s) => (
-            <article
+            <Link
               key={s.title}
-              className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-cyan/60 hover:-translate-y-1 transition-all"
+              to="/tema/$category/$slug"
+              params={{ category: "roblox", slug: s.slug }}
+              className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-cyan/60 hover:-translate-y-1 transition-all block"
             >
               <div className="flex items-center gap-2">
                 <s.icon className="h-6 w-6 text-neon-cyan" />
                 <h3 className="font-bold text-lg">{s.title}</h3>
+                <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground group-hover:text-neon-cyan transition-colors" />
               </div>
               <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
               <pre className="mt-3 text-[11px] sm:text-xs font-mono bg-black/60 border border-neon-cyan/20 rounded-md p-3 overflow-x-auto text-neon-cyan/90 whitespace-pre">
                 {s.snippet}
               </pre>
-            </article>
+            </Link>
           ))}
         </div>
       </section>
