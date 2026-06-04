@@ -96,11 +96,12 @@ type Msg = { role: "user" | "assistant"; content: string };
 
 function AI() {
   const { user } = useAuth();
+  const { q } = Route.useSearch();
   const callAi = useServerFn(aiChat);
   const fetchHistory = useServerFn(getChatHistory);
   const persistMsg = useServerFn(saveChatMessage);
   const doClearHistory = useServerFn(clearChatHistory);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(q ?? "");
   const [loading, setLoading] = useState(false);
   const [historyLoading, setHistoryLoading] = useState(true);
   const [msgs, setMsgs] = useState<Msg[]>([{ role: "assistant", content: WELCOME }]);
