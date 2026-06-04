@@ -27,6 +27,9 @@ import { getChatHistory, saveChatMessage, clearChatHistory } from "@/lib/chat.fu
 import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/ai")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    q: typeof search.q === "string" ? search.q : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Inteligencia Artificial — ItsaBDias" },
