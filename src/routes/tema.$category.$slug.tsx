@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import { ArrowLeft, Sparkles, BookOpen, Code2, Lightbulb } from "lucide-react";
-import { findTopic, CATEGORY_META } from "@/lib/topics";
+import { findTopic, CATEGORY_META, type Topic, type TopicSection, type TopicExample } from "@/lib/topics";
 
 export const Route = createFileRoute("/tema/$category/$slug")({
   loader: ({ params }) => {
