@@ -16,16 +16,16 @@ export const Route = createFileRoute("/electricidad")({
 });
 
 const fundamentals = [
-  { icon: CircuitBoard, name: "Circuitos", desc: "Serie, paralelo, ley de Ohm y Kirchhoff.", color: "text-neon-cyan" },
-  { icon: Activity, name: "Voltaje", desc: "Diferencia de potencial, AC y DC.", color: "text-neon-purple" },
-  { icon: Zap, name: "Corriente", desc: "Amperios, resistencia y potencia.", color: "text-neon-blue" },
-  { icon: Plug, name: "Sensores", desc: "Temperatura, luz, movimiento y más.", color: "text-neon-cyan" },
+  { icon: CircuitBoard, name: "Circuitos", slug: "circuitos", desc: "Serie, paralelo, ley de Ohm y Kirchhoff.", color: "text-neon-cyan" },
+  { icon: Activity, name: "Voltaje", slug: "voltaje", desc: "Diferencia de potencial, AC y DC.", color: "text-neon-purple" },
+  { icon: Zap, name: "Corriente", slug: "corriente", desc: "Amperios, resistencia y potencia.", color: "text-neon-blue" },
+  { icon: Plug, name: "Sensores", slug: "sensores", desc: "Temperatura, luz, movimiento y más.", color: "text-neon-cyan" },
 ];
 
 const tools = [
-  { icon: Cpu, title: "Arduino", desc: "Microcontroladores, sketches y librerías." },
-  { icon: Lightbulb, title: "Electrónica básica", desc: "Resistencias, diodos, transistores y LEDs." },
-  { icon: Sparkles, title: "Proyectos DIY", desc: "Robots, sensores caseros y domótica." },
+  { icon: Cpu, title: "Arduino", slug: "arduino", desc: "Microcontroladores, sketches y librerías." },
+  { icon: Lightbulb, title: "Electrónica básica", slug: "circuitos", desc: "Resistencias, diodos, transistores y LEDs." },
+  { icon: Sparkles, title: "Proyectos DIY", slug: "diy", desc: "Robots, sensores caseros y domótica." },
 ];
 
 function Electricidad() {
