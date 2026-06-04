@@ -55,11 +55,14 @@ function GameDev() {
           </h3>
           <div className="grid sm:grid-cols-3 gap-4">
             {engines.map((e) => (
-              <article key={e.name} className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-purple/60 hover:-translate-y-1 transition-all">
-                <e.icon className={`h-7 w-7 ${e.color}`} />
+              <Link key={e.name} to="/tema/$category/$slug" params={{ category: "gamedev", slug: e.slug }} className="group rounded-xl p-5 bg-gradient-card border border-border hover:border-neon-purple/60 hover:-translate-y-1 transition-all block">
+                <div className="flex items-start justify-between">
+                  <e.icon className={`h-7 w-7 ${e.color}`} />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-neon-cyan transition-colors" />
+                </div>
                 <h4 className="mt-3 font-bold text-lg">{e.name}</h4>
                 <p className="mt-1 text-sm text-muted-foreground">{e.desc}</p>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
