@@ -1,9 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X, Youtube, LogOut, User as UserIcon } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/hooks/useAuth";
 import { NotificationBell } from "@/components/NotificationBell";
+import { supabase } from "@/integrations/supabase/client";
 
 const links = [
   { to: "/", label: "Inicio" },
@@ -24,6 +25,16 @@ const links = [
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const { user, signOut } = useAuth();
+  const [myUsername, setMyUsername] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user) { setMyUsername(null); return; }
+    let cancelled = false;
+    supabase.from("profiles").select("username").eq("id", user.id).maybeSingle().then(({ data }) => {
+      if (!cancelled) setMyUsername(data?.username ?? null);
+    });
+    return () => { cancelled = true; };
+  }, [user]);
   return (
     <header className="fixed top-0 inset-x-0 z-50 glass">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 flex items-center justify-between h-16">
@@ -47,13 +58,24 @@ export function Navbar() {
           {user ? (
             <>
               <NotificationBell />
-              <Link
-                to="/profile"
-                className="hidden md:inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <UserIcon className="h-3.5 w-3.5 text-neon-cyan" />
-                {user.email?.split("@")[0]}
-              </Link>
+              {myUsername ? (
+                <Link
+                  to="/u/$username"
+                  params={{ username: myUsername }}
+                  className="hidden md:inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <UserIcon className="h-3.5 w-3.5 text-neon-cyan" />
+                  {myUsername}
+                </Link>
+              ) : (
+                <Link
+                  to="/profile"
+                  className="hidden md:inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <UserIcon className="h-3.5 w-3.5 text-neon-cyan" />
+                  {user.email?.split("@")[0]}
+                </Link>
+              )}
               <button
                 onClick={() => signOut()}
                 className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-md border border-border hover:border-neon-purple/60 text-xs font-semibold"
