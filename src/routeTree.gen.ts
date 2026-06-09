@@ -28,6 +28,7 @@ import { Route as AiRouteImport } from './routes/ai'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as TemaCategorySlugRouteImport } from './routes/tema.$category.$slug'
 
 const TecnologiaRoute = TecnologiaRouteImport.update({
@@ -125,6 +126,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UUsernameRoute = UUsernameRouteImport.update({
+  id: '/u/$username',
+  path: '/u/$username',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TemaCategorySlugRoute = TemaCategorySlugRouteImport.update({
   id: '/tema/$category/$slug',
   path: '/tema/$category/$slug',
@@ -151,6 +157,7 @@ export interface FileRoutesByFullPath {
   '/software': typeof SoftwareRoute
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
+  '/u/$username': typeof UUsernameRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
 }
 export interface FileRoutesByTo {
@@ -173,6 +180,7 @@ export interface FileRoutesByTo {
   '/software': typeof SoftwareRoute
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
+  '/u/$username': typeof UUsernameRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
 }
 export interface FileRoutesById {
@@ -196,6 +204,7 @@ export interface FileRoutesById {
   '/software': typeof SoftwareRoute
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
+  '/u/$username': typeof UUsernameRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
 }
 export interface FileRouteTypes {
@@ -220,6 +229,7 @@ export interface FileRouteTypes {
     | '/software'
     | '/staff'
     | '/tecnologia'
+    | '/u/$username'
     | '/tema/$category/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -242,6 +252,7 @@ export interface FileRouteTypes {
     | '/software'
     | '/staff'
     | '/tecnologia'
+    | '/u/$username'
     | '/tema/$category/$slug'
   id:
     | '__root__'
@@ -264,6 +275,7 @@ export interface FileRouteTypes {
     | '/software'
     | '/staff'
     | '/tecnologia'
+    | '/u/$username'
     | '/tema/$category/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -287,6 +299,7 @@ export interface RootRouteChildren {
   SoftwareRoute: typeof SoftwareRoute
   StaffRoute: typeof StaffRoute
   TecnologiaRoute: typeof TecnologiaRoute
+  UUsernameRoute: typeof UUsernameRoute
   TemaCategorySlugRoute: typeof TemaCategorySlugRoute
 }
 
@@ -425,6 +438,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/u/$username': {
+      id: '/u/$username'
+      path: '/u/$username'
+      fullPath: '/u/$username'
+      preLoaderRoute: typeof UUsernameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tema/$category/$slug': {
       id: '/tema/$category/$slug'
       path: '/tema/$category/$slug'
@@ -455,6 +475,7 @@ const rootRouteChildren: RootRouteChildren = {
   SoftwareRoute: SoftwareRoute,
   StaffRoute: StaffRoute,
   TecnologiaRoute: TecnologiaRoute,
+  UUsernameRoute: UUsernameRoute,
   TemaCategorySlugRoute: TemaCategorySlugRoute,
 }
 export const routeTree = rootRouteImport
