@@ -25,6 +25,16 @@ const links = [
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const { user, signOut } = useAuth();
+  const [myUsername, setMyUsername] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user) { setMyUsername(null); return; }
+    let cancelled = false;
+    supabase.from("profiles").select("username").eq("id", user.id).maybeSingle().then(({ data }) => {
+      if (!cancelled) setMyUsername(data?.username ?? null);
+    });
+    return () => { cancelled = true; };
+  }, [user]);
   return (
     <header className="fixed top-0 inset-x-0 z-50 glass">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 flex items-center justify-between h-16">
