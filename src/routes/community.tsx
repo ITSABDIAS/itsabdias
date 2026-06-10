@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { RankBadge, topRank } from "@/components/RankBadge";
 import { useUserRoles } from "@/hooks/useUserRoles";
+import { PremiumName, PremiumAvatarRing } from "@/components/PremiumName";
 
 export const Route = createFileRoute("/community")({
   head: () => ({
