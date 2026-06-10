@@ -260,6 +260,7 @@ function PublicProfilePage() {
               <StatCard label="Siguiendo" value={stats.following} onClick={() => setDialog("following")} />
             </div>
           </div>
+          ); })()}
         </div>
 
         <FollowersDialog
