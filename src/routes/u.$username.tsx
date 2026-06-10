@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { User as UserIcon, UserPlus, UserCheck, MessageSquare, Loader2 } from "lucide-react";
 import { RankBadge, RANK_PRIORITY, type RankSlug } from "@/components/RankBadge";
 import { FollowersDialog } from "@/components/FollowersDialog";
+import { PremiumName, PremiumAvatarRing } from "@/components/PremiumName";
 
 export const Route = createFileRoute("/u/$username")({
   head: ({ params }) => ({
