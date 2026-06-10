@@ -214,17 +214,28 @@ function PublicProfilePage() {
                     Editar perfil
                   </Link>
                 ) : (
-                  <button
-                    onClick={toggleFollow}
-                    disabled={followBusy}
-                    className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-md font-semibold text-sm transition-all disabled:opacity-60 ${
-                      isFollowing
-                        ? "border border-neon-cyan/50 text-neon-cyan hover:bg-destructive/20 hover:border-destructive/60 hover:text-destructive"
-                        : "bg-gradient-neon text-primary-foreground shadow-neon-purple hover:shadow-neon-blue"
-                    }`}
-                  >
-                    {isFollowing ? <><UserCheck className="h-4 w-4" /> Siguiendo</> : <><UserPlus className="h-4 w-4" /> Seguir</>}
-                  </button>
+                  <>
+                    <button
+                      onClick={toggleFollow}
+                      disabled={followBusy}
+                      className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-md font-semibold text-sm transition-all disabled:opacity-60 ${
+                        isFollowing
+                          ? "border border-neon-cyan/50 text-neon-cyan hover:bg-destructive/20 hover:border-destructive/60 hover:text-destructive"
+                          : "bg-gradient-neon text-primary-foreground shadow-neon-purple hover:shadow-neon-blue"
+                      }`}
+                    >
+                      {isFollowing ? <><UserCheck className="h-4 w-4" /> Siguiendo</> : <><UserPlus className="h-4 w-4" /> Seguir</>}
+                    </button>
+                    <Link
+                      to="/messages"
+                      search={{ to: profile.id }}
+                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-md border border-neon-cyan/50 text-neon-cyan hover:bg-neon-cyan/10 font-semibold text-sm"
+                      title="Enviar mensaje"
+                    >
+                      <MessageSquare className="h-4 w-4" />
+                      <span className="hidden sm:inline">Mensaje</span>
+                    </Link>
+                  </>
                 )}
               </div>
             </div>
