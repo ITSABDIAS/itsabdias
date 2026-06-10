@@ -278,7 +278,8 @@ function Community() {
                 </div>
               )}
             </article>
-          ))}
+            );
+          })}
         </div>
       </section>
     </PageShell>
