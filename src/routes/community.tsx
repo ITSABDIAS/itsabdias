@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { RankBadge, topRank } from "@/components/RankBadge";
 import { useUserRoles } from "@/hooks/useUserRoles";
+import { PremiumName, PremiumAvatarRing } from "@/components/PremiumName";
 
 export const Route = createFileRoute("/community")({
   head: () => ({
@@ -189,16 +190,32 @@ function Community() {
             <p className="text-center text-muted-foreground">Sé el primero en publicar algo.</p>
           )}
 
-          {posts.map((p) => (
-            <article key={p.id} className="glass rounded-2xl p-5 hover:border-neon-blue/40 transition-colors">
+          {[...posts].sort((a, b) => {
+            const ap = rolesMap.get(a.user_id)?.some((r) => r === "premium" || r === "founder") ? 1 : 0;
+            const bp = rolesMap.get(b.user_id)?.some((r) => r === "premium" || r === "founder") ? 1 : 0;
+            if (ap !== bp) return bp - ap;
+            return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+          }).map((p) => {
+            const pRoles = rolesMap.get(p.user_id);
+            const isPrem = !!pRoles?.some((r) => r === "premium" || r === "founder");
+            return (
+            <article key={p.id} className={`glass rounded-2xl p-5 transition-colors ${isPrem ? "border-2 border-[#fbbf24]/50 shadow-[0_0_20px_rgba(251,191,36,0.18)]" : "hover:border-neon-blue/40"}`}>
               <div className="flex items-center gap-3">
-                <div className="h-11 w-11 rounded-full bg-gradient-neon flex items-center justify-center font-bold text-primary-foreground uppercase">
-                  {(p.profile?.username ?? "?")[0]}
-                </div>
+                <PremiumAvatarRing premium={isPrem}>
+                  <div className="h-11 w-11 rounded-full bg-gradient-neon flex items-center justify-center font-bold text-primary-foreground uppercase overflow-hidden">
+                    {p.profile?.avatar_url ? <img src={p.profile.avatar_url} alt="" className="h-full w-full object-cover" /> : (p.profile?.username ?? "?")[0]}
+                  </div>
+                </PremiumAvatarRing>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-bold truncate">{p.profile?.username ?? "anónimo"}</span>
-                    {(() => { const t = topRank(rolesMap.get(p.user_id)); return t ? <RankBadge slug={t} size="xs" /> : null; })()}
+                    {p.profile?.username ? (
+                      <Link to="/u/$username" params={{ username: p.profile.username }} className="font-bold truncate hover:underline">
+                        <PremiumName premium={isPrem}>{p.profile.username}</PremiumName>
+                      </Link>
+                    ) : (
+                      <span className="font-bold truncate">anónimo</span>
+                    )}
+                    {(() => { const t = topRank(pRoles); return t ? <RankBadge slug={t} size="xs" /> : null; })()}
                   </div>
                   <div className="text-xs text-muted-foreground">{timeAgo(p.created_at)}</div>
                 </div>
@@ -261,7 +278,8 @@ function Community() {
                 </div>
               )}
             </article>
-          ))}
+            );
+          })}
         </div>
       </section>
     </PageShell>

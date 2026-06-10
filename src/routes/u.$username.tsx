@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { User as UserIcon, UserPlus, UserCheck, MessageSquare, Loader2 } from "lucide-react";
 import { RankBadge, RANK_PRIORITY, type RankSlug } from "@/components/RankBadge";
 import { FollowersDialog } from "@/components/FollowersDialog";
+import { PremiumName, PremiumAvatarRing } from "@/components/PremiumName";
 
 export const Route = createFileRoute("/u/$username")({
   head: ({ params }) => ({
@@ -183,19 +184,30 @@ function PublicProfilePage() {
         </div>
 
         <div className="mx-auto max-w-4xl px-6 -mt-16 relative z-10">
-          <div className="glass rounded-2xl p-6 sm:p-8 neon-border">
+          {(() => { const isPrem = roles.includes("premium") || roles.includes("founder"); return (
+          <div className={`glass rounded-2xl p-6 sm:p-8 ${isPrem ? "border-2 border-[#fbbf24]/60 shadow-[0_0_28px_rgba(251,191,36,0.25)]" : "neon-border"}`}>
             <div className="flex flex-col sm:flex-row items-start gap-6">
-              <div className="h-28 w-28 rounded-full bg-gradient-neon flex items-center justify-center overflow-hidden shadow-neon-purple ring-4 ring-background -mt-20 shrink-0">
-                {profile.avatar_url ? (
-                  <img src={profile.avatar_url} alt={profile.username} className="h-full w-full object-cover" />
-                ) : (
-                  <UserIcon className="h-14 w-14 text-primary-foreground" />
-                )}
+              <div className="-mt-20 shrink-0">
+                <PremiumAvatarRing premium={isPrem}>
+                  <div className="h-28 w-28 rounded-full bg-gradient-neon flex items-center justify-center overflow-hidden shadow-neon-purple ring-4 ring-background">
+                    {profile.avatar_url ? (
+                      <img src={profile.avatar_url} alt={profile.username} className="h-full w-full object-cover" />
+                    ) : (
+                      <UserIcon className="h-14 w-14 text-primary-foreground" />
+                    )}
+                  </div>
+                </PremiumAvatarRing>
               </div>
 
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-3">
-                  <h1 className="font-display text-2xl sm:text-3xl font-bold text-gradient-neon">{profile.username}</h1>
+                  <h1 className="font-display text-2xl sm:text-3xl font-bold">
+                    {isPrem ? (
+                      <PremiumName premium>{profile.username}</PremiumName>
+                    ) : (
+                      <span className="text-gradient-neon">{profile.username}</span>
+                    )}
+                  </h1>
                   {sortedRoles.length > 0 && (
                     <div className="flex flex-wrap gap-1.5">
                       {sortedRoles.map((r) => <RankBadge key={r} slug={r} size="sm" />)}
@@ -214,17 +226,28 @@ function PublicProfilePage() {
                     Editar perfil
                   </Link>
                 ) : (
-                  <button
-                    onClick={toggleFollow}
-                    disabled={followBusy}
-                    className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-md font-semibold text-sm transition-all disabled:opacity-60 ${
-                      isFollowing
-                        ? "border border-neon-cyan/50 text-neon-cyan hover:bg-destructive/20 hover:border-destructive/60 hover:text-destructive"
-                        : "bg-gradient-neon text-primary-foreground shadow-neon-purple hover:shadow-neon-blue"
-                    }`}
-                  >
-                    {isFollowing ? <><UserCheck className="h-4 w-4" /> Siguiendo</> : <><UserPlus className="h-4 w-4" /> Seguir</>}
-                  </button>
+                  <>
+                    <button
+                      onClick={toggleFollow}
+                      disabled={followBusy}
+                      className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-md font-semibold text-sm transition-all disabled:opacity-60 ${
+                        isFollowing
+                          ? "border border-neon-cyan/50 text-neon-cyan hover:bg-destructive/20 hover:border-destructive/60 hover:text-destructive"
+                          : "bg-gradient-neon text-primary-foreground shadow-neon-purple hover:shadow-neon-blue"
+                      }`}
+                    >
+                      {isFollowing ? <><UserCheck className="h-4 w-4" /> Siguiendo</> : <><UserPlus className="h-4 w-4" /> Seguir</>}
+                    </button>
+                    <Link
+                      to="/messages"
+                      search={{ to: profile.id }}
+                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-md border border-neon-cyan/50 text-neon-cyan hover:bg-neon-cyan/10 font-semibold text-sm"
+                      title="Enviar mensaje"
+                    >
+                      <MessageSquare className="h-4 w-4" />
+                      <span className="hidden sm:inline">Mensaje</span>
+                    </Link>
+                  </>
                 )}
               </div>
             </div>
@@ -237,6 +260,7 @@ function PublicProfilePage() {
               <StatCard label="Siguiendo" value={stats.following} onClick={() => setDialog("following")} />
             </div>
           </div>
+          ); })()}
         </div>
 
         <FollowersDialog

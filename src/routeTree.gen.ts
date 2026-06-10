@@ -18,6 +18,7 @@ import { Route as ProgramacionRouteImport } from './routes/programacion'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PremiumRouteImport } from './routes/premium'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as HardwareRouteImport } from './routes/hardware'
 import { Route as GamedevRouteImport } from './routes/gamedev'
@@ -74,6 +75,11 @@ const PremiumRoute = PremiumRouteImport.update({
 const NotificationsRoute = NotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MessagesRoute = MessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HelpRoute = HelpRouteImport.update({
@@ -148,6 +154,7 @@ export interface FileRoutesByFullPath {
   '/gamedev': typeof GamedevRoute
   '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
+  '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
   '/profile': typeof ProfileRoute
@@ -171,6 +178,7 @@ export interface FileRoutesByTo {
   '/gamedev': typeof GamedevRoute
   '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
+  '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
   '/profile': typeof ProfileRoute
@@ -195,6 +203,7 @@ export interface FileRoutesById {
   '/gamedev': typeof GamedevRoute
   '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
+  '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
   '/profile': typeof ProfileRoute
@@ -220,6 +229,7 @@ export interface FileRouteTypes {
     | '/gamedev'
     | '/hardware'
     | '/help'
+    | '/messages'
     | '/notifications'
     | '/premium'
     | '/profile'
@@ -243,6 +253,7 @@ export interface FileRouteTypes {
     | '/gamedev'
     | '/hardware'
     | '/help'
+    | '/messages'
     | '/notifications'
     | '/premium'
     | '/profile'
@@ -266,6 +277,7 @@ export interface FileRouteTypes {
     | '/gamedev'
     | '/hardware'
     | '/help'
+    | '/messages'
     | '/notifications'
     | '/premium'
     | '/profile'
@@ -290,6 +302,7 @@ export interface RootRouteChildren {
   GamedevRoute: typeof GamedevRoute
   HardwareRoute: typeof HardwareRoute
   HelpRoute: typeof HelpRoute
+  MessagesRoute: typeof MessagesRoute
   NotificationsRoute: typeof NotificationsRoute
   PremiumRoute: typeof PremiumRoute
   ProfileRoute: typeof ProfileRoute
@@ -366,6 +379,13 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/notifications'
       preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/messages': {
+      id: '/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof MessagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/help': {
@@ -466,6 +486,7 @@ const rootRouteChildren: RootRouteChildren = {
   GamedevRoute: GamedevRoute,
   HardwareRoute: HardwareRoute,
   HelpRoute: HelpRoute,
+  MessagesRoute: MessagesRoute,
   NotificationsRoute: NotificationsRoute,
   PremiumRoute: PremiumRoute,
   ProfileRoute: ProfileRoute,
