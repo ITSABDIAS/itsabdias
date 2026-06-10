@@ -18,6 +18,7 @@ const links = [
   { to: "/tecnologia", label: "Tecnología" },
   { to: "/projects", label: "Proyectos" },
   { to: "/community", label: "Comunidad" },
+  { to: "/messages", label: "Mensajes" },
   { to: "/help", label: "Ayuda" },
   { to: "/premium", label: "Premium" },
 ] as const;
