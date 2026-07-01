@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import { Gamepad2, Box, Sparkles, ArrowRight, Boxes, Brain, Palette, Upload, Map } from "lucide-react";
+import { TutorialsSection } from "@/components/TutorialsSection";
 
 export const Route = createFileRoute("/gamedev")({
   head: () => ({
@@ -97,6 +98,7 @@ function GameDev() {
           </Link>
         </div>
       </section>
+          <TutorialsSection category="gamedev" />
     </PageShell>
   );
 }

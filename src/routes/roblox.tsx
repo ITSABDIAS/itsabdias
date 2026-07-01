@@ -14,6 +14,7 @@ import {
   ArrowRight,
   Sparkles,
 } from "lucide-react";
+import { TutorialsSection } from "@/components/TutorialsSection";
 
 export const Route = createFileRoute("/roblox")({
   head: () => ({
@@ -116,6 +117,7 @@ function Roblox() {
           </Link>
         </div>
       </section>
+          <TutorialsSection category="roblox" />
     </PageShell>
   );
 }

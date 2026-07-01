@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import { Wrench, Database, Server, Network, Cloud, Layout, Sparkles, ArrowRight, GitBranch } from "lucide-react";
+import { TutorialsSection } from "@/components/TutorialsSection";
 
 export const Route = createFileRoute("/software")({
   head: () => ({
@@ -98,6 +99,7 @@ function Software() {
           </Link>
         </div>
       </section>
+          <TutorialsSection category="software" />
     </PageShell>
   );
 }

@@ -14,6 +14,7 @@ import {
   Scissors,
   LifeBuoy,
 } from "lucide-react";
+import { TutorialsSection } from "@/components/TutorialsSection";
 
 export const Route = createFileRoute("/programacion")({
   head: () => ({
@@ -159,6 +160,7 @@ function Programacion() {
           </Link>
         </div>
       </section>
+          <TutorialsSection category="programacion" />
     </PageShell>
   );
 }

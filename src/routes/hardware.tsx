@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import { Cpu, MemoryStick, HardDrive, Monitor, Sparkles, ArrowRight, Wrench, Gauge, ShoppingCart } from "lucide-react";
+import { TutorialsSection } from "@/components/TutorialsSection";
 
 export const Route = createFileRoute("/hardware")({
   head: () => ({
@@ -94,6 +95,7 @@ function Hardware() {
           </Link>
         </div>
       </section>
+          <TutorialsSection category="hardware" />
     </PageShell>
   );
 }
