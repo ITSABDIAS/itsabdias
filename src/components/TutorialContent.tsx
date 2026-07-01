@@ -1,3 +1,4 @@
+import type { ReactElement } from "react";
 import { CopyButton } from "@/components/CopyButton";
 
 // Simple markdown-lite renderer with code blocks + headings + lists.
