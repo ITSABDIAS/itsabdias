@@ -31,6 +31,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
+import { Route as AdminTutorialesRouteImport } from './routes/admin.tutoriales'
 import { Route as TutorialCategorySlugRouteImport } from './routes/tutorial.$category.$slug'
 import { Route as TemaCategorySlugRouteImport } from './routes/tema.$category.$slug'
 
@@ -144,6 +145,11 @@ const UUsernameRoute = UUsernameRouteImport.update({
   path: '/u/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminTutorialesRoute = AdminTutorialesRouteImport.update({
+  id: '/tutoriales',
+  path: '/tutoriales',
+  getParentRoute: () => AdminRoute,
+} as any)
 const TutorialCategorySlugRoute = TutorialCategorySlugRouteImport.update({
   id: '/tutorial/$category/$slug',
   path: '/tutorial/$category/$slug',
@@ -158,7 +164,7 @@ const TemaCategorySlugRoute = TemaCategorySlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
@@ -177,6 +183,7 @@ export interface FileRoutesByFullPath {
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
   '/tutoriales': typeof TutorialesRoute
+  '/admin/tutoriales': typeof AdminTutorialesRoute
   '/u/$username': typeof UUsernameRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
   '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
@@ -184,7 +191,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
@@ -203,6 +210,7 @@ export interface FileRoutesByTo {
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
   '/tutoriales': typeof TutorialesRoute
+  '/admin/tutoriales': typeof AdminTutorialesRoute
   '/u/$username': typeof UUsernameRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
   '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
@@ -211,7 +219,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
@@ -230,6 +238,7 @@ export interface FileRoutesById {
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
   '/tutoriales': typeof TutorialesRoute
+  '/admin/tutoriales': typeof AdminTutorialesRoute
   '/u/$username': typeof UUsernameRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
   '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
@@ -258,6 +267,7 @@ export interface FileRouteTypes {
     | '/staff'
     | '/tecnologia'
     | '/tutoriales'
+    | '/admin/tutoriales'
     | '/u/$username'
     | '/tema/$category/$slug'
     | '/tutorial/$category/$slug'
@@ -284,6 +294,7 @@ export interface FileRouteTypes {
     | '/staff'
     | '/tecnologia'
     | '/tutoriales'
+    | '/admin/tutoriales'
     | '/u/$username'
     | '/tema/$category/$slug'
     | '/tutorial/$category/$slug'
@@ -310,6 +321,7 @@ export interface FileRouteTypes {
     | '/staff'
     | '/tecnologia'
     | '/tutoriales'
+    | '/admin/tutoriales'
     | '/u/$username'
     | '/tema/$category/$slug'
     | '/tutorial/$category/$slug'
@@ -318,7 +330,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AiRoute: typeof AiRoute
   AuthRoute: typeof AuthRoute
   CommunityRoute: typeof CommunityRoute
@@ -498,6 +510,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/tutoriales': {
+      id: '/admin/tutoriales'
+      path: '/tutoriales'
+      fullPath: '/admin/tutoriales'
+      preLoaderRoute: typeof AdminTutorialesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/tutorial/$category/$slug': {
       id: '/tutorial/$category/$slug'
       path: '/tutorial/$category/$slug'
@@ -515,10 +534,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminTutorialesRoute: typeof AdminTutorialesRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminTutorialesRoute: AdminTutorialesRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   AiRoute: AiRoute,
   AuthRoute: AuthRoute,
   CommunityRoute: CommunityRoute,

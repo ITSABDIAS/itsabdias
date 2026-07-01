@@ -86,7 +86,8 @@ function AdminTutorialesPage() {
   }, [rows, cat, q]);
 
   const toggle = async (id: string, field: "is_featured" | "is_hidden", value: boolean) => {
-    const { error } = await supabase.from("tutorials").update({ [field]: value }).eq("id", id);
+    const patch = field === "is_featured" ? { is_featured: value } : { is_hidden: value };
+    const { error } = await supabase.from("tutorials").update(patch).eq("id", id);
     if (error) return toast.error(error.message);
     load();
   };
