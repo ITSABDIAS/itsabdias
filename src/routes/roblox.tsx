@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import {
-import { TutorialsSection } from "@/components/TutorialsSection";
   Gamepad2,
   Code2,
   Boxes,
@@ -15,6 +14,7 @@ import { TutorialsSection } from "@/components/TutorialsSection";
   ArrowRight,
   Sparkles,
 } from "lucide-react";
+import { TutorialsSection } from "@/components/TutorialsSection";
 
 export const Route = createFileRoute("/roblox")({
   head: () => ({
