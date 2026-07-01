@@ -471,6 +471,159 @@ export type Database = {
         }
         Relationships: []
       }
+      tutorial_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          tutorial_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          tutorial_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          tutorial_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tutorial_comments_tutorial_id_fkey"
+            columns: ["tutorial_id"]
+            isOneToOne: false
+            referencedRelation: "tutorials"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tutorial_likes: {
+        Row: {
+          created_at: string
+          tutorial_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          tutorial_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          tutorial_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tutorial_likes_tutorial_id_fkey"
+            columns: ["tutorial_id"]
+            isOneToOne: false
+            referencedRelation: "tutorials"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tutorial_saves: {
+        Row: {
+          created_at: string
+          tutorial_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          tutorial_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          tutorial_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tutorial_saves_tutorial_id_fkey"
+            columns: ["tutorial_id"]
+            isOneToOne: false
+            referencedRelation: "tutorials"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tutorials: {
+        Row: {
+          author_id: string | null
+          category: string
+          comments_count: number
+          content: string
+          cover_url: string | null
+          created_at: string
+          description: string
+          id: string
+          is_ai_generated: boolean
+          is_featured: boolean
+          is_hidden: boolean
+          level: string
+          likes_count: number
+          read_minutes: number
+          saves_count: number
+          slug: string
+          tags: string[]
+          title: string
+          updated_at: string
+          views_count: number
+        }
+        Insert: {
+          author_id?: string | null
+          category: string
+          comments_count?: number
+          content: string
+          cover_url?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          is_ai_generated?: boolean
+          is_featured?: boolean
+          is_hidden?: boolean
+          level?: string
+          likes_count?: number
+          read_minutes?: number
+          saves_count?: number
+          slug: string
+          tags?: string[]
+          title: string
+          updated_at?: string
+          views_count?: number
+        }
+        Update: {
+          author_id?: string | null
+          category?: string
+          comments_count?: number
+          content?: string
+          cover_url?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          is_ai_generated?: boolean
+          is_featured?: boolean
+          is_hidden?: boolean
+          level?: string
+          likes_count?: number
+          read_minutes?: number
+          saves_count?: number
+          slug?: string
+          tags?: string[]
+          title?: string
+          updated_at?: string
+          views_count?: number
+        }
+        Relationships: []
+      }
       user_activity: {
         Row: {
           last_heartbeat: string
@@ -540,6 +693,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_tutorial_view: { Args: { _id: string }; Returns: undefined }
       record_activity: { Args: { _seconds: number }; Returns: number }
     }
     Enums: {
