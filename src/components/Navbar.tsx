@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const links = [
   { to: "/", label: "Inicio" },
+  { to: "/tutoriales", label: "Tutoriales" },
   { to: "/programacion", label: "Programación" },
   { to: "/ai", label: "IA" },
   { to: "/hardware", label: "Hardware" },
@@ -19,6 +20,7 @@ const links = [
   { to: "/projects", label: "Proyectos" },
   { to: "/community", label: "Comunidad" },
   { to: "/messages", label: "Mensajes" },
+  { to: "/staff", label: "Staff" },
   { to: "/help", label: "Ayuda" },
   { to: "/premium", label: "Premium" },
 ] as const;
@@ -110,7 +112,7 @@ export function Navbar() {
         </div>
       </div>
       {open && (
-        <nav className="lg:hidden border-t border-border px-4 py-3 flex flex-col gap-1 glass">
+        <nav className="lg:hidden border-t border-border px-4 py-3 flex flex-col gap-1 glass max-h-[calc(100vh-4rem)] overflow-y-auto">
           {links.map((l) => (
             <Link
               key={l.to}
@@ -121,6 +123,17 @@ export function Navbar() {
               {l.label}
             </Link>
           ))}
+          <div className="pt-2 mt-2 border-t border-border flex flex-col gap-2">
+            {user ? (
+              <>
+                <Link to="/profile" onClick={() => setOpen(false)} className="px-3 py-2 rounded-md text-sm hover:bg-secondary/60 inline-flex items-center gap-2"><UserIcon className="h-4 w-4 text-neon-cyan"/> Mi perfil</Link>
+                <button onClick={() => { setOpen(false); signOut(); }} className="text-left px-3 py-2 rounded-md text-sm hover:bg-secondary/60 inline-flex items-center gap-2"><LogOut className="h-4 w-4"/> Salir</button>
+              </>
+            ) : (
+              <Link to="/auth" onClick={() => setOpen(false)} className="px-3 py-2 rounded-md text-sm bg-gradient-neon text-primary-foreground font-semibold text-center">Entrar</Link>
+            )}
+            <a href="https://youtube.com/@ITSABDIAS" target="_blank" rel="noreferrer" className="px-3 py-2 rounded-md text-sm border border-border inline-flex items-center gap-2 justify-center"><Youtube className="h-4 w-4"/> Suscribirse</a>
+          </div>
         </nav>
       )}
     </header>
