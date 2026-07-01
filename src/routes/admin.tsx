@@ -127,10 +127,11 @@ function AdminPage() {
   return (
     <PageShell>
       <section className="py-20 px-6">
-          <SectionTitle eyebrow="// admin.panel" title="Panel de administrador" subtitle="Gestiona los tickets de la comunidad." />
+        <SectionTitle eyebrow="// admin.panel" title="Panel de administrador" subtitle="Gestiona los tickets de la comunidad." />
 
-          <div className="mx-auto max-w-5xl mb-6 flex flex-wrap gap-2">
-            <Link to="/admin/tutoriales" className="px-3 py-1.5 rounded-md text-xs bg-gradient-neon text-primary-foreground font-bold">→ Tutoriales</Link>
+        <div className="mx-auto max-w-5xl">
+          <div className="mb-6 flex flex-wrap gap-2">
+            <Link to="/admin/tutoriales" className="px-3 py-1.5 rounded-md text-xs bg-gradient-neon text-primary-foreground font-bold">→ Gestionar tutoriales</Link>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
             {STATUSES.map((s) => (
