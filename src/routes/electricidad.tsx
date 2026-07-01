@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import { Zap, CircuitBoard, Activity, Cpu, Sparkles, ArrowRight, Lightbulb, Plug } from "lucide-react";
+import { TutorialsSection } from "@/components/TutorialsSection";
 
 export const Route = createFileRoute("/electricidad")({
   head: () => ({
@@ -97,6 +98,7 @@ function Electricidad() {
           </Link>
         </div>
       </section>
+          <TutorialsSection category="electricidad" />
     </PageShell>
   );
 }

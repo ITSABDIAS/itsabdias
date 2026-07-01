@@ -25,6 +25,7 @@ import {
 import { aiChat } from "@/lib/ai.functions";
 import { getChatHistory, saveChatMessage, clearChatHistory } from "@/lib/chat.functions";
 import { useAuth } from "@/hooks/useAuth";
+import { TutorialsSection } from "@/components/TutorialsSection";
 
 export const Route = createFileRoute("/ai")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -362,6 +363,7 @@ function AI() {
           </div>
         </div>
       </section>
+          <TutorialsSection category="ai" />
     </PageShell>
   );
 }

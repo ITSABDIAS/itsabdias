@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import {
+import { TutorialsSection } from "@/components/TutorialsSection";
   Code2,
   FileCode,
   Palette,
@@ -159,6 +160,7 @@ function Programacion() {
           </Link>
         </div>
       </section>
+          <TutorialsSection category="programacion" />
     </PageShell>
   );
 }

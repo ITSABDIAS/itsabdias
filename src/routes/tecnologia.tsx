@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import { Cpu, Newspaper, BrainCircuit, Gamepad2, Smartphone, Rocket, Sparkles, ArrowRight } from "lucide-react";
+import { TutorialsSection } from "@/components/TutorialsSection";
 
 export const Route = createFileRoute("/tecnologia")({
   head: () => ({
@@ -99,6 +100,7 @@ function Tecnologia() {
           </Link>
         </div>
       </section>
+          <TutorialsSection category="tecnologia" />
     </PageShell>
   );
 }

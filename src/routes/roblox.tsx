@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import {
+import { TutorialsSection } from "@/components/TutorialsSection";
   Gamepad2,
   Code2,
   Boxes,
@@ -116,6 +117,7 @@ function Roblox() {
           </Link>
         </div>
       </section>
+          <TutorialsSection category="roblox" />
     </PageShell>
   );
 }
