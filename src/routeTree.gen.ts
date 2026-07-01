@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TutorialesRouteImport } from './routes/tutoriales'
 import { Route as TecnologiaRouteImport } from './routes/tecnologia'
 import { Route as StaffRouteImport } from './routes/staff'
 import { Route as SoftwareRouteImport } from './routes/software'
@@ -30,8 +31,14 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
+import { Route as TutorialCategorySlugRouteImport } from './routes/tutorial.$category.$slug'
 import { Route as TemaCategorySlugRouteImport } from './routes/tema.$category.$slug'
 
+const TutorialesRoute = TutorialesRouteImport.update({
+  id: '/tutoriales',
+  path: '/tutoriales',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TecnologiaRoute = TecnologiaRouteImport.update({
   id: '/tecnologia',
   path: '/tecnologia',
@@ -137,6 +144,11 @@ const UUsernameRoute = UUsernameRouteImport.update({
   path: '/u/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TutorialCategorySlugRoute = TutorialCategorySlugRouteImport.update({
+  id: '/tutorial/$category/$slug',
+  path: '/tutorial/$category/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TemaCategorySlugRoute = TemaCategorySlugRouteImport.update({
   id: '/tema/$category/$slug',
   path: '/tema/$category/$slug',
@@ -164,8 +176,10 @@ export interface FileRoutesByFullPath {
   '/software': typeof SoftwareRoute
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
+  '/tutoriales': typeof TutorialesRoute
   '/u/$username': typeof UUsernameRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
+  '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -188,8 +202,10 @@ export interface FileRoutesByTo {
   '/software': typeof SoftwareRoute
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
+  '/tutoriales': typeof TutorialesRoute
   '/u/$username': typeof UUsernameRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
+  '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -213,8 +229,10 @@ export interface FileRoutesById {
   '/software': typeof SoftwareRoute
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
+  '/tutoriales': typeof TutorialesRoute
   '/u/$username': typeof UUsernameRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
+  '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -239,8 +257,10 @@ export interface FileRouteTypes {
     | '/software'
     | '/staff'
     | '/tecnologia'
+    | '/tutoriales'
     | '/u/$username'
     | '/tema/$category/$slug'
+    | '/tutorial/$category/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -263,8 +283,10 @@ export interface FileRouteTypes {
     | '/software'
     | '/staff'
     | '/tecnologia'
+    | '/tutoriales'
     | '/u/$username'
     | '/tema/$category/$slug'
+    | '/tutorial/$category/$slug'
   id:
     | '__root__'
     | '/'
@@ -287,8 +309,10 @@ export interface FileRouteTypes {
     | '/software'
     | '/staff'
     | '/tecnologia'
+    | '/tutoriales'
     | '/u/$username'
     | '/tema/$category/$slug'
+    | '/tutorial/$category/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -312,12 +336,21 @@ export interface RootRouteChildren {
   SoftwareRoute: typeof SoftwareRoute
   StaffRoute: typeof StaffRoute
   TecnologiaRoute: typeof TecnologiaRoute
+  TutorialesRoute: typeof TutorialesRoute
   UUsernameRoute: typeof UUsernameRoute
   TemaCategorySlugRoute: typeof TemaCategorySlugRoute
+  TutorialCategorySlugRoute: typeof TutorialCategorySlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tutoriales': {
+      id: '/tutoriales'
+      path: '/tutoriales'
+      fullPath: '/tutoriales'
+      preLoaderRoute: typeof TutorialesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tecnologia': {
       id: '/tecnologia'
       path: '/tecnologia'
@@ -465,6 +498,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tutorial/$category/$slug': {
+      id: '/tutorial/$category/$slug'
+      path: '/tutorial/$category/$slug'
+      fullPath: '/tutorial/$category/$slug'
+      preLoaderRoute: typeof TutorialCategorySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tema/$category/$slug': {
       id: '/tema/$category/$slug'
       path: '/tema/$category/$slug'
@@ -496,8 +536,10 @@ const rootRouteChildren: RootRouteChildren = {
   SoftwareRoute: SoftwareRoute,
   StaffRoute: StaffRoute,
   TecnologiaRoute: TecnologiaRoute,
+  TutorialesRoute: TutorialesRoute,
   UUsernameRoute: UUsernameRoute,
   TemaCategorySlugRoute: TemaCategorySlugRoute,
+  TutorialCategorySlugRoute: TutorialCategorySlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
