@@ -5,7 +5,7 @@ import { CopyButton } from "@/components/CopyButton";
 // Kept dependency-free for reliability.
 export function TutorialContent({ content }: { content: string }) {
   const parts = content.split(/```/);
-  const nodes: JSX.Element[] = [];
+  const nodes: ReactElement[] = [];
   parts.forEach((chunk, i) => {
     if (i % 2 === 1) {
       // code block
@@ -30,7 +30,7 @@ export function TutorialContent({ content }: { content: string }) {
 
 function TextBlock({ text }: { text: string }) {
   const lines = text.split("\n");
-  const out: JSX.Element[] = [];
+  const out: ReactElement[] = [];
   let listBuf: string[] = [];
   const flushList = (k: number) => {
     if (listBuf.length) {
@@ -78,7 +78,7 @@ function TextBlock({ text }: { text: string }) {
 
 function inline(s: string) {
   // bold **x** and inline `code`
-  const parts: (string | JSX.Element)[] = [];
+  const parts: (string | ReactElement)[] = [];
   const regex = /(\*\*[^*]+\*\*|`[^`]+`)/g;
   let last = 0;
   let m;
