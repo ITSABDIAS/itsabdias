@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
@@ -127,9 +127,11 @@ function AdminPage() {
   return (
     <PageShell>
       <section className="py-20 px-6">
-        <SectionTitle eyebrow="// admin.panel" title="Panel de administrador" subtitle="Gestiona los tickets de la comunidad." />
+          <SectionTitle eyebrow="// admin.panel" title="Panel de administrador" subtitle="Gestiona los tickets de la comunidad." />
 
-        <div className="mx-auto max-w-5xl">
+          <div className="mx-auto max-w-5xl mb-6 flex flex-wrap gap-2">
+            <Link to="/admin/tutoriales" className="px-3 py-1.5 rounded-md text-xs bg-gradient-neon text-primary-foreground font-bold">→ Tutoriales</Link>
+          </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
             {STATUSES.map((s) => (
               <div key={s.value} className={`glass rounded-xl p-4 border ${s.color}`}>
