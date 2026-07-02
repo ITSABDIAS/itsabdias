@@ -1,10 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import { RankBadge, RANK_META, RANK_PRIORITY, type RankSlug } from "@/components/RankBadge";
+import { useMyRoles } from "@/hooks/useMyRoles";
 import { supabase } from "@/integrations/supabase/client";
-import { User as UserIcon } from "lucide-react";
+import { User as UserIcon, Shield } from "lucide-react";
 
 export const Route = createFileRoute("/staff")({
   head: () => ({
