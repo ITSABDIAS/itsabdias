@@ -86,12 +86,14 @@ function StaffPage() {
 
   return (
     <PageShell>
-      <section className="py-20 px-6">
+      <section className="py-16 sm:py-20 px-4 sm:px-6">
         <SectionTitle
           eyebrow="// crew.directory"
           title="Staff & Comunidad"
           subtitle="El equipo que mantiene viva la comunidad ItsaBDias."
         />
+
+        <StaffToolsBar />
 
         {loading && <p className="text-center text-muted-foreground">Cargando equipo...</p>}
         {!loading && members.length === 0 && (
