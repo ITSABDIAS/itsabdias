@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      announcements: {
+        Row: {
+          active: boolean
+          audience: string
+          body: string | null
+          created_at: string
+          created_by: string | null
+          expires_at: string | null
+          id: string
+          level: string
+          title: string
+        }
+        Insert: {
+          active?: boolean
+          audience?: string
+          body?: string | null
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          level?: string
+          title: string
+        }
+        Update: {
+          active?: boolean
+          audience?: string
+          body?: string | null
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          level?: string
+          title?: string
+        }
+        Relationships: []
+      }
       chat_messages: {
         Row: {
           content: string
@@ -279,6 +315,8 @@ export type Database = {
           bio: string | null
           created_at: string
           id: string
+          joined_staff_at: string | null
+          last_seen_at: string | null
           username: string
         }
         Insert: {
@@ -287,6 +325,8 @@ export type Database = {
           bio?: string | null
           created_at?: string
           id: string
+          joined_staff_at?: string | null
+          last_seen_at?: string | null
           username: string
         }
         Update: {
@@ -295,6 +335,8 @@ export type Database = {
           bio?: string | null
           created_at?: string
           id?: string
+          joined_staff_at?: string | null
+          last_seen_at?: string | null
           username?: string
         }
         Relationships: []
@@ -435,6 +477,42 @@ export type Database = {
           name?: string
           priority?: number
           slug?: string
+        }
+        Relationships: []
+      }
+      staff_actions: {
+        Row: {
+          action: Database["public"]["Enums"]["staff_action_type"]
+          actor_id: string
+          created_at: string
+          id: string
+          reason: string | null
+          result: string | null
+          target_content_id: string | null
+          target_content_type: string | null
+          target_user_id: string | null
+        }
+        Insert: {
+          action: Database["public"]["Enums"]["staff_action_type"]
+          actor_id: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          result?: string | null
+          target_content_id?: string | null
+          target_content_type?: string | null
+          target_user_id?: string | null
+        }
+        Update: {
+          action?: Database["public"]["Enums"]["staff_action_type"]
+          actor_id?: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          result?: string | null
+          target_content_id?: string | null
+          target_content_type?: string | null
+          target_user_id?: string | null
         }
         Relationships: []
       }
@@ -666,6 +744,33 @@ export type Database = {
         }
         Relationships: []
       }
+      user_status: {
+        Row: {
+          reason: string | null
+          set_by: string | null
+          status: Database["public"]["Enums"]["user_status_type"]
+          until: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          reason?: string | null
+          set_by?: string | null
+          status?: Database["public"]["Enums"]["user_status_type"]
+          until?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          reason?: string | null
+          set_by?: string | null
+          status?: Database["public"]["Enums"]["user_status_type"]
+          until?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -694,7 +799,80 @@ export type Database = {
         Returns: boolean
       }
       increment_tutorial_view: { Args: { _id: string }; Returns: undefined }
+      is_admin_or_higher: { Args: { _uid: string }; Returns: boolean }
+      is_founder: { Args: { _uid: string }; Returns: boolean }
+      is_moderator_or_higher: { Args: { _uid: string }; Returns: boolean }
       record_activity: { Args: { _seconds: number }; Returns: number }
+      staff_assign_role: {
+        Args: {
+          _reason?: string
+          _role: Database["public"]["Enums"]["app_role"]
+          _target: string
+        }
+        Returns: undefined
+      }
+      staff_broadcast_notification: {
+        Args: {
+          _audience?: string
+          _body: string
+          _link: string
+          _title: string
+        }
+        Returns: number
+      }
+      staff_create_announcement: {
+        Args: {
+          _audience?: string
+          _body: string
+          _expires_at?: string
+          _level?: string
+          _title: string
+        }
+        Returns: string
+      }
+      staff_deactivate_announcement: {
+        Args: { _id: string }
+        Returns: undefined
+      }
+      staff_delete_content: {
+        Args: { _id: string; _reason?: string; _type: string }
+        Returns: undefined
+      }
+      staff_feature_content: {
+        Args: {
+          _featured: boolean
+          _id: string
+          _reason?: string
+          _type: string
+        }
+        Returns: undefined
+      }
+      staff_grant_premium: {
+        Args: { _reason?: string; _target: string }
+        Returns: undefined
+      }
+      staff_revoke_premium: {
+        Args: { _reason?: string; _target: string }
+        Returns: undefined
+      }
+      staff_revoke_role: {
+        Args: {
+          _reason?: string
+          _role: Database["public"]["Enums"]["app_role"]
+          _target: string
+        }
+        Returns: undefined
+      }
+      staff_set_user_status: {
+        Args: {
+          _reason?: string
+          _status: Database["public"]["Enums"]["user_status_type"]
+          _target: string
+          _until?: string
+        }
+        Returns: undefined
+      }
+      touch_last_seen: { Args: never; Returns: undefined }
     }
     Enums: {
       app_role:
@@ -707,6 +885,36 @@ export type Database = {
         | "ai_expert"
         | "verified"
         | "member"
+      staff_action_type:
+        | "assign_admin"
+        | "remove_admin"
+        | "assign_moderator"
+        | "remove_moderator"
+        | "assign_verified"
+        | "remove_verified"
+        | "grant_premium"
+        | "revoke_premium"
+        | "suspend_user"
+        | "unsuspend_user"
+        | "ban_user"
+        | "unban_user"
+        | "mute_user"
+        | "unmute_user"
+        | "delete_post"
+        | "delete_project"
+        | "delete_tutorial"
+        | "delete_comment"
+        | "feature_post"
+        | "feature_project"
+        | "feature_tutorial"
+        | "unfeature_post"
+        | "unfeature_project"
+        | "unfeature_tutorial"
+        | "hide_content"
+        | "unhide_content"
+        | "send_announcement"
+        | "send_notification_broadcast"
+      user_status_type: "active" | "muted" | "suspended" | "banned"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -845,6 +1053,37 @@ export const Constants = {
         "verified",
         "member",
       ],
+      staff_action_type: [
+        "assign_admin",
+        "remove_admin",
+        "assign_moderator",
+        "remove_moderator",
+        "assign_verified",
+        "remove_verified",
+        "grant_premium",
+        "revoke_premium",
+        "suspend_user",
+        "unsuspend_user",
+        "ban_user",
+        "unban_user",
+        "mute_user",
+        "unmute_user",
+        "delete_post",
+        "delete_project",
+        "delete_tutorial",
+        "delete_comment",
+        "feature_post",
+        "feature_project",
+        "feature_tutorial",
+        "unfeature_post",
+        "unfeature_project",
+        "unfeature_tutorial",
+        "hide_content",
+        "unhide_content",
+        "send_announcement",
+        "send_notification_broadcast",
+      ],
+      user_status_type: ["active", "muted", "suspended", "banned"],
     },
   },
 } as const

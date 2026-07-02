@@ -51,19 +51,32 @@ async function callAI(apiKey: string, prompt: string) {
         {
           role: "system",
           content:
-            "Eres NEXUS, el generador de tutoriales de ItsaBDias. Devuelves SIEMPRE JSON válido con: title, description, level (principiante|intermedio|avanzado), read_minutes (int), tags (array de 3-6 strings), content (markdown extenso con secciones: Introducción, Explicación sencilla, Paso a paso, Ejemplos con código en bloques ```lang, Buenas prácticas, Errores comunes, Conclusión). Nada de texto fuera del JSON.",
+            'Eres NEXUS, el generador de tutoriales de ItsaBDias. Respondes SIEMPRE con un objeto json válido y NADA más. El json debe tener EXACTAMENTE estas claves: title (string), description (string, 1-2 frases), level ("principiante"|"intermedio"|"avanzado"), read_minutes (int 3-30), tags (array de 3-6 strings cortos), content (string en markdown, extenso, con secciones: ## Introducción, ## Explicación sencilla, ## Paso a paso, ## Ejemplos con código en bloques ```lang, ## Buenas prácticas, ## Errores comunes, ## Conclusión). Nunca envuelvas el json en ```. Nunca añadas texto antes o después.',
         },
-        { role: "user", content: prompt },
+        { role: "user", content: prompt + "\n\nResponde en formato json siguiendo el esquema indicado." },
       ],
       response_format: { type: "json_object" },
+      temperature: 0.7,
     }),
   });
-  if (res.status === 429) throw new Error("Demasiadas solicitudes a la IA. Intenta luego.");
+  const text = await res.text();
+  if (res.status === 429) throw new Error("Demasiadas solicitudes a la IA. Intenta en unos segundos.");
   if (res.status === 402) throw new Error("Sin créditos de IA. Añade créditos al workspace.");
-  if (!res.ok) throw new Error("Error del servicio de IA");
-  const json = await res.json();
-  const raw: string = json?.choices?.[0]?.message?.content ?? "{}";
-  return JSON.parse(raw);
+  if (!res.ok) throw new Error(`IA error ${res.status}: ${text.slice(0, 200)}`);
+  let json: any;
+  try { json = JSON.parse(text); } catch { throw new Error("Respuesta no es JSON"); }
+  const raw: string = json?.choices?.[0]?.message?.content ?? "";
+  if (!raw) throw new Error("IA devolvió respuesta vacía");
+  // strip potential ``` wrapping
+  const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "").trim();
+  try {
+    return JSON.parse(cleaned);
+  } catch {
+    // try to extract first {...} block
+    const m = cleaned.match(/\{[\s\S]*\}/);
+    if (m) return JSON.parse(m[0]);
+    throw new Error("IA no devolvió JSON parseable");
+  }
 }
 
 export const generateTutorials = createServerFn({ method: "POST" })
@@ -72,7 +85,6 @@ export const generateTutorials = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
 
-    // authorize: admin or founder only
     const { data: roles } = await supabase
       .from("user_roles")
       .select("role")
@@ -88,7 +100,6 @@ export const generateTutorials = createServerFn({ method: "POST" })
     const created: { id: string; title: string; slug: string }[] = [];
     const errors: string[] = [];
 
-    // fetch existing titles to avoid duplicates
     const { data: existing } = await supabaseAdmin
       .from("tutorials")
       .select("title, slug")
@@ -106,12 +117,12 @@ export const generateTutorials = createServerFn({ method: "POST" })
             ? ` Evita estos títulos ya existentes: ${Array.from(existingTitles).slice(0, 20).join("; ")}.`
             : "";
         const levelPart = data.level ? ` Nivel: ${data.level}.` : "";
-        const prompt = `Genera un tutorial completo en español ${topicPart}.${levelPart}${avoid} Devuelve JSON con los campos indicados.`;
+        const prompt = `Genera un tutorial completo en español ${topicPart}.${levelPart}${avoid}`;
 
         const obj = await callAI(apiKey, prompt);
         const title: string = String(obj.title || "").trim().slice(0, 160);
         if (!title) throw new Error("Sin título");
-        if (existingTitles.has(title.toLowerCase())) throw new Error("Duplicado");
+        if (existingTitles.has(title.toLowerCase())) throw new Error(`Duplicado: ${title}`);
 
         let slug = slugify(title) || `tutorial-${Date.now()}`;
         let n = 1;
@@ -119,12 +130,15 @@ export const generateTutorials = createServerFn({ method: "POST" })
           slug = `${slugify(title)}-${++n}`;
         }
 
+        const content = String(obj.content || "").trim();
+        if (content.length < 100) throw new Error("Contenido demasiado corto");
+
         const row = {
           category: data.category,
           slug,
           title,
-          description: String(obj.description || "").slice(0, 500),
-          content: String(obj.content || ""),
+          description: String(obj.description || "").slice(0, 500) || title,
+          content,
           level: ["principiante", "intermedio", "avanzado"].includes(obj.level)
             ? obj.level
             : data.level ?? "principiante",

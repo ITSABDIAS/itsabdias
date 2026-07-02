@@ -22,14 +22,15 @@ export function Footer() {
           <h4 className="font-semibold mb-3 text-sm uppercase tracking-wider">Síguenos</h4>
           <div className="flex gap-3">
             {[
-              { Icon: Youtube, href: "https://youtube.com/@ITSABDIAS" },
-              { Icon: Twitch, href: "#" },
-              { Icon: Github, href: "#" },
-              { Icon: Twitter, href: "#" },
-            ].map(({ Icon, href }, i) => (
+              { Icon: Youtube, href: "https://youtube.com/@ITSABDIAS", label: "YouTube" },
+              { Icon: Github, href: "https://github.com/ITSABDIAS", label: "GitHub" },
+              { Icon: Twitch, href: "#", label: "Twitch" },
+              { Icon: Twitter, href: "#", label: "Twitter" },
+            ].map(({ Icon, href, label }, i) => (
               <a
                 key={i}
                 href={href}
+                aria-label={label}
                 target={href.startsWith("http") ? "_blank" : undefined}
                 rel="noopener noreferrer"
                 className="p-2 rounded-md glass hover:shadow-neon-blue hover:scale-110 transition-all"

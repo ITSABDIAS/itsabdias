@@ -20,10 +20,17 @@ export function useMyRoles() {
     return () => { cancel = true; };
   }, [user?.id]);
 
+  const isFounder = roles.includes("founder");
+  const isAdmin = isFounder || roles.includes("admin");
+  const isModerator = isAdmin || roles.includes("moderator");
+
   return {
     roles,
     loading,
-    isPremium: roles.includes("premium") || roles.includes("founder"),
-    isStaff: roles.includes("admin") || roles.includes("founder") || roles.includes("moderator"),
+    isFounder,
+    isAdmin,
+    isModerator,
+    isPremium: roles.includes("premium") || isFounder,
+    isStaff: isModerator,
   };
 }

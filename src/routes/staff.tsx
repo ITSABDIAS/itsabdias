@@ -1,10 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import { RankBadge, RANK_META, RANK_PRIORITY, type RankSlug } from "@/components/RankBadge";
+import { useMyRoles } from "@/hooks/useMyRoles";
 import { supabase } from "@/integrations/supabase/client";
-import { User as UserIcon } from "lucide-react";
+import { User as UserIcon, Shield } from "lucide-react";
 
 export const Route = createFileRoute("/staff")({
   head: () => ({
@@ -22,6 +23,8 @@ type Member = {
   avatar_url: string | null;
   bio: string | null;
   roles: RankSlug[];
+  joined_staff_at: string | null;
+  last_seen_at: string | null;
 };
 
 const PUBLIC_RANKS: RankSlug[] = ["founder", "admin", "moderator", "developer", "ai_expert", "verified"];
@@ -48,7 +51,7 @@ function StaffPage() {
 
       const { data: profiles } = await supabase
         .from("profiles")
-        .select("id, username, avatar_url, bio")
+        .select("id, username, avatar_url, bio, joined_staff_at, last_seen_at")
         .in("id", ids);
 
       const list: Member[] = (profiles ?? []).map((p: any) => ({
@@ -57,6 +60,8 @@ function StaffPage() {
         avatar_url: p.avatar_url,
         bio: p.bio,
         roles: byUser.get(p.id) ?? [],
+        joined_staff_at: p.joined_staff_at ?? null,
+        last_seen_at: p.last_seen_at ?? null,
       }));
 
       list.sort((a, b) => {
@@ -81,12 +86,14 @@ function StaffPage() {
 
   return (
     <PageShell>
-      <section className="py-20 px-6">
+      <section className="py-16 sm:py-20 px-4 sm:px-6">
         <SectionTitle
           eyebrow="// crew.directory"
           title="Staff & Comunidad"
           subtitle="El equipo que mantiene viva la comunidad ItsaBDias."
         />
+
+        <StaffToolsBar />
 
         {loading && <p className="text-center text-muted-foreground">Cargando equipo...</p>}
         {!loading && members.length === 0 && (
@@ -135,7 +142,7 @@ function StaffPage() {
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="font-display font-bold truncate">{m.username ?? "anónimo"}</p>
+                            <Link to="/u/$username" params={{ username: m.username ?? "" }} className="font-display font-bold truncate hover:text-neon-cyan block">{m.username ?? "anónimo"}</Link>
                             <div className="mt-1 flex flex-wrap gap-1">
                               {m.roles
                                 .filter((r) => PUBLIC_RANKS.includes(r))
@@ -144,6 +151,7 @@ function StaffPage() {
                                   <RankBadge key={r} slug={r} size="xs" />
                                 ))}
                             </div>
+                            <ActivityLine lastSeen={m.last_seen_at} joined={m.joined_staff_at} />
                           </div>
                         </div>
                         {m.bio && (
@@ -159,5 +167,33 @@ function StaffPage() {
         </div>
       </section>
     </PageShell>
+  );
+}
+
+function StaffToolsBar() {
+  const { isModerator, isAdmin, isFounder } = useMyRoles();
+  if (!isModerator) return null;
+  return (
+    <div className="mx-auto max-w-6xl mb-8 flex flex-wrap gap-2">
+      <Link to="/admin" className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs bg-gradient-neon text-primary-foreground font-bold">
+        <Shield className="h-3.5 w-3.5" /> Panel de moderación
+      </Link>
+      {isModerator && <Link to="/admin/usuarios" className="px-3 py-1.5 rounded-md text-xs border border-border hover:border-neon-cyan/60">Usuarios</Link>}
+      {isAdmin && <Link to="/admin/anuncios" className="px-3 py-1.5 rounded-md text-xs border border-border hover:border-neon-cyan/60">Anuncios</Link>}
+      {isModerator && <Link to="/admin/historial" className="px-3 py-1.5 rounded-md text-xs border border-border hover:border-neon-cyan/60">Historial</Link>}
+      {isFounder && <span className="px-2 py-1 rounded-md text-[10px] font-mono uppercase border border-yellow-400/50 text-yellow-300">Founder</span>}
+    </div>
+  );
+}
+
+function ActivityLine({ lastSeen, joined }: { lastSeen: string | null; joined: string | null }) {
+  const now = Date.now();
+  const active = lastSeen ? (now - new Date(lastSeen).getTime() < 5 * 60 * 1000) : false;
+  return (
+    <div className="mt-1 flex items-center gap-2 text-[10px] font-mono text-muted-foreground">
+      <span className={`inline-block h-1.5 w-1.5 rounded-full ${active ? "bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.9)]" : "bg-muted-foreground/50"}`} />
+      <span>{active ? "activo" : lastSeen ? `visto ${new Date(lastSeen).toLocaleDateString()}` : "inactivo"}</span>
+      {joined && <span>· desde {new Date(joined).toLocaleDateString()}</span>}
+    </div>
   );
 }
