@@ -125,12 +125,9 @@ function MessagesPage() {
   useEffect(() => {
     if (!user) return;
     loadConversations();
-    const ch = supabase
-      .channel(`dm-list:${user.id}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "conversations" }, loadConversations)
-      .on("postgres_changes", { event: "*", schema: "public", table: "direct_messages", filter: `recipient_id=eq.${user.id}` }, loadConversations)
-      .subscribe();
-    return () => { supabase.removeChannel(ch); };
+    // Realtime disabled for privacy; poll instead
+    const iv = setInterval(loadConversations, 8000);
+    return () => { clearInterval(iv); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
