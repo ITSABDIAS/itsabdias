@@ -30,6 +30,8 @@ export function useRankProgress() {
       if (elapsed <= 0) return;
 
       const { error: actErr } = await supabase.rpc("record_activity", { _seconds: elapsed });
+      // Update staff last_seen_at for online indicator (best-effort)
+      supabase.rpc("touch_last_seen" as any).then(() => {}, () => {});
       if (actErr) return;
 
       const { data: granted, error: chkErr } = await supabase.rpc("check_rank_unlocks", {
