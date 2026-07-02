@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
+import { AnnouncementBanner } from "./AnnouncementBanner";
 
 export function PageShell({ children }: { children: ReactNode }) {
   return (
