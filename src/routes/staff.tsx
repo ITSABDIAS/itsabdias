@@ -142,7 +142,7 @@ function StaffPage() {
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="font-display font-bold truncate">{m.username ?? "anónimo"}</p>
+                            <Link to="/u/$username" params={{ username: m.username ?? "" }} className="font-display font-bold truncate hover:text-neon-cyan block">{m.username ?? "anónimo"}</Link>
                             <div className="mt-1 flex flex-wrap gap-1">
                               {m.roles
                                 .filter((r) => PUBLIC_RANKS.includes(r))
@@ -151,6 +151,7 @@ function StaffPage() {
                                   <RankBadge key={r} slug={r} size="xs" />
                                 ))}
                             </div>
+                            <ActivityLine lastSeen={m.last_seen_at} joined={m.joined_staff_at} />
                           </div>
                         </div>
                         {m.bio && (
