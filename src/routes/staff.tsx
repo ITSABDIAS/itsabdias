@@ -51,7 +51,7 @@ function StaffPage() {
 
       const { data: profiles } = await supabase
         .from("profiles")
-        .select("id, username, avatar_url, bio")
+        .select("id, username, avatar_url, bio, joined_staff_at, last_seen_at")
         .in("id", ids);
 
       const list: Member[] = (profiles ?? []).map((p: any) => ({
@@ -60,6 +60,8 @@ function StaffPage() {
         avatar_url: p.avatar_url,
         bio: p.bio,
         roles: byUser.get(p.id) ?? [],
+        joined_staff_at: p.joined_staff_at ?? null,
+        last_seen_at: p.last_seen_at ?? null,
       }));
 
       list.sort((a, b) => {
