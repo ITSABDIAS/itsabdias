@@ -130,8 +130,11 @@ function AdminPage() {
         <SectionTitle eyebrow="// admin.panel" title="Panel de administrador" subtitle="Gestiona los tickets de la comunidad." />
 
         <div className="mx-auto max-w-5xl">
-          <div className="mb-6 flex flex-wrap gap-2">
-            <Link to="/admin/tutoriales" className="px-3 py-1.5 rounded-md text-xs bg-gradient-neon text-primary-foreground font-bold">→ Gestionar tutoriales</Link>
+          <div className="mb-6 flex flex-wrap gap-2 text-xs">
+            <Link to="/admin/usuarios" className="px-3 py-1.5 rounded-md border border-border hover:border-neon-cyan/60">Usuarios</Link>
+            <Link to="/admin/anuncios" className="px-3 py-1.5 rounded-md border border-border hover:border-neon-cyan/60">Anuncios</Link>
+            <Link to="/admin/historial" className="px-3 py-1.5 rounded-md border border-border hover:border-neon-cyan/60">Historial</Link>
+            <Link to="/admin/tutoriales" className="px-3 py-1.5 rounded-md bg-gradient-neon text-primary-foreground font-bold">→ Tutoriales</Link>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
             {STATUSES.map((s) => (
