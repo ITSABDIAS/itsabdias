@@ -33,6 +33,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
 import { Route as AdminTutorialesRouteImport } from './routes/admin.tutoriales'
+import { Route as AdminAnunciosRouteImport } from './routes/admin.anuncios'
 import { Route as TutorialCategorySlugRouteImport } from './routes/tutorial.$category.$slug'
 import { Route as TemaCategorySlugRouteImport } from './routes/tema.$category.$slug'
 
@@ -156,6 +157,11 @@ const AdminTutorialesRoute = AdminTutorialesRouteImport.update({
   path: '/tutoriales',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAnunciosRoute = AdminAnunciosRouteImport.update({
+  id: '/anuncios',
+  path: '/anuncios',
+  getParentRoute: () => AdminRoute,
+} as any)
 const TutorialCategorySlugRoute = TutorialCategorySlugRouteImport.update({
   id: '/tutorial/$category/$slug',
   path: '/tutorial/$category/$slug',
@@ -189,6 +195,7 @@ export interface FileRoutesByFullPath {
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
   '/tutoriales': typeof TutorialesRoute
+  '/admin/anuncios': typeof AdminAnunciosRoute
   '/admin/tutoriales': typeof AdminTutorialesRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/u/$username': typeof UUsernameRoute
@@ -217,6 +224,7 @@ export interface FileRoutesByTo {
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
   '/tutoriales': typeof TutorialesRoute
+  '/admin/anuncios': typeof AdminAnunciosRoute
   '/admin/tutoriales': typeof AdminTutorialesRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/u/$username': typeof UUsernameRoute
@@ -246,6 +254,7 @@ export interface FileRoutesById {
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
   '/tutoriales': typeof TutorialesRoute
+  '/admin/anuncios': typeof AdminAnunciosRoute
   '/admin/tutoriales': typeof AdminTutorialesRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/u/$username': typeof UUsernameRoute
@@ -276,6 +285,7 @@ export interface FileRouteTypes {
     | '/staff'
     | '/tecnologia'
     | '/tutoriales'
+    | '/admin/anuncios'
     | '/admin/tutoriales'
     | '/admin/usuarios'
     | '/u/$username'
@@ -304,6 +314,7 @@ export interface FileRouteTypes {
     | '/staff'
     | '/tecnologia'
     | '/tutoriales'
+    | '/admin/anuncios'
     | '/admin/tutoriales'
     | '/admin/usuarios'
     | '/u/$username'
@@ -332,6 +343,7 @@ export interface FileRouteTypes {
     | '/staff'
     | '/tecnologia'
     | '/tutoriales'
+    | '/admin/anuncios'
     | '/admin/tutoriales'
     | '/admin/usuarios'
     | '/u/$username'
@@ -536,6 +548,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTutorialesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/anuncios': {
+      id: '/admin/anuncios'
+      path: '/anuncios'
+      fullPath: '/admin/anuncios'
+      preLoaderRoute: typeof AdminAnunciosRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/tutorial/$category/$slug': {
       id: '/tutorial/$category/$slug'
       path: '/tutorial/$category/$slug'
@@ -554,11 +573,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminAnunciosRoute: typeof AdminAnunciosRoute
   AdminTutorialesRoute: typeof AdminTutorialesRoute
   AdminUsuariosRoute: typeof AdminUsuariosRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAnunciosRoute: AdminAnunciosRoute,
   AdminTutorialesRoute: AdminTutorialesRoute,
   AdminUsuariosRoute: AdminUsuariosRoute,
 }
