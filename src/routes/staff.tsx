@@ -23,6 +23,8 @@ type Member = {
   avatar_url: string | null;
   bio: string | null;
   roles: RankSlug[];
+  joined_staff_at: string | null;
+  last_seen_at: string | null;
 };
 
 const PUBLIC_RANKS: RankSlug[] = ["founder", "admin", "moderator", "developer", "ai_expert", "verified"];
