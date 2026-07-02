@@ -169,3 +169,31 @@ function StaffPage() {
     </PageShell>
   );
 }
+
+function StaffToolsBar() {
+  const { isModerator, isAdmin, isFounder } = useMyRoles();
+  if (!isModerator) return null;
+  return (
+    <div className="mx-auto max-w-6xl mb-8 flex flex-wrap gap-2">
+      <Link to="/admin" className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs bg-gradient-neon text-primary-foreground font-bold">
+        <Shield className="h-3.5 w-3.5" /> Panel de moderación
+      </Link>
+      {isModerator && <Link to="/admin/usuarios" className="px-3 py-1.5 rounded-md text-xs border border-border hover:border-neon-cyan/60">Usuarios</Link>}
+      {isAdmin && <Link to="/admin/anuncios" className="px-3 py-1.5 rounded-md text-xs border border-border hover:border-neon-cyan/60">Anuncios</Link>}
+      {isModerator && <Link to="/admin/historial" className="px-3 py-1.5 rounded-md text-xs border border-border hover:border-neon-cyan/60">Historial</Link>}
+      {isFounder && <span className="px-2 py-1 rounded-md text-[10px] font-mono uppercase border border-yellow-400/50 text-yellow-300">Founder</span>}
+    </div>
+  );
+}
+
+function ActivityLine({ lastSeen, joined }: { lastSeen: string | null; joined: string | null }) {
+  const now = Date.now();
+  const active = lastSeen ? (now - new Date(lastSeen).getTime() < 5 * 60 * 1000) : false;
+  return (
+    <div className="mt-1 flex items-center gap-2 text-[10px] font-mono text-muted-foreground">
+      <span className={`inline-block h-1.5 w-1.5 rounded-full ${active ? "bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.9)]" : "bg-muted-foreground/50"}`} />
+      <span>{active ? "activo" : lastSeen ? `visto ${new Date(lastSeen).toLocaleDateString()}` : "inactivo"}</span>
+      {joined && <span>· desde {new Date(joined).toLocaleDateString()}</span>}
+    </div>
+  );
+}
