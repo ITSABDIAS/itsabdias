@@ -135,7 +135,7 @@ function MessagesPage() {
   useEffect(() => {
     if (!user || !activeId) { setMessages([]); return; }
     let cancelled = false;
-    (async () => {
+    const load = async () => {
       const { data } = await supabase
         .from("direct_messages")
         .select("*")
@@ -143,26 +143,22 @@ function MessagesPage() {
         .order("created_at", { ascending: true })
         .limit(500);
       if (cancelled) return;
-      setMessages((data ?? []) as DM[]);
-      // Mark mine-as-recipient as read
+      setMessages((prev) => {
+        const next = (data ?? []) as DM[];
+        if (prev.length === next.length && prev[prev.length - 1]?.id === next[next.length - 1]?.id) return prev;
+        return next;
+      });
       await supabase
         .from("direct_messages")
         .update({ read_at: new Date().toISOString() })
         .eq("conversation_id", activeId)
         .eq("recipient_id", user.id)
         .is("read_at", null);
-    })();
-    const ch = supabase
-      .channel(`dm-thread:${activeId}`)
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "direct_messages", filter: `conversation_id=eq.${activeId}` }, async (payload) => {
-        const m = payload.new as DM;
-        setMessages((prev) => prev.some((x) => x.id === m.id) ? prev : [...prev, m]);
-        if (m.recipient_id === user.id) {
-          await supabase.from("direct_messages").update({ read_at: new Date().toISOString() }).eq("id", m.id);
-        }
-      })
-      .subscribe();
-    return () => { cancelled = true; supabase.removeChannel(ch); };
+    };
+    load();
+    // Realtime disabled for privacy; poll thread instead
+    const iv = setInterval(load, 4000);
+    return () => { cancelled = true; clearInterval(iv); };
   }, [activeId, user?.id]);
 
   useEffect(() => {
