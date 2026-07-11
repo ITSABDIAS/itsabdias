@@ -30,6 +30,7 @@ import { Route as AiRouteImport } from './routes/ai'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
 import { Route as AdminTutorialesRouteImport } from './routes/admin.tutoriales'
@@ -144,6 +145,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const UUsernameRoute = UUsernameRouteImport.update({
   id: '/u/$username',
   path: '/u/$username',
@@ -213,13 +219,13 @@ export interface FileRoutesByFullPath {
   '/admin/tutoriales': typeof AdminTutorialesRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/u/$username': typeof UUsernameRoute
+  '/admin/': typeof AdminIndexRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
   '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRouteWithChildren
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
@@ -244,6 +250,7 @@ export interface FileRoutesByTo {
   '/admin/tutoriales': typeof AdminTutorialesRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/u/$username': typeof UUsernameRoute
+  '/admin': typeof AdminIndexRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
   '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
 }
@@ -276,6 +283,7 @@ export interface FileRoutesById {
   '/admin/tutoriales': typeof AdminTutorialesRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/u/$username': typeof UUsernameRoute
+  '/admin/': typeof AdminIndexRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
   '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
 }
@@ -309,13 +317,13 @@ export interface FileRouteTypes {
     | '/admin/tutoriales'
     | '/admin/usuarios'
     | '/u/$username'
+    | '/admin/'
     | '/tema/$category/$slug'
     | '/tutorial/$category/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
-    | '/admin'
     | '/ai'
     | '/auth'
     | '/community'
@@ -340,6 +348,7 @@ export interface FileRouteTypes {
     | '/admin/tutoriales'
     | '/admin/usuarios'
     | '/u/$username'
+    | '/admin'
     | '/tema/$category/$slug'
     | '/tutorial/$category/$slug'
   id:
@@ -371,6 +380,7 @@ export interface FileRouteTypes {
     | '/admin/tutoriales'
     | '/admin/usuarios'
     | '/u/$username'
+    | '/admin/'
     | '/tema/$category/$slug'
     | '/tutorial/$category/$slug'
   fileRoutesById: FileRoutesById
@@ -551,6 +561,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/u/$username': {
       id: '/u/$username'
       path: '/u/$username'
@@ -616,6 +633,7 @@ interface AdminRouteChildren {
   AdminTicketsRoute: typeof AdminTicketsRoute
   AdminTutorialesRoute: typeof AdminTutorialesRoute
   AdminUsuariosRoute: typeof AdminUsuariosRoute
+  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -624,6 +642,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminTicketsRoute: AdminTicketsRoute,
   AdminTutorialesRoute: AdminTutorialesRoute,
   AdminUsuariosRoute: AdminUsuariosRoute,
+  AdminIndexRoute: AdminIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)

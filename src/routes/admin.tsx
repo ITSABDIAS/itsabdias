@@ -1,230 +1,254 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { toast } from "sonner";
-import { Shield, CheckCircle2, Clock, Loader2, Archive } from "lucide-react";
+import {
+  Shield, Users, UserCheck, Crown, GraduationCap, Newspaper, FolderKanban,
+  MessageSquare, Ticket, Megaphone, History, BarChart3, Sparkles, Search,
+  Activity, Bot, TrendingUp, Zap, Settings, ShieldCheck, Star, PlusCircle,
+} from "lucide-react";
 
-export const Route = createFileRoute("/admin")({
-  head: () => ({
-    meta: [
-      { title: "Panel Admin — ItsaBDias" },
-      { name: "description", content: "Panel de administración de tickets." },
-    ],
-  }),
-  component: AdminPage,
+export const Route = createFileRoute("/admin/")({
+  head: () => ({ meta: [{ title: "Panel Admin — ItsaBDias" }] }),
+  component: AdminDashboard,
 });
 
-type Ticket = {
-  id: string;
-  user_id: string;
-  category: string;
-  title: string;
-  body: string;
-  status: string;
-  admin_response: string | null;
-  created_at: string;
-  username?: string;
+type Stats = {
+  users: number; active: number; premium: number; verified: number; moderators: number; admins: number;
+  tutorials: number; aiTutorials: number; posts: number; projects: number; ticketsOpen: number;
+  weeklyUsers: number;
 };
 
-const STATUSES = [
-  { value: "open", label: "Abierto", icon: Clock, color: "text-yellow-400 border-yellow-400/40 bg-yellow-400/10" },
-  { value: "in_progress", label: "En progreso", icon: Loader2, color: "text-neon-blue border-neon-blue/40 bg-neon-blue/10" },
-  { value: "resolved", label: "Resuelto", icon: CheckCircle2, color: "text-green-400 border-green-400/40 bg-green-400/10" },
-  { value: "closed", label: "Cerrado", icon: Archive, color: "text-muted-foreground border-border bg-secondary/40" },
-];
+type SearchResult = { kind: string; id: string; label: string; sub?: string; link?: string };
 
-function AdminPage() {
+function AdminDashboard() {
   const { user, loading: authLoading } = useAuth();
   const nav = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isFounder, setIsFounder] = useState(false);
   const [checking, setChecking] = useState(true);
-  const [tickets, setTickets] = useState<Ticket[]>([]);
-  const [filter, setFilter] = useState<string>("all");
-  const [responses, setResponses] = useState<Record<string, string>>({});
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [activity, setActivity] = useState<any[]>([]);
+  const [q, setQ] = useState("");
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const [searching, setSearching] = useState(false);
 
   useEffect(() => {
     if (authLoading) return;
-    if (!user) {
-      nav({ to: "/auth" });
-      return;
-    }
+    if (!user) { nav({ to: "/auth" }); return; }
     (async () => {
-      const { data } = await supabase.from("user_roles").select("role").eq("user_id", user.id).in("role", ["admin", "founder"]);
-      const admin = (data ?? []).length > 0;
+      const { data } = await supabase.from("user_roles").select("role").eq("user_id", user.id);
+      const roles = (data ?? []).map((r) => r.role);
+      const admin = roles.includes("admin") || roles.includes("founder");
       setIsAdmin(admin);
+      setIsFounder(roles.includes("founder"));
       setChecking(false);
-      if (admin) load();
+      if (admin) { loadStats(); loadActivity(); }
     })();
   }, [user, authLoading, nav]);
 
-  const load = async () => {
-    const { data, error } = await supabase
-      .from("help_tickets")
-      .select("id, user_id, category, title, body, status, admin_response, created_at")
-      .order("created_at", { ascending: false });
-    if (error) return toast.error(error.message);
-    const userIds = Array.from(new Set((data ?? []).map((t) => t.user_id)));
-    const { data: profiles } = await supabase
-      .from("profiles")
-      .select("id, username")
-      .in("id", userIds.length ? userIds : ["00000000-0000-0000-0000-000000000000"]);
-    const map = new Map((profiles ?? []).map((p) => [p.id, p.username]));
-    setTickets((data ?? []).map((t) => ({ ...t, username: map.get(t.user_id) })));
+  const loadStats = async () => {
+    const since = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
+    const activeSince = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+    const c = (q: any) => q.then((r: any) => r.count ?? 0);
+    const [users, active, tutorials, aiTut, posts, projects, ticketsOpen, weekly, roleRows, subs] = await Promise.all([
+      c(supabase.from("profiles").select("*", { count: "exact", head: true })),
+      c(supabase.from("profiles").select("*", { count: "exact", head: true }).gte("last_seen_at", activeSince)),
+      c(supabase.from("tutorials").select("*", { count: "exact", head: true })),
+      c(supabase.from("tutorials").select("*", { count: "exact", head: true }).eq("is_ai_generated", true)),
+      c(supabase.from("posts").select("*", { count: "exact", head: true })),
+      c(supabase.from("projects").select("*", { count: "exact", head: true })),
+      c(supabase.from("help_tickets").select("*", { count: "exact", head: true }).eq("status", "open")),
+      c(supabase.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", since)),
+      supabase.from("user_roles").select("role"),
+      c(supabase.from("subscriptions").select("*", { count: "exact", head: true }).eq("status", "active").eq("plan", "premium")),
+    ]);
+    const roles = (roleRows.data ?? []).map((r: any) => r.role);
+    setStats({
+      users, active, premium: subs,
+      verified: roles.filter((r: string) => r === "verified").length,
+      moderators: roles.filter((r: string) => r === "moderator").length,
+      admins: roles.filter((r: string) => r === "admin" || r === "founder").length,
+      tutorials, aiTutorials: aiTut, posts, projects, ticketsOpen, weeklyUsers: weekly,
+    });
+  };
+
+  const loadActivity = async () => {
+    const { data } = await supabase
+      .from("staff_actions")
+      .select("id, action, reason, created_at, actor_id, target_user_id")
+      .order("created_at", { ascending: false })
+      .limit(15);
+    setActivity(data ?? []);
   };
 
   useEffect(() => {
-    if (!isAdmin) return;
-    const ch = supabase
-      .channel("admin-tickets")
-      .on("postgres_changes", { event: "*", schema: "public", table: "help_tickets" }, load)
-      .subscribe();
-    return () => {
-      supabase.removeChannel(ch);
-    };
-  }, [isAdmin]);
+    const t = setTimeout(async () => {
+      const term = q.trim();
+      if (term.length < 2) { setResults([]); return; }
+      setSearching(true);
+      const [p, tut, po, pr, tk] = await Promise.all([
+        supabase.from("profiles").select("id, username").ilike("username", `%${term}%`).limit(5),
+        supabase.from("tutorials").select("id, title, category, slug").ilike("title", `%${term}%`).limit(5),
+        supabase.from("posts").select("id, content").ilike("content", `%${term}%`).limit(5),
+        supabase.from("projects").select("id, title").ilike("title", `%${term}%`).limit(5),
+        supabase.from("help_tickets").select("id, title, status").ilike("title", `%${term}%`).limit(5),
+      ]);
+      const r: SearchResult[] = [
+        ...(p.data ?? []).map((x: any) => ({ kind: "Usuario", id: x.id, label: x.username, link: `/u/${x.username}` })),
+        ...(tut.data ?? []).map((x: any) => ({ kind: "Tutorial", id: x.id, label: x.title, sub: x.category, link: `/tutorial/${x.category}/${x.slug}` })),
+        ...(po.data ?? []).map((x: any) => ({ kind: "Publicación", id: x.id, label: (x.content ?? "").slice(0, 80), link: `/community` })),
+        ...(pr.data ?? []).map((x: any) => ({ kind: "Proyecto", id: x.id, label: x.title, link: `/projects` })),
+        ...(tk.data ?? []).map((x: any) => ({ kind: "Ticket", id: x.id, label: x.title, sub: x.status, link: `/admin/tickets` })),
+      ];
+      setResults(r); setSearching(false);
+    }, 300);
+    return () => clearTimeout(t);
+  }, [q]);
 
-  const setStatus = async (id: string, status: string) => {
-    const { error } = await supabase.from("help_tickets").update({ status }).eq("id", id);
-    if (error) return toast.error(error.message);
-    toast.success("Estado actualizado");
-  };
+  const menu = useMemo(() => [
+    { to: "/admin/usuarios", label: "Usuarios", icon: Users, color: "text-neon-cyan" },
+    { to: "/staff", label: "Staff", icon: ShieldCheck, color: "text-neon-purple" },
+    { to: "/admin/tutoriales", label: "Tutoriales", icon: GraduationCap, color: "text-neon-blue" },
+    { to: "/admin/tickets", label: "Tickets", icon: Ticket, color: "text-yellow-400" },
+    { to: "/admin/anuncios", label: "Anuncios", icon: Megaphone, color: "text-pink-400" },
+    { to: "/admin/historial", label: "Historial", icon: History, color: "text-muted-foreground" },
+    { to: "/community", label: "Publicaciones", icon: MessageSquare, color: "text-green-400" },
+    { to: "/projects", label: "Proyectos", icon: FolderKanban, color: "text-orange-400" },
+    { to: "/tutoriales", label: "Ver tutoriales", icon: Newspaper, color: "text-neon-cyan" },
+  ], []);
 
-  const sendResponse = async (id: string) => {
-    const text = responses[id]?.trim();
-    if (!text) return;
-    const { error } = await supabase.from("help_tickets").update({ admin_response: text }).eq("id", id);
-    if (error) return toast.error(error.message);
-    toast.success("Respuesta enviada");
-    setResponses((r) => ({ ...r, [id]: "" }));
-  };
-
-  if (checking) {
-    return (
-      <PageShell>
-        <section className="py-32 px-6 text-center text-muted-foreground">Verificando acceso...</section>
-      </PageShell>
-    );
-  }
-
-  if (!isAdmin) {
-    return (
-      <PageShell>
-        <section className="py-32 px-6 text-center">
-          <Shield className="h-16 w-16 mx-auto text-neon-purple mb-4" />
-          <h2 className="font-display text-2xl font-bold mb-2">Acceso restringido</h2>
-          <p className="text-muted-foreground">Esta página es solo para administradores.</p>
-        </section>
-      </PageShell>
-    );
-  }
-
-  const filtered = filter === "all" ? tickets : tickets.filter((t) => t.status === filter);
-  const counts = STATUSES.reduce((acc, s) => ({ ...acc, [s.value]: tickets.filter((t) => t.status === s.value).length }), {} as Record<string, number>);
+  if (checking) return <PageShell><section className="py-32 text-center text-muted-foreground">Verificando acceso...</section></PageShell>;
+  if (!isAdmin) return (
+    <PageShell>
+      <section className="py-32 px-6 text-center">
+        <Shield className="h-16 w-16 mx-auto text-neon-purple mb-4" />
+        <h2 className="font-display text-2xl font-bold mb-2">Acceso restringido</h2>
+        <p className="text-muted-foreground">Solo administradores.</p>
+      </section>
+    </PageShell>
+  );
 
   return (
     <PageShell>
-      <section className="py-20 px-6">
-        <SectionTitle eyebrow="// admin.panel" title="Panel de administrador" subtitle="Gestiona los tickets de la comunidad." />
+      <section className="py-10 px-4 sm:px-6">
+        <SectionTitle eyebrow="// admin.panel" title="Panel de administración" subtitle="Control total de ITSABDIAS." />
 
-        <div className="mx-auto max-w-5xl">
-          <div className="mb-6 flex flex-wrap gap-2 text-xs">
-            <Link to="/admin/usuarios" className="px-3 py-1.5 rounded-md border border-border hover:border-neon-cyan/60">Usuarios</Link>
-            <Link to="/admin/anuncios" className="px-3 py-1.5 rounded-md border border-border hover:border-neon-cyan/60">Anuncios</Link>
-            <Link to="/admin/historial" className="px-3 py-1.5 rounded-md border border-border hover:border-neon-cyan/60">Historial</Link>
-            <Link to="/admin/tutoriales" className="px-3 py-1.5 rounded-md bg-gradient-neon text-primary-foreground font-bold">→ Tutoriales</Link>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-            {STATUSES.map((s) => (
-              <div key={s.value} className={`glass rounded-xl p-4 border ${s.color}`}>
-                <p className="text-xs uppercase font-mono">{s.label}</p>
-                <p className="text-3xl font-display font-bold mt-1">{counts[s.value] ?? 0}</p>
+        <div className="mx-auto max-w-6xl space-y-8">
+          {/* Global search */}
+          <div className="glass rounded-2xl p-4 neon-border">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <input
+                value={q} onChange={(e) => setQ(e.target.value)}
+                placeholder="Buscar usuarios, tutoriales, publicaciones, proyectos, tickets..."
+                className="w-full pl-10 pr-3 py-3 bg-input/40 border border-border rounded-lg text-sm focus:outline-none focus:border-neon-cyan"
+              />
+            </div>
+            {q.trim().length >= 2 && (
+              <div className="mt-3 max-h-72 overflow-y-auto divide-y divide-border/40">
+                {searching && <p className="text-xs text-muted-foreground p-2">Buscando...</p>}
+                {!searching && results.length === 0 && <p className="text-xs text-muted-foreground p-2">Sin resultados.</p>}
+                {results.map((r) => (
+                  <Link key={`${r.kind}-${r.id}`} to={r.link ?? "/admin"} className="flex items-center justify-between gap-3 p-2 hover:bg-secondary/40 rounded-md">
+                    <div className="min-w-0">
+                      <p className="text-sm truncate">{r.label}</p>
+                      {r.sub && <p className="text-[11px] text-muted-foreground truncate">{r.sub}</p>}
+                    </div>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-border text-muted-foreground shrink-0">{r.kind}</span>
+                  </Link>
+                ))}
               </div>
-            ))}
+            )}
           </div>
 
-          <div className="flex flex-wrap gap-2 mb-6">
-            <button
-              onClick={() => setFilter("all")}
-              className={`px-3 py-1.5 rounded-md text-xs border transition-all ${filter === "all" ? "bg-gradient-neon text-primary-foreground border-transparent" : "border-border text-muted-foreground hover:text-foreground"}`}
-            >
-              Todos ({tickets.length})
-            </button>
-            {STATUSES.map((s) => (
-              <button
-                key={s.value}
-                onClick={() => setFilter(s.value)}
-                className={`px-3 py-1.5 rounded-md text-xs border transition-all ${filter === s.value ? "bg-gradient-neon text-primary-foreground border-transparent" : "border-border text-muted-foreground hover:text-foreground"}`}
-              >
-                {s.label}
-              </button>
-            ))}
+          {/* Stats */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <StatCard icon={Users} label="Usuarios" value={stats?.users ?? 0} color="text-neon-cyan" />
+            <StatCard icon={Activity} label="Activos ahora" value={stats?.active ?? 0} color="text-green-400" />
+            <StatCard icon={Crown} label="Premium" value={stats?.premium ?? 0} color="text-yellow-400" />
+            <StatCard icon={UserCheck} label="Verificados" value={stats?.verified ?? 0} color="text-neon-blue" />
+            <StatCard icon={ShieldCheck} label="Mods" value={stats?.moderators ?? 0} color="text-neon-purple" />
+            <StatCard icon={Shield} label="Admins" value={stats?.admins ?? 0} color="text-pink-400" />
+            <StatCard icon={GraduationCap} label="Tutoriales" value={stats?.tutorials ?? 0} color="text-neon-blue" />
+            <StatCard icon={Bot} label="Por NEXUS" value={stats?.aiTutorials ?? 0} color="text-neon-purple" />
+            <StatCard icon={MessageSquare} label="Publicaciones" value={stats?.posts ?? 0} color="text-green-400" />
+            <StatCard icon={FolderKanban} label="Proyectos" value={stats?.projects ?? 0} color="text-orange-400" />
+            <StatCard icon={Ticket} label="Tickets abiertos" value={stats?.ticketsOpen ?? 0} color="text-yellow-400" />
+            <StatCard icon={TrendingUp} label="Nuevos (7d)" value={stats?.weeklyUsers ?? 0} color="text-neon-cyan" />
           </div>
 
-          <div className="space-y-4">
-            {filtered.length === 0 && <p className="text-muted-foreground text-sm">No hay tickets en esta categoría.</p>}
-            {filtered.map((t) => {
-              const status = STATUSES.find((s) => s.value === t.status) ?? STATUSES[0];
-              return (
-                <div key={t.id} className="glass rounded-xl p-5 space-y-3">
-                  <div className="flex items-start justify-between gap-3 flex-wrap">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-neon-purple/20 text-neon-purple border border-neon-purple/40">
-                          {t.category}
-                        </span>
-                        <span className={`text-xs px-2 py-0.5 rounded-full border inline-flex items-center gap-1 ${status.color}`}>
-                          <status.icon className="h-3 w-3" /> {status.label}
-                        </span>
-                      </div>
-                      <h4 className="mt-2 font-bold text-lg">{t.title}</h4>
-                      <p className="mt-1 text-sm text-muted-foreground whitespace-pre-wrap">{t.body}</p>
-                      {t.username && <p className="mt-2 text-xs text-neon-cyan">por {t.username}</p>}
-                    </div>
-                  </div>
+          {/* Menu grid */}
+          <div>
+            <h3 className="font-display text-lg font-bold mb-3 flex items-center gap-2"><Settings className="h-5 w-5" /> Gestión</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+              {menu.map((m) => (
+                <Link key={m.to} to={m.to} className="glass rounded-xl p-4 border border-border hover:border-neon-cyan/60 transition-all hover:scale-[1.02] group">
+                  <m.icon className={`h-6 w-6 ${m.color} group-hover:scale-110 transition-transform`} />
+                  <p className="mt-2 font-bold">{m.label}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
 
-                  <div className="flex flex-wrap gap-2 pt-2 border-t border-border">
-                    {STATUSES.map((s) => (
-                      <button
-                        key={s.value}
-                        onClick={() => setStatus(t.id, s.value)}
-                        disabled={t.status === s.value}
-                        className="px-2.5 py-1 rounded-md text-xs border border-border hover:border-neon-blue/60 disabled:opacity-40 disabled:cursor-not-allowed"
-                      >
-                        → {s.label}
-                      </button>
-                    ))}
-                  </div>
+          {/* Quick actions */}
+          <div>
+            <h3 className="font-display text-lg font-bold mb-3 flex items-center gap-2"><Zap className="h-5 w-5 text-yellow-400" /> Acciones rápidas</h3>
+            <div className="flex flex-wrap gap-2">
+              <QuickAction to="/admin/tutoriales" icon={Sparkles} label="Generar tutorial NEXUS" />
+              <QuickAction to="/admin/tutoriales" icon={PlusCircle} label="Crear tutorial" />
+              <QuickAction to="/admin/anuncios" icon={Megaphone} label="Crear anuncio" />
+              <QuickAction to="/community" icon={MessageSquare} label="Nueva publicación" />
+              <QuickAction to="/projects" icon={FolderKanban} label="Nuevo proyecto" />
+              <QuickAction to="/help" icon={Ticket} label="Ver tickets" />
+              {isFounder && <QuickAction to="/admin/usuarios" icon={Crown} label="Otorgar Premium" />}
+              {isFounder && <QuickAction to="/admin/usuarios" icon={ShieldCheck} label="Invitar Admin/Mod" />}
+            </div>
+          </div>
 
-                  {t.admin_response && (
-                    <div className="rounded-md border border-neon-cyan/40 bg-neon-cyan/5 p-3 text-sm">
-                      <p className="text-xs font-mono text-neon-cyan mb-1">RESPUESTA OFICIAL</p>
-                      <p className="whitespace-pre-wrap">{t.admin_response}</p>
-                    </div>
-                  )}
-
-                  <div className="flex gap-2">
-                    <input
-                      value={responses[t.id] ?? ""}
-                      onChange={(e) => setResponses((r) => ({ ...r, [t.id]: e.target.value }))}
-                      placeholder={t.admin_response ? "Actualizar respuesta..." : "Escribir respuesta oficial..."}
-                      className="flex-1 bg-input/40 border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:border-neon-blue"
-                    />
-                    <button
-                      onClick={() => sendResponse(t.id)}
-                      className="px-4 py-2 rounded-md bg-gradient-neon text-primary-foreground text-sm font-semibold"
-                    >
-                      Enviar
-                    </button>
+          {/* Recent activity */}
+          <div className="glass rounded-2xl p-5">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-display text-lg font-bold flex items-center gap-2"><History className="h-5 w-5" /> Actividad reciente</h3>
+              <Link to="/admin/historial" className="text-xs text-neon-cyan hover:underline">Ver todo →</Link>
+            </div>
+            {activity.length === 0 && <p className="text-sm text-muted-foreground">Sin actividad reciente.</p>}
+            <ul className="space-y-2">
+              {activity.map((a) => (
+                <li key={a.id} className="text-sm flex items-start gap-3 py-1.5 border-b border-border/40 last:border-0">
+                  <Star className="h-3.5 w-3.5 mt-1 text-neon-cyan shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate"><span className="font-mono text-neon-purple">{a.action}</span>{a.reason ? ` — ${a.reason}` : ""}</p>
+                    <p className="text-[11px] text-muted-foreground">{new Date(a.created_at).toLocaleString()}</p>
                   </div>
-                </div>
-              );
-            })}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
     </PageShell>
+  );
+}
+
+function StatCard({ icon: Icon, label, value, color }: { icon: any; label: string; value: number; color: string }) {
+  return (
+    <div className="glass rounded-xl p-4 border border-border hover:border-neon-cyan/40 transition-all">
+      <div className="flex items-center gap-2">
+        <Icon className={`h-4 w-4 ${color}`} />
+        <p className="text-[11px] uppercase font-mono text-muted-foreground truncate">{label}</p>
+      </div>
+      <p className="text-2xl font-display font-bold mt-1">{value.toLocaleString()}</p>
+    </div>
+  );
+}
+
+function QuickAction({ to, icon: Icon, label }: { to: string; icon: any; label: string }) {
+  return (
+    <Link to={to} className="inline-flex items-center gap-2 px-3 py-2 rounded-md text-xs border border-border hover:border-neon-cyan/60 hover:bg-neon-cyan/5 transition-all">
+      <Icon className="h-3.5 w-3.5" />{label}
+    </Link>
   );
 }
