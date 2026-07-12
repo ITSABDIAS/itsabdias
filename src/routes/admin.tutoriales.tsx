@@ -153,7 +153,7 @@ function AdminTutorialesPage() {
 
         <div className="mx-auto max-w-6xl">
           <div className="mb-6 flex flex-wrap gap-2">
-            <Link to="/admin" className="px-3 py-1.5 rounded-md text-xs border border-border hover:border-neon-cyan/60">← Tickets</Link>
+            <Link to="/admin" className="px-3 py-1.5 rounded-md text-xs border border-border hover:border-neon-cyan/60">← Dashboard</Link>
             <Link to="/tutoriales" className="px-3 py-1.5 rounded-md text-xs border border-border hover:border-neon-cyan/60">Ver tutoriales públicos</Link>
           </div>
 

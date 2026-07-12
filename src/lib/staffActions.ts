@@ -63,3 +63,10 @@ export async function deactivateAnnouncement(id: string) {
   toast.success("Anuncio desactivado");
   return true;
 }
+
+export async function deleteContent(type: "post" | "project" | "tutorial" | "comment", id: string, reason?: string) {
+  const { error } = await supabase.rpc("staff_delete_content" as any, { _type: type, _id: id, _reason: reason ?? null });
+  if (error) { toast.error(error.message); return false; }
+  toast.success("Eliminado");
+  return true;
+}

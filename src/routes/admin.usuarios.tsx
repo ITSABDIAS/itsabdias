@@ -130,7 +130,7 @@ function AdminUsuariosPage() {
 
         <div className="mx-auto max-w-6xl">
           <div className="mb-4 flex flex-wrap gap-2 text-xs">
-            <Link to="/admin" className="px-3 py-1.5 rounded-md border border-border hover:border-neon-cyan/60">← Tickets</Link>
+            <Link to="/admin" className="px-3 py-1.5 rounded-md border border-border hover:border-neon-cyan/60">← Dashboard</Link>
             <Link to="/admin/tutoriales" className="px-3 py-1.5 rounded-md border border-border hover:border-neon-cyan/60">Tutoriales</Link>
             <Link to="/admin/anuncios" className="px-3 py-1.5 rounded-md border border-border hover:border-neon-cyan/60">Anuncios</Link>
             <Link to="/admin/historial" className="px-3 py-1.5 rounded-md border border-border hover:border-neon-cyan/60">Historial</Link>

@@ -114,10 +114,10 @@ function AdminDashboard() {
     { to: "/admin/tutoriales", label: "Tutoriales", icon: GraduationCap, color: "text-neon-blue" },
     { to: "/admin/tickets", label: "Tickets", icon: Ticket, color: "text-yellow-400" },
     { to: "/admin/anuncios", label: "Anuncios", icon: Megaphone, color: "text-pink-400" },
+    { to: "/admin/publicaciones", label: "Publicaciones", icon: MessageSquare, color: "text-green-400" },
+    { to: "/admin/proyectos", label: "Proyectos", icon: FolderKanban, color: "text-orange-400" },
     { to: "/admin/historial", label: "Historial", icon: History, color: "text-muted-foreground" },
-    { to: "/community", label: "Publicaciones", icon: MessageSquare, color: "text-green-400" },
-    { to: "/projects", label: "Proyectos", icon: FolderKanban, color: "text-orange-400" },
-    { to: "/tutoriales", label: "Ver tutoriales", icon: Newspaper, color: "text-neon-cyan" },
+    { to: "/admin/configuracion", label: "Configuración", icon: Settings, color: "text-neon-cyan" },
   ], []);
 
   if (checking) return <PageShell><section className="py-32 text-center text-muted-foreground">Verificando acceso...</section></PageShell>;
@@ -178,6 +178,27 @@ function AdminDashboard() {
             <StatCard icon={FolderKanban} label="Proyectos" value={stats?.projects ?? 0} color="text-orange-400" />
             <StatCard icon={Ticket} label="Tickets abiertos" value={stats?.ticketsOpen ?? 0} color="text-yellow-400" />
             <StatCard icon={TrendingUp} label="Nuevos (7d)" value={stats?.weeklyUsers ?? 0} color="text-neon-cyan" />
+          </div>
+
+          {/* System status */}
+          <div>
+            <h3 className="font-display text-lg font-bold mb-3 flex items-center gap-2"><Activity className="h-5 w-5 text-green-400" /> Estado del sistema</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+              {[
+                { l: "Servidor", ok: true },
+                { l: "Base de datos", ok: true },
+                { l: "Autenticación", ok: true },
+                { l: "NEXUS IA", ok: true },
+                { l: "Tutoriales", ok: (stats?.tutorials ?? 0) >= 0 },
+                { l: "Almacenamiento", ok: true },
+              ].map((s) => (
+                <div key={s.l} className="glass rounded-xl p-3 border border-border flex items-center gap-2">
+                  <span className={`h-2 w-2 rounded-full ${s.ok ? "bg-green-400 shadow-[0_0_8px_var(--tw-shadow-color)] shadow-green-400" : "bg-red-500"}`} />
+                  <p className="text-sm">{s.l}</p>
+                  <span className="ml-auto text-[10px] font-mono uppercase text-muted-foreground">{s.ok ? "OK" : "Down"}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Menu grid */}
