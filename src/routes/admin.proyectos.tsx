@@ -6,8 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useMyRoles } from "@/hooks/useMyRoles";
 import { deleteContent } from "@/lib/staffActions";
-import { toast } from "sonner";
-import { Search, Shield, Trash2, Star, FolderKanban } from "lucide-react";
+import { Search, Shield, Trash2, FolderKanban } from "lucide-react";
 
 export const Route = createFileRoute("/admin/proyectos")({
   head: () => ({ meta: [{ title: "Admin · Proyectos — ItsaBDias" }] }),
@@ -16,7 +15,7 @@ export const Route = createFileRoute("/admin/proyectos")({
 
 type Row = {
   id: string; title: string; description: string | null; category: string | null;
-  is_featured?: boolean | null; created_at: string; user_id: string; username?: string;
+  created_at: string; user_id: string; username?: string;
 };
 
 function AdminProjectsPage() {
