@@ -54,7 +54,7 @@ function AdminHistorialPage() {
         <SectionTitle eyebrow="// admin.historial" title="Historial del staff" subtitle="Auditoría completa de acciones administrativas." />
         <div className="mx-auto max-w-5xl">
           <div className="mb-4 flex flex-wrap gap-2 text-xs">
-            <Link to="/admin" className="px-3 py-1.5 rounded-md border border-border hover:border-neon-cyan/60">← Tickets</Link>
+            <Link to="/admin" className="px-3 py-1.5 rounded-md border border-border hover:border-neon-cyan/60">← Dashboard</Link>
             <Link to="/admin/usuarios" className="px-3 py-1.5 rounded-md border border-border hover:border-neon-cyan/60">Usuarios</Link>
             <Link to="/admin/anuncios" className="px-3 py-1.5 rounded-md border border-border hover:border-neon-cyan/60">Anuncios</Link>
           </div>
