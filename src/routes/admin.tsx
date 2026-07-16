@@ -169,8 +169,10 @@ function AdminDashboard() {
             <div className="flex flex-wrap gap-2">
               <QuickAction to="/admin/tutorials" icon={Sparkles} label="Generar tutorial NEXUS" />
               <QuickAction to="/admin/tutorials" icon={PlusCircle} label="Crear tutorial" />
+              <QuickAction to="/admin/noticias" icon={Newspaper} label="Publicar noticia" />
               <QuickAction to="/admin/announcements" icon={Megaphone} label="Crear anuncio" />
               <QuickAction to="/admin/posts" icon={MessageSquare} label="Moderar publicaciones" />
+
               <QuickAction to="/admin/projects" icon={FolderKanban} label="Gestionar proyectos" />
               <QuickAction to="/admin/tickets" icon={Ticket} label="Ver tickets" />
               {isFounder && <QuickAction to="/admin/users" icon={Crown} label="Otorgar Premium" />}
