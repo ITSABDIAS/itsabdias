@@ -5,9 +5,9 @@ import { SectionTitle } from "@/components/SectionTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import {
-  Shield, Users, UserCheck, Crown, GraduationCap, Newspaper, FolderKanban,
-  MessageSquare, Ticket, Megaphone, History, BarChart3, Sparkles, Search,
-  Activity, Bot, TrendingUp, Zap, Settings, ShieldCheck, Star, PlusCircle,
+  Shield, Users, UserCheck, Crown, GraduationCap, FolderKanban,
+  MessageSquare, Ticket, Megaphone, History,
+  Activity, Bot, TrendingUp, Zap, Settings, ShieldCheck, Star, PlusCircle, Sparkles,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
@@ -21,7 +21,7 @@ type Stats = {
   weeklyUsers: number;
 };
 
-type SearchResult = { kind: string; id: string; label: string; sub?: string; link?: string };
+
 
 function AdminDashboard() {
   const { user, loading: authLoading } = useAuth();
@@ -31,9 +31,6 @@ function AdminDashboard() {
   const [checking, setChecking] = useState(true);
   const [stats, setStats] = useState<Stats | null>(null);
   const [activity, setActivity] = useState<any[]>([]);
-  const [q, setQ] = useState("");
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [searching, setSearching] = useState(false);
 
   useEffect(() => {
     if (authLoading) return;
@@ -84,40 +81,17 @@ function AdminDashboard() {
     setActivity(data ?? []);
   };
 
-  useEffect(() => {
-    const t = setTimeout(async () => {
-      const term = q.trim();
-      if (term.length < 2) { setResults([]); return; }
-      setSearching(true);
-      const [p, tut, po, pr, tk] = await Promise.all([
-        supabase.from("profiles").select("id, username").ilike("username", `%${term}%`).limit(5),
-        supabase.from("tutorials").select("id, title, category, slug").ilike("title", `%${term}%`).limit(5),
-        supabase.from("posts").select("id, content").ilike("content", `%${term}%`).limit(5),
-        supabase.from("projects").select("id, title").ilike("title", `%${term}%`).limit(5),
-        supabase.from("help_tickets").select("id, title, status").ilike("title", `%${term}%`).limit(5),
-      ]);
-      const r: SearchResult[] = [
-        ...(p.data ?? []).map((x: any) => ({ kind: "Usuario", id: x.id, label: x.username, link: `/u/${x.username}` })),
-        ...(tut.data ?? []).map((x: any) => ({ kind: "Tutorial", id: x.id, label: x.title, sub: x.category, link: `/tutorial/${x.category}/${x.slug}` })),
-        ...(po.data ?? []).map((x: any) => ({ kind: "Publicación", id: x.id, label: (x.content ?? "").slice(0, 80), link: `/community` })),
-        ...(pr.data ?? []).map((x: any) => ({ kind: "Proyecto", id: x.id, label: x.title, link: `/projects` })),
-        ...(tk.data ?? []).map((x: any) => ({ kind: "Ticket", id: x.id, label: x.title, sub: x.status, link: `/admin/tickets` })),
-      ];
-      setResults(r); setSearching(false);
-    }, 300);
-    return () => clearTimeout(t);
-  }, [q]);
 
   const menu = useMemo(() => [
-    { to: "/admin/usuarios", label: "Usuarios", icon: Users, color: "text-neon-cyan" },
-    { to: "/staff", label: "Staff", icon: ShieldCheck, color: "text-neon-purple" },
-    { to: "/admin/tutoriales", label: "Tutoriales", icon: GraduationCap, color: "text-neon-blue" },
+    { to: "/admin/users", label: "Usuarios", icon: Users, color: "text-neon-cyan" },
+    { to: "/admin/staff", label: "Staff", icon: ShieldCheck, color: "text-neon-purple" },
+    { to: "/admin/tutorials", label: "Tutoriales", icon: GraduationCap, color: "text-neon-blue" },
     { to: "/admin/tickets", label: "Tickets", icon: Ticket, color: "text-yellow-400" },
-    { to: "/admin/anuncios", label: "Anuncios", icon: Megaphone, color: "text-pink-400" },
-    { to: "/admin/publicaciones", label: "Publicaciones", icon: MessageSquare, color: "text-green-400" },
-    { to: "/admin/proyectos", label: "Proyectos", icon: FolderKanban, color: "text-orange-400" },
-    { to: "/admin/historial", label: "Historial", icon: History, color: "text-muted-foreground" },
-    { to: "/admin/configuracion", label: "Configuración", icon: Settings, color: "text-neon-cyan" },
+    { to: "/admin/announcements", label: "Anuncios", icon: Megaphone, color: "text-pink-400" },
+    { to: "/admin/posts", label: "Publicaciones", icon: MessageSquare, color: "text-green-400" },
+    { to: "/admin/projects", label: "Proyectos", icon: FolderKanban, color: "text-orange-400" },
+    { to: "/admin/history", label: "Historial", icon: History, color: "text-muted-foreground" },
+    { to: "/admin/settings", label: "Configuración", icon: Settings, color: "text-neon-cyan" },
   ], []);
 
   if (checking) return <PageShell><section className="py-32 text-center text-muted-foreground">Verificando acceso...</section></PageShell>;
@@ -137,32 +111,6 @@ function AdminDashboard() {
         <SectionTitle eyebrow="// admin.panel" title="Panel de administración" subtitle="Control total de ITSABDIAS." />
 
         <div className="mx-auto max-w-6xl space-y-8">
-          {/* Global search */}
-          <div className="glass rounded-2xl p-4 neon-border">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <input
-                value={q} onChange={(e) => setQ(e.target.value)}
-                placeholder="Buscar usuarios, tutoriales, publicaciones, proyectos, tickets..."
-                className="w-full pl-10 pr-3 py-3 bg-input/40 border border-border rounded-lg text-sm focus:outline-none focus:border-neon-cyan"
-              />
-            </div>
-            {q.trim().length >= 2 && (
-              <div className="mt-3 max-h-72 overflow-y-auto divide-y divide-border/40">
-                {searching && <p className="text-xs text-muted-foreground p-2">Buscando...</p>}
-                {!searching && results.length === 0 && <p className="text-xs text-muted-foreground p-2">Sin resultados.</p>}
-                {results.map((r) => (
-                  <Link key={`${r.kind}-${r.id}`} to={r.link ?? "/admin"} className="flex items-center justify-between gap-3 p-2 hover:bg-secondary/40 rounded-md">
-                    <div className="min-w-0">
-                      <p className="text-sm truncate">{r.label}</p>
-                      {r.sub && <p className="text-[11px] text-muted-foreground truncate">{r.sub}</p>}
-                    </div>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-border text-muted-foreground shrink-0">{r.kind}</span>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
 
           {/* Stats */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -218,14 +166,14 @@ function AdminDashboard() {
           <div>
             <h3 className="font-display text-lg font-bold mb-3 flex items-center gap-2"><Zap className="h-5 w-5 text-yellow-400" /> Acciones rápidas</h3>
             <div className="flex flex-wrap gap-2">
-              <QuickAction to="/admin/tutoriales" icon={Sparkles} label="Generar tutorial NEXUS" />
-              <QuickAction to="/admin/tutoriales" icon={PlusCircle} label="Crear tutorial" />
-              <QuickAction to="/admin/anuncios" icon={Megaphone} label="Crear anuncio" />
-              <QuickAction to="/community" icon={MessageSquare} label="Nueva publicación" />
-              <QuickAction to="/projects" icon={FolderKanban} label="Nuevo proyecto" />
-              <QuickAction to="/help" icon={Ticket} label="Ver tickets" />
-              {isFounder && <QuickAction to="/admin/usuarios" icon={Crown} label="Otorgar Premium" />}
-              {isFounder && <QuickAction to="/admin/usuarios" icon={ShieldCheck} label="Invitar Admin/Mod" />}
+              <QuickAction to="/admin/tutorials" icon={Sparkles} label="Generar tutorial NEXUS" />
+              <QuickAction to="/admin/tutorials" icon={PlusCircle} label="Crear tutorial" />
+              <QuickAction to="/admin/announcements" icon={Megaphone} label="Crear anuncio" />
+              <QuickAction to="/admin/posts" icon={MessageSquare} label="Moderar publicaciones" />
+              <QuickAction to="/admin/projects" icon={FolderKanban} label="Gestionar proyectos" />
+              <QuickAction to="/admin/tickets" icon={Ticket} label="Ver tickets" />
+              {isFounder && <QuickAction to="/admin/users" icon={Crown} label="Otorgar Premium" />}
+              {isFounder && <QuickAction to="/admin/users" icon={ShieldCheck} label="Invitar Admin/Mod" />}
             </div>
           </div>
 
@@ -233,7 +181,7 @@ function AdminDashboard() {
           <div className="glass rounded-2xl p-5">
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-display text-lg font-bold flex items-center gap-2"><History className="h-5 w-5" /> Actividad reciente</h3>
-              <Link to="/admin/historial" className="text-xs text-neon-cyan hover:underline">Ver todo →</Link>
+              <Link to="/admin/history" className="text-xs text-neon-cyan hover:underline">Ver todo →</Link>
             </div>
             {activity.length === 0 && <p className="text-sm text-muted-foreground">Sin actividad reciente.</p>}
             <ul className="space-y-2">
