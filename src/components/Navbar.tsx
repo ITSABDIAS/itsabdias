@@ -16,6 +16,7 @@ const primaryLinks: NavLink[] = [
   { to: "/ai", label: "NEXUS IA", Icon: Sparkles },
   { to: "/projects", label: "Proyectos", Icon: Rocket },
   { to: "/tutoriales", label: "Tutoriales", Icon: BookOpen },
+  { to: "/noticias", label: "Noticias", Icon: Newspaper },
   { to: "/community", label: "Comunidad", Icon: MessageSquare },
 ];
 
