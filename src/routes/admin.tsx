@@ -5,9 +5,9 @@ import { SectionTitle } from "@/components/SectionTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import {
-  Shield, Users, UserCheck, Crown, GraduationCap, Newspaper, FolderKanban,
-  MessageSquare, Ticket, Megaphone, History, BarChart3, Sparkles, Search,
-  Activity, Bot, TrendingUp, Zap, Settings, ShieldCheck, Star, PlusCircle,
+  Shield, Users, UserCheck, Crown, GraduationCap, FolderKanban,
+  MessageSquare, Ticket, Megaphone, History,
+  Activity, Bot, TrendingUp, Zap, Settings, ShieldCheck, Star, PlusCircle, Sparkles,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
@@ -21,7 +21,7 @@ type Stats = {
   weeklyUsers: number;
 };
 
-type SearchResult = { kind: string; id: string; label: string; sub?: string; link?: string };
+
 
 function AdminDashboard() {
   const { user, loading: authLoading } = useAuth();
@@ -31,9 +31,6 @@ function AdminDashboard() {
   const [checking, setChecking] = useState(true);
   const [stats, setStats] = useState<Stats | null>(null);
   const [activity, setActivity] = useState<any[]>([]);
-  const [q, setQ] = useState("");
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [searching, setSearching] = useState(false);
 
   useEffect(() => {
     if (authLoading) return;
@@ -84,40 +81,17 @@ function AdminDashboard() {
     setActivity(data ?? []);
   };
 
-  useEffect(() => {
-    const t = setTimeout(async () => {
-      const term = q.trim();
-      if (term.length < 2) { setResults([]); return; }
-      setSearching(true);
-      const [p, tut, po, pr, tk] = await Promise.all([
-        supabase.from("profiles").select("id, username").ilike("username", `%${term}%`).limit(5),
-        supabase.from("tutorials").select("id, title, category, slug").ilike("title", `%${term}%`).limit(5),
-        supabase.from("posts").select("id, content").ilike("content", `%${term}%`).limit(5),
-        supabase.from("projects").select("id, title").ilike("title", `%${term}%`).limit(5),
-        supabase.from("help_tickets").select("id, title, status").ilike("title", `%${term}%`).limit(5),
-      ]);
-      const r: SearchResult[] = [
-        ...(p.data ?? []).map((x: any) => ({ kind: "Usuario", id: x.id, label: x.username, link: `/u/${x.username}` })),
-        ...(tut.data ?? []).map((x: any) => ({ kind: "Tutorial", id: x.id, label: x.title, sub: x.category, link: `/tutorial/${x.category}/${x.slug}` })),
-        ...(po.data ?? []).map((x: any) => ({ kind: "Publicación", id: x.id, label: (x.content ?? "").slice(0, 80), link: `/community` })),
-        ...(pr.data ?? []).map((x: any) => ({ kind: "Proyecto", id: x.id, label: x.title, link: `/projects` })),
-        ...(tk.data ?? []).map((x: any) => ({ kind: "Ticket", id: x.id, label: x.title, sub: x.status, link: `/admin/tickets` })),
-      ];
-      setResults(r); setSearching(false);
-    }, 300);
-    return () => clearTimeout(t);
-  }, [q]);
 
   const menu = useMemo(() => [
-    { to: "/admin/usuarios", label: "Usuarios", icon: Users, color: "text-neon-cyan" },
-    { to: "/staff", label: "Staff", icon: ShieldCheck, color: "text-neon-purple" },
-    { to: "/admin/tutoriales", label: "Tutoriales", icon: GraduationCap, color: "text-neon-blue" },
+    { to: "/admin/users", label: "Usuarios", icon: Users, color: "text-neon-cyan" },
+    { to: "/admin/staff", label: "Staff", icon: ShieldCheck, color: "text-neon-purple" },
+    { to: "/admin/tutorials", label: "Tutoriales", icon: GraduationCap, color: "text-neon-blue" },
     { to: "/admin/tickets", label: "Tickets", icon: Ticket, color: "text-yellow-400" },
-    { to: "/admin/anuncios", label: "Anuncios", icon: Megaphone, color: "text-pink-400" },
-    { to: "/admin/publicaciones", label: "Publicaciones", icon: MessageSquare, color: "text-green-400" },
-    { to: "/admin/proyectos", label: "Proyectos", icon: FolderKanban, color: "text-orange-400" },
-    { to: "/admin/historial", label: "Historial", icon: History, color: "text-muted-foreground" },
-    { to: "/admin/configuracion", label: "Configuración", icon: Settings, color: "text-neon-cyan" },
+    { to: "/admin/announcements", label: "Anuncios", icon: Megaphone, color: "text-pink-400" },
+    { to: "/admin/posts", label: "Publicaciones", icon: MessageSquare, color: "text-green-400" },
+    { to: "/admin/projects", label: "Proyectos", icon: FolderKanban, color: "text-orange-400" },
+    { to: "/admin/history", label: "Historial", icon: History, color: "text-muted-foreground" },
+    { to: "/admin/settings", label: "Configuración", icon: Settings, color: "text-neon-cyan" },
   ], []);
 
   if (checking) return <PageShell><section className="py-32 text-center text-muted-foreground">Verificando acceso...</section></PageShell>;

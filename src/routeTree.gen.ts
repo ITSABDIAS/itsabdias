@@ -32,13 +32,21 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminTutorialsRouteImport } from './routes/admin.tutorials'
 import { Route as AdminTutorialesRouteImport } from './routes/admin.tutoriales'
 import { Route as AdminTicketsRouteImport } from './routes/admin.tickets'
+import { Route as AdminStaffRouteImport } from './routes/admin.staff'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminPublicacionesRouteImport } from './routes/admin.publicaciones'
 import { Route as AdminProyectosRouteImport } from './routes/admin.proyectos'
+import { Route as AdminProjectsRouteImport } from './routes/admin.projects'
+import { Route as AdminPostsRouteImport } from './routes/admin.posts'
+import { Route as AdminHistoryRouteImport } from './routes/admin.history'
 import { Route as AdminHistorialRouteImport } from './routes/admin.historial'
 import { Route as AdminConfiguracionRouteImport } from './routes/admin.configuracion'
 import { Route as AdminAnunciosRouteImport } from './routes/admin.anuncios'
+import { Route as AdminAnnouncementsRouteImport } from './routes/admin.announcements'
 import { Route as TutorialCategorySlugRouteImport } from './routes/tutorial.$category.$slug'
 import { Route as TemaCategorySlugRouteImport } from './routes/tema.$category.$slug'
 
@@ -157,6 +165,16 @@ const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
   path: '/usuarios',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTutorialsRoute = AdminTutorialsRouteImport.update({
+  id: '/tutorials',
+  path: '/tutorials',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminTutorialesRoute = AdminTutorialesRouteImport.update({
   id: '/tutoriales',
   path: '/tutoriales',
@@ -167,6 +185,16 @@ const AdminTicketsRoute = AdminTicketsRouteImport.update({
   path: '/tickets',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminStaffRoute = AdminStaffRouteImport.update({
+  id: '/staff',
+  path: '/staff',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPublicacionesRoute = AdminPublicacionesRouteImport.update({
   id: '/publicaciones',
   path: '/publicaciones',
@@ -175,6 +203,21 @@ const AdminPublicacionesRoute = AdminPublicacionesRouteImport.update({
 const AdminProyectosRoute = AdminProyectosRouteImport.update({
   id: '/proyectos',
   path: '/proyectos',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProjectsRoute = AdminProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPostsRoute = AdminPostsRouteImport.update({
+  id: '/posts',
+  path: '/posts',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHistoryRoute = AdminHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminHistorialRoute = AdminHistorialRouteImport.update({
@@ -190,6 +233,11 @@ const AdminConfiguracionRoute = AdminConfiguracionRouteImport.update({
 const AdminAnunciosRoute = AdminAnunciosRouteImport.update({
   id: '/anuncios',
   path: '/anuncios',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAnnouncementsRoute = AdminAnnouncementsRouteImport.update({
+  id: '/announcements',
+  path: '/announcements',
   getParentRoute: () => AdminRoute,
 } as any)
 const TutorialCategorySlugRoute = TutorialCategorySlugRouteImport.update({
@@ -225,13 +273,21 @@ export interface FileRoutesByFullPath {
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
   '/tutoriales': typeof TutorialesRoute
+  '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/anuncios': typeof AdminAnunciosRoute
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
+  '/admin/history': typeof AdminHistoryRoute
+  '/admin/posts': typeof AdminPostsRoute
+  '/admin/projects': typeof AdminProjectsRoute
   '/admin/proyectos': typeof AdminProyectosRoute
   '/admin/publicaciones': typeof AdminPublicacionesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/staff': typeof AdminStaffRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tutoriales': typeof AdminTutorialesRoute
+  '/admin/tutorials': typeof AdminTutorialsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/u/$username': typeof UUsernameRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
@@ -259,13 +315,21 @@ export interface FileRoutesByTo {
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
   '/tutoriales': typeof TutorialesRoute
+  '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/anuncios': typeof AdminAnunciosRoute
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
+  '/admin/history': typeof AdminHistoryRoute
+  '/admin/posts': typeof AdminPostsRoute
+  '/admin/projects': typeof AdminProjectsRoute
   '/admin/proyectos': typeof AdminProyectosRoute
   '/admin/publicaciones': typeof AdminPublicacionesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/staff': typeof AdminStaffRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tutoriales': typeof AdminTutorialesRoute
+  '/admin/tutorials': typeof AdminTutorialsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/u/$username': typeof UUsernameRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
@@ -294,13 +358,21 @@ export interface FileRoutesById {
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
   '/tutoriales': typeof TutorialesRoute
+  '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/anuncios': typeof AdminAnunciosRoute
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
+  '/admin/history': typeof AdminHistoryRoute
+  '/admin/posts': typeof AdminPostsRoute
+  '/admin/projects': typeof AdminProjectsRoute
   '/admin/proyectos': typeof AdminProyectosRoute
   '/admin/publicaciones': typeof AdminPublicacionesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/staff': typeof AdminStaffRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tutoriales': typeof AdminTutorialesRoute
+  '/admin/tutorials': typeof AdminTutorialsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/u/$username': typeof UUsernameRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
@@ -330,13 +402,21 @@ export interface FileRouteTypes {
     | '/staff'
     | '/tecnologia'
     | '/tutoriales'
+    | '/admin/announcements'
     | '/admin/anuncios'
     | '/admin/configuracion'
     | '/admin/historial'
+    | '/admin/history'
+    | '/admin/posts'
+    | '/admin/projects'
     | '/admin/proyectos'
     | '/admin/publicaciones'
+    | '/admin/settings'
+    | '/admin/staff'
     | '/admin/tickets'
     | '/admin/tutoriales'
+    | '/admin/tutorials'
+    | '/admin/users'
     | '/admin/usuarios'
     | '/u/$username'
     | '/tema/$category/$slug'
@@ -364,13 +444,21 @@ export interface FileRouteTypes {
     | '/staff'
     | '/tecnologia'
     | '/tutoriales'
+    | '/admin/announcements'
     | '/admin/anuncios'
     | '/admin/configuracion'
     | '/admin/historial'
+    | '/admin/history'
+    | '/admin/posts'
+    | '/admin/projects'
     | '/admin/proyectos'
     | '/admin/publicaciones'
+    | '/admin/settings'
+    | '/admin/staff'
     | '/admin/tickets'
     | '/admin/tutoriales'
+    | '/admin/tutorials'
+    | '/admin/users'
     | '/admin/usuarios'
     | '/u/$username'
     | '/tema/$category/$slug'
@@ -398,13 +486,21 @@ export interface FileRouteTypes {
     | '/staff'
     | '/tecnologia'
     | '/tutoriales'
+    | '/admin/announcements'
     | '/admin/anuncios'
     | '/admin/configuracion'
     | '/admin/historial'
+    | '/admin/history'
+    | '/admin/posts'
+    | '/admin/projects'
     | '/admin/proyectos'
     | '/admin/publicaciones'
+    | '/admin/settings'
+    | '/admin/staff'
     | '/admin/tickets'
     | '/admin/tutoriales'
+    | '/admin/tutorials'
+    | '/admin/users'
     | '/admin/usuarios'
     | '/u/$username'
     | '/tema/$category/$slug'
@@ -601,6 +697,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsuariosRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/tutorials': {
+      id: '/admin/tutorials'
+      path: '/tutorials'
+      fullPath: '/admin/tutorials'
+      preLoaderRoute: typeof AdminTutorialsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/tutoriales': {
       id: '/admin/tutoriales'
       path: '/tutoriales'
@@ -615,6 +725,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTicketsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/staff': {
+      id: '/admin/staff'
+      path: '/staff'
+      fullPath: '/admin/staff'
+      preLoaderRoute: typeof AdminStaffRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/publicaciones': {
       id: '/admin/publicaciones'
       path: '/publicaciones'
@@ -627,6 +751,27 @@ declare module '@tanstack/react-router' {
       path: '/proyectos'
       fullPath: '/admin/proyectos'
       preLoaderRoute: typeof AdminProyectosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/projects': {
+      id: '/admin/projects'
+      path: '/projects'
+      fullPath: '/admin/projects'
+      preLoaderRoute: typeof AdminProjectsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/posts': {
+      id: '/admin/posts'
+      path: '/posts'
+      fullPath: '/admin/posts'
+      preLoaderRoute: typeof AdminPostsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/history': {
+      id: '/admin/history'
+      path: '/history'
+      fullPath: '/admin/history'
+      preLoaderRoute: typeof AdminHistoryRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/historial': {
@@ -650,6 +795,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAnunciosRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/announcements': {
+      id: '/admin/announcements'
+      path: '/announcements'
+      fullPath: '/admin/announcements'
+      preLoaderRoute: typeof AdminAnnouncementsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/tutorial/$category/$slug': {
       id: '/tutorial/$category/$slug'
       path: '/tutorial/$category/$slug'
@@ -668,24 +820,40 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
   AdminAnunciosRoute: typeof AdminAnunciosRoute
   AdminConfiguracionRoute: typeof AdminConfiguracionRoute
   AdminHistorialRoute: typeof AdminHistorialRoute
+  AdminHistoryRoute: typeof AdminHistoryRoute
+  AdminPostsRoute: typeof AdminPostsRoute
+  AdminProjectsRoute: typeof AdminProjectsRoute
   AdminProyectosRoute: typeof AdminProyectosRoute
   AdminPublicacionesRoute: typeof AdminPublicacionesRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminStaffRoute: typeof AdminStaffRoute
   AdminTicketsRoute: typeof AdminTicketsRoute
   AdminTutorialesRoute: typeof AdminTutorialesRoute
+  AdminTutorialsRoute: typeof AdminTutorialsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   AdminUsuariosRoute: typeof AdminUsuariosRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAnnouncementsRoute: AdminAnnouncementsRoute,
   AdminAnunciosRoute: AdminAnunciosRoute,
   AdminConfiguracionRoute: AdminConfiguracionRoute,
   AdminHistorialRoute: AdminHistorialRoute,
+  AdminHistoryRoute: AdminHistoryRoute,
+  AdminPostsRoute: AdminPostsRoute,
+  AdminProjectsRoute: AdminProjectsRoute,
   AdminProyectosRoute: AdminProyectosRoute,
   AdminPublicacionesRoute: AdminPublicacionesRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminStaffRoute: AdminStaffRoute,
   AdminTicketsRoute: AdminTicketsRoute,
   AdminTutorialesRoute: AdminTutorialesRoute,
+  AdminTutorialsRoute: AdminTutorialsRoute,
+  AdminUsersRoute: AdminUsersRoute,
   AdminUsuariosRoute: AdminUsuariosRoute,
 }
 
@@ -720,13 +888,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
