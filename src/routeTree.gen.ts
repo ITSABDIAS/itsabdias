@@ -42,6 +42,7 @@ import { Route as AdminPublicacionesRouteImport } from './routes/admin.publicaci
 import { Route as AdminProyectosRouteImport } from './routes/admin.proyectos'
 import { Route as AdminProjectsRouteImport } from './routes/admin.projects'
 import { Route as AdminPostsRouteImport } from './routes/admin.posts'
+import { Route as AdminNoticiasRouteImport } from './routes/admin.noticias'
 import { Route as AdminHistoryRouteImport } from './routes/admin.history'
 import { Route as AdminHistorialRouteImport } from './routes/admin.historial'
 import { Route as AdminConfiguracionRouteImport } from './routes/admin.configuracion'
@@ -215,6 +216,11 @@ const AdminPostsRoute = AdminPostsRouteImport.update({
   path: '/posts',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminNoticiasRoute = AdminNoticiasRouteImport.update({
+  id: '/noticias',
+  path: '/noticias',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminHistoryRoute = AdminHistoryRouteImport.update({
   id: '/history',
   path: '/history',
@@ -278,6 +284,7 @@ export interface FileRoutesByFullPath {
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
   '/admin/history': typeof AdminHistoryRoute
+  '/admin/noticias': typeof AdminNoticiasRoute
   '/admin/posts': typeof AdminPostsRoute
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/proyectos': typeof AdminProyectosRoute
@@ -320,6 +327,7 @@ export interface FileRoutesByTo {
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
   '/admin/history': typeof AdminHistoryRoute
+  '/admin/noticias': typeof AdminNoticiasRoute
   '/admin/posts': typeof AdminPostsRoute
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/proyectos': typeof AdminProyectosRoute
@@ -363,6 +371,7 @@ export interface FileRoutesById {
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
   '/admin/history': typeof AdminHistoryRoute
+  '/admin/noticias': typeof AdminNoticiasRoute
   '/admin/posts': typeof AdminPostsRoute
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/proyectos': typeof AdminProyectosRoute
@@ -407,6 +416,7 @@ export interface FileRouteTypes {
     | '/admin/configuracion'
     | '/admin/historial'
     | '/admin/history'
+    | '/admin/noticias'
     | '/admin/posts'
     | '/admin/projects'
     | '/admin/proyectos'
@@ -449,6 +459,7 @@ export interface FileRouteTypes {
     | '/admin/configuracion'
     | '/admin/historial'
     | '/admin/history'
+    | '/admin/noticias'
     | '/admin/posts'
     | '/admin/projects'
     | '/admin/proyectos'
@@ -491,6 +502,7 @@ export interface FileRouteTypes {
     | '/admin/configuracion'
     | '/admin/historial'
     | '/admin/history'
+    | '/admin/noticias'
     | '/admin/posts'
     | '/admin/projects'
     | '/admin/proyectos'
@@ -767,6 +779,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPostsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/noticias': {
+      id: '/admin/noticias'
+      path: '/noticias'
+      fullPath: '/admin/noticias'
+      preLoaderRoute: typeof AdminNoticiasRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/history': {
       id: '/admin/history'
       path: '/history'
@@ -825,6 +844,7 @@ interface AdminRouteChildren {
   AdminConfiguracionRoute: typeof AdminConfiguracionRoute
   AdminHistorialRoute: typeof AdminHistorialRoute
   AdminHistoryRoute: typeof AdminHistoryRoute
+  AdminNoticiasRoute: typeof AdminNoticiasRoute
   AdminPostsRoute: typeof AdminPostsRoute
   AdminProjectsRoute: typeof AdminProjectsRoute
   AdminProyectosRoute: typeof AdminProyectosRoute
@@ -844,6 +864,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminConfiguracionRoute: AdminConfiguracionRoute,
   AdminHistorialRoute: AdminHistorialRoute,
   AdminHistoryRoute: AdminHistoryRoute,
+  AdminNoticiasRoute: AdminNoticiasRoute,
   AdminPostsRoute: AdminPostsRoute,
   AdminProjectsRoute: AdminProjectsRoute,
   AdminProyectosRoute: AdminProyectosRoute,
