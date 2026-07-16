@@ -111,32 +111,6 @@ function AdminDashboard() {
         <SectionTitle eyebrow="// admin.panel" title="Panel de administración" subtitle="Control total de ITSABDIAS." />
 
         <div className="mx-auto max-w-6xl space-y-8">
-          {/* Global search */}
-          <div className="glass rounded-2xl p-4 neon-border">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <input
-                value={q} onChange={(e) => setQ(e.target.value)}
-                placeholder="Buscar usuarios, tutoriales, publicaciones, proyectos, tickets..."
-                className="w-full pl-10 pr-3 py-3 bg-input/40 border border-border rounded-lg text-sm focus:outline-none focus:border-neon-cyan"
-              />
-            </div>
-            {q.trim().length >= 2 && (
-              <div className="mt-3 max-h-72 overflow-y-auto divide-y divide-border/40">
-                {searching && <p className="text-xs text-muted-foreground p-2">Buscando...</p>}
-                {!searching && results.length === 0 && <p className="text-xs text-muted-foreground p-2">Sin resultados.</p>}
-                {results.map((r) => (
-                  <Link key={`${r.kind}-${r.id}`} to={r.link ?? "/admin"} className="flex items-center justify-between gap-3 p-2 hover:bg-secondary/40 rounded-md">
-                    <div className="min-w-0">
-                      <p className="text-sm truncate">{r.label}</p>
-                      {r.sub && <p className="text-[11px] text-muted-foreground truncate">{r.sub}</p>}
-                    </div>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-border text-muted-foreground shrink-0">{r.kind}</span>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
 
           {/* Stats */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
