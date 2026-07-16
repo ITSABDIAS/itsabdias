@@ -19,6 +19,7 @@ import { Route as ProgramacionRouteImport } from './routes/programacion'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PremiumRouteImport } from './routes/premium'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as NoticiasRouteImport } from './routes/noticias'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as HardwareRouteImport } from './routes/hardware'
@@ -99,6 +100,11 @@ const PremiumRoute = PremiumRouteImport.update({
 const NotificationsRoute = NotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoticiasRoute = NoticiasRouteImport.update({
+  id: '/noticias',
+  path: '/noticias',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MessagesRoute = MessagesRouteImport.update({
@@ -269,6 +275,7 @@ export interface FileRoutesByFullPath {
   '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
   '/messages': typeof MessagesRoute
+  '/noticias': typeof NoticiasRoute
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
   '/profile': typeof ProfileRoute
@@ -312,6 +319,7 @@ export interface FileRoutesByTo {
   '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
   '/messages': typeof MessagesRoute
+  '/noticias': typeof NoticiasRoute
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
   '/profile': typeof ProfileRoute
@@ -356,6 +364,7 @@ export interface FileRoutesById {
   '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
   '/messages': typeof MessagesRoute
+  '/noticias': typeof NoticiasRoute
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
   '/profile': typeof ProfileRoute
@@ -401,6 +410,7 @@ export interface FileRouteTypes {
     | '/hardware'
     | '/help'
     | '/messages'
+    | '/noticias'
     | '/notifications'
     | '/premium'
     | '/profile'
@@ -444,6 +454,7 @@ export interface FileRouteTypes {
     | '/hardware'
     | '/help'
     | '/messages'
+    | '/noticias'
     | '/notifications'
     | '/premium'
     | '/profile'
@@ -487,6 +498,7 @@ export interface FileRouteTypes {
     | '/hardware'
     | '/help'
     | '/messages'
+    | '/noticias'
     | '/notifications'
     | '/premium'
     | '/profile'
@@ -531,6 +543,7 @@ export interface RootRouteChildren {
   HardwareRoute: typeof HardwareRoute
   HelpRoute: typeof HelpRoute
   MessagesRoute: typeof MessagesRoute
+  NoticiasRoute: typeof NoticiasRoute
   NotificationsRoute: typeof NotificationsRoute
   PremiumRoute: typeof PremiumRoute
   ProfileRoute: typeof ProfileRoute
@@ -616,6 +629,13 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/notifications'
       preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/noticias': {
+      id: '/noticias'
+      path: '/noticias'
+      fullPath: '/noticias'
+      preLoaderRoute: typeof NoticiasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/messages': {
@@ -892,6 +912,7 @@ const rootRouteChildren: RootRouteChildren = {
   HardwareRoute: HardwareRoute,
   HelpRoute: HelpRoute,
   MessagesRoute: MessagesRoute,
+  NoticiasRoute: NoticiasRoute,
   NotificationsRoute: NotificationsRoute,
   PremiumRoute: PremiumRoute,
   ProfileRoute: ProfileRoute,
