@@ -166,14 +166,14 @@ function AdminDashboard() {
           <div>
             <h3 className="font-display text-lg font-bold mb-3 flex items-center gap-2"><Zap className="h-5 w-5 text-yellow-400" /> Acciones rápidas</h3>
             <div className="flex flex-wrap gap-2">
-              <QuickAction to="/admin/tutoriales" icon={Sparkles} label="Generar tutorial NEXUS" />
-              <QuickAction to="/admin/tutoriales" icon={PlusCircle} label="Crear tutorial" />
-              <QuickAction to="/admin/anuncios" icon={Megaphone} label="Crear anuncio" />
-              <QuickAction to="/community" icon={MessageSquare} label="Nueva publicación" />
-              <QuickAction to="/projects" icon={FolderKanban} label="Nuevo proyecto" />
-              <QuickAction to="/help" icon={Ticket} label="Ver tickets" />
-              {isFounder && <QuickAction to="/admin/usuarios" icon={Crown} label="Otorgar Premium" />}
-              {isFounder && <QuickAction to="/admin/usuarios" icon={ShieldCheck} label="Invitar Admin/Mod" />}
+              <QuickAction to="/admin/tutorials" icon={Sparkles} label="Generar tutorial NEXUS" />
+              <QuickAction to="/admin/tutorials" icon={PlusCircle} label="Crear tutorial" />
+              <QuickAction to="/admin/announcements" icon={Megaphone} label="Crear anuncio" />
+              <QuickAction to="/admin/posts" icon={MessageSquare} label="Moderar publicaciones" />
+              <QuickAction to="/admin/projects" icon={FolderKanban} label="Gestionar proyectos" />
+              <QuickAction to="/admin/tickets" icon={Ticket} label="Ver tickets" />
+              {isFounder && <QuickAction to="/admin/users" icon={Crown} label="Otorgar Premium" />}
+              {isFounder && <QuickAction to="/admin/users" icon={ShieldCheck} label="Invitar Admin/Mod" />}
             </div>
           </div>
 
@@ -181,7 +181,7 @@ function AdminDashboard() {
           <div className="glass rounded-2xl p-5">
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-display text-lg font-bold flex items-center gap-2"><History className="h-5 w-5" /> Actividad reciente</h3>
-              <Link to="/admin/historial" className="text-xs text-neon-cyan hover:underline">Ver todo →</Link>
+              <Link to="/admin/history" className="text-xs text-neon-cyan hover:underline">Ver todo →</Link>
             </div>
             {activity.length === 0 && <p className="text-sm text-muted-foreground">Sin actividad reciente.</p>}
             <ul className="space-y-2">
