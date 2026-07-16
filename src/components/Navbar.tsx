@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   Menu, X, Youtube, LogOut, User as UserIcon, Github,
-  Home, Sparkles, Rocket, BookOpen, MessageSquare, Users, Crown, Shield, HelpCircle, Mail
+  Home, Sparkles, Rocket, BookOpen, MessageSquare, Users, Crown, Shield, HelpCircle, Mail, Newspaper
 } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/hooks/useAuth";
