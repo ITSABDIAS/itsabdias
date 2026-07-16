@@ -45,6 +45,7 @@ import { Route as AdminProyectosRouteImport } from './routes/admin.proyectos'
 import { Route as AdminProjectsRouteImport } from './routes/admin.projects'
 import { Route as AdminPostsRouteImport } from './routes/admin.posts'
 import { Route as AdminNoticiasRouteImport } from './routes/admin.noticias'
+import { Route as AdminNewsRouteImport } from './routes/admin.news'
 import { Route as AdminHistoryRouteImport } from './routes/admin.history'
 import { Route as AdminHistorialRouteImport } from './routes/admin.historial'
 import { Route as AdminConfiguracionRouteImport } from './routes/admin.configuracion'
@@ -233,6 +234,11 @@ const AdminNoticiasRoute = AdminNoticiasRouteImport.update({
   path: '/noticias',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminNewsRoute = AdminNewsRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminHistoryRoute = AdminHistoryRouteImport.update({
   id: '/history',
   path: '/history',
@@ -297,6 +303,7 @@ export interface FileRoutesByFullPath {
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
   '/admin/history': typeof AdminHistoryRoute
+  '/admin/news': typeof AdminNewsRoute
   '/admin/noticias': typeof AdminNoticiasRoute
   '/admin/posts': typeof AdminPostsRoute
   '/admin/projects': typeof AdminProjectsRoute
@@ -342,6 +349,7 @@ export interface FileRoutesByTo {
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
   '/admin/history': typeof AdminHistoryRoute
+  '/admin/news': typeof AdminNewsRoute
   '/admin/noticias': typeof AdminNoticiasRoute
   '/admin/posts': typeof AdminPostsRoute
   '/admin/projects': typeof AdminProjectsRoute
@@ -388,6 +396,7 @@ export interface FileRoutesById {
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
   '/admin/history': typeof AdminHistoryRoute
+  '/admin/news': typeof AdminNewsRoute
   '/admin/noticias': typeof AdminNoticiasRoute
   '/admin/posts': typeof AdminPostsRoute
   '/admin/projects': typeof AdminProjectsRoute
@@ -435,6 +444,7 @@ export interface FileRouteTypes {
     | '/admin/configuracion'
     | '/admin/historial'
     | '/admin/history'
+    | '/admin/news'
     | '/admin/noticias'
     | '/admin/posts'
     | '/admin/projects'
@@ -480,6 +490,7 @@ export interface FileRouteTypes {
     | '/admin/configuracion'
     | '/admin/historial'
     | '/admin/history'
+    | '/admin/news'
     | '/admin/noticias'
     | '/admin/posts'
     | '/admin/projects'
@@ -525,6 +536,7 @@ export interface FileRouteTypes {
     | '/admin/configuracion'
     | '/admin/historial'
     | '/admin/history'
+    | '/admin/news'
     | '/admin/noticias'
     | '/admin/posts'
     | '/admin/projects'
@@ -826,6 +838,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminNoticiasRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/news': {
+      id: '/admin/news'
+      path: '/news'
+      fullPath: '/admin/news'
+      preLoaderRoute: typeof AdminNewsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/history': {
       id: '/admin/history'
       path: '/history'
@@ -884,6 +903,7 @@ interface AdminRouteChildren {
   AdminConfiguracionRoute: typeof AdminConfiguracionRoute
   AdminHistorialRoute: typeof AdminHistorialRoute
   AdminHistoryRoute: typeof AdminHistoryRoute
+  AdminNewsRoute: typeof AdminNewsRoute
   AdminNoticiasRoute: typeof AdminNoticiasRoute
   AdminPostsRoute: typeof AdminPostsRoute
   AdminProjectsRoute: typeof AdminProjectsRoute
@@ -904,6 +924,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminConfiguracionRoute: AdminConfiguracionRoute,
   AdminHistorialRoute: AdminHistorialRoute,
   AdminHistoryRoute: AdminHistoryRoute,
+  AdminNewsRoute: AdminNewsRoute,
   AdminNoticiasRoute: AdminNoticiasRoute,
   AdminPostsRoute: AdminPostsRoute,
   AdminProjectsRoute: AdminProjectsRoute,

@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import {
   Shield, Users, UserCheck, Crown, GraduationCap, FolderKanban,
-  MessageSquare, Ticket, Megaphone, History,
+  MessageSquare, Ticket, Megaphone, History, Newspaper,
   Activity, Bot, TrendingUp, Zap, Settings, ShieldCheck, Star, PlusCircle, Sparkles,
 } from "lucide-react";
 
