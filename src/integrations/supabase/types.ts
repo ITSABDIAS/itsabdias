@@ -254,6 +254,63 @@ export type Database = {
           },
         ]
       }
+      news: {
+        Row: {
+          author_id: string | null
+          category: string
+          content: string
+          cover_url: string | null
+          created_at: string
+          id: string
+          is_featured: boolean
+          is_hidden: boolean
+          published_at: string
+          scheduled_at: string | null
+          slug: string
+          summary: string
+          tags: string[]
+          title: string
+          updated_at: string
+          views_count: number
+        }
+        Insert: {
+          author_id?: string | null
+          category?: string
+          content: string
+          cover_url?: string | null
+          created_at?: string
+          id?: string
+          is_featured?: boolean
+          is_hidden?: boolean
+          published_at?: string
+          scheduled_at?: string | null
+          slug: string
+          summary: string
+          tags?: string[]
+          title: string
+          updated_at?: string
+          views_count?: number
+        }
+        Update: {
+          author_id?: string | null
+          category?: string
+          content?: string
+          cover_url?: string | null
+          created_at?: string
+          id?: string
+          is_featured?: boolean
+          is_hidden?: boolean
+          published_at?: string
+          scheduled_at?: string | null
+          slug?: string
+          summary?: string
+          tags?: string[]
+          title?: string
+          updated_at?: string
+          views_count?: number
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           body: string | null
@@ -798,6 +855,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_news_view: { Args: { _id: string }; Returns: undefined }
       increment_tutorial_view: { Args: { _id: string }; Returns: undefined }
       is_admin_or_higher: { Args: { _uid: string }; Returns: boolean }
       is_founder: { Args: { _uid: string }; Returns: boolean }

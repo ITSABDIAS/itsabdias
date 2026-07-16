@@ -19,6 +19,7 @@ import { Route as ProgramacionRouteImport } from './routes/programacion'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PremiumRouteImport } from './routes/premium'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as NoticiasRouteImport } from './routes/noticias'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as HardwareRouteImport } from './routes/hardware'
@@ -31,6 +32,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
+import { Route as NoticiaSlugRouteImport } from './routes/noticia.$slug'
 import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminTutorialsRouteImport } from './routes/admin.tutorials'
@@ -42,6 +44,8 @@ import { Route as AdminPublicacionesRouteImport } from './routes/admin.publicaci
 import { Route as AdminProyectosRouteImport } from './routes/admin.proyectos'
 import { Route as AdminProjectsRouteImport } from './routes/admin.projects'
 import { Route as AdminPostsRouteImport } from './routes/admin.posts'
+import { Route as AdminNoticiasRouteImport } from './routes/admin.noticias'
+import { Route as AdminNewsRouteImport } from './routes/admin.news'
 import { Route as AdminHistoryRouteImport } from './routes/admin.history'
 import { Route as AdminHistorialRouteImport } from './routes/admin.historial'
 import { Route as AdminConfiguracionRouteImport } from './routes/admin.configuracion'
@@ -98,6 +102,11 @@ const PremiumRoute = PremiumRouteImport.update({
 const NotificationsRoute = NotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoticiasRoute = NoticiasRouteImport.update({
+  id: '/noticias',
+  path: '/noticias',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MessagesRoute = MessagesRouteImport.update({
@@ -160,6 +169,11 @@ const UUsernameRoute = UUsernameRouteImport.update({
   path: '/u/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NoticiaSlugRoute = NoticiaSlugRouteImport.update({
+  id: '/noticia/$slug',
+  path: '/noticia/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
   id: '/usuarios',
   path: '/usuarios',
@@ -215,6 +229,16 @@ const AdminPostsRoute = AdminPostsRouteImport.update({
   path: '/posts',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminNoticiasRoute = AdminNoticiasRouteImport.update({
+  id: '/noticias',
+  path: '/noticias',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminNewsRoute = AdminNewsRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminHistoryRoute = AdminHistoryRouteImport.update({
   id: '/history',
   path: '/history',
@@ -263,6 +287,7 @@ export interface FileRoutesByFullPath {
   '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
   '/messages': typeof MessagesRoute
+  '/noticias': typeof NoticiasRoute
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
   '/profile': typeof ProfileRoute
@@ -278,6 +303,8 @@ export interface FileRoutesByFullPath {
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
   '/admin/history': typeof AdminHistoryRoute
+  '/admin/news': typeof AdminNewsRoute
+  '/admin/noticias': typeof AdminNoticiasRoute
   '/admin/posts': typeof AdminPostsRoute
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/proyectos': typeof AdminProyectosRoute
@@ -289,6 +316,7 @@ export interface FileRoutesByFullPath {
   '/admin/tutorials': typeof AdminTutorialsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/noticia/$slug': typeof NoticiaSlugRoute
   '/u/$username': typeof UUsernameRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
   '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
@@ -305,6 +333,7 @@ export interface FileRoutesByTo {
   '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
   '/messages': typeof MessagesRoute
+  '/noticias': typeof NoticiasRoute
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
   '/profile': typeof ProfileRoute
@@ -320,6 +349,8 @@ export interface FileRoutesByTo {
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
   '/admin/history': typeof AdminHistoryRoute
+  '/admin/news': typeof AdminNewsRoute
+  '/admin/noticias': typeof AdminNoticiasRoute
   '/admin/posts': typeof AdminPostsRoute
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/proyectos': typeof AdminProyectosRoute
@@ -331,6 +362,7 @@ export interface FileRoutesByTo {
   '/admin/tutorials': typeof AdminTutorialsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/noticia/$slug': typeof NoticiaSlugRoute
   '/u/$username': typeof UUsernameRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
   '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
@@ -348,6 +380,7 @@ export interface FileRoutesById {
   '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
   '/messages': typeof MessagesRoute
+  '/noticias': typeof NoticiasRoute
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
   '/profile': typeof ProfileRoute
@@ -363,6 +396,8 @@ export interface FileRoutesById {
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
   '/admin/history': typeof AdminHistoryRoute
+  '/admin/news': typeof AdminNewsRoute
+  '/admin/noticias': typeof AdminNoticiasRoute
   '/admin/posts': typeof AdminPostsRoute
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/proyectos': typeof AdminProyectosRoute
@@ -374,6 +409,7 @@ export interface FileRoutesById {
   '/admin/tutorials': typeof AdminTutorialsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/noticia/$slug': typeof NoticiaSlugRoute
   '/u/$username': typeof UUsernameRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
   '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
@@ -392,6 +428,7 @@ export interface FileRouteTypes {
     | '/hardware'
     | '/help'
     | '/messages'
+    | '/noticias'
     | '/notifications'
     | '/premium'
     | '/profile'
@@ -407,6 +444,8 @@ export interface FileRouteTypes {
     | '/admin/configuracion'
     | '/admin/historial'
     | '/admin/history'
+    | '/admin/news'
+    | '/admin/noticias'
     | '/admin/posts'
     | '/admin/projects'
     | '/admin/proyectos'
@@ -418,6 +457,7 @@ export interface FileRouteTypes {
     | '/admin/tutorials'
     | '/admin/users'
     | '/admin/usuarios'
+    | '/noticia/$slug'
     | '/u/$username'
     | '/tema/$category/$slug'
     | '/tutorial/$category/$slug'
@@ -434,6 +474,7 @@ export interface FileRouteTypes {
     | '/hardware'
     | '/help'
     | '/messages'
+    | '/noticias'
     | '/notifications'
     | '/premium'
     | '/profile'
@@ -449,6 +490,8 @@ export interface FileRouteTypes {
     | '/admin/configuracion'
     | '/admin/historial'
     | '/admin/history'
+    | '/admin/news'
+    | '/admin/noticias'
     | '/admin/posts'
     | '/admin/projects'
     | '/admin/proyectos'
@@ -460,6 +503,7 @@ export interface FileRouteTypes {
     | '/admin/tutorials'
     | '/admin/users'
     | '/admin/usuarios'
+    | '/noticia/$slug'
     | '/u/$username'
     | '/tema/$category/$slug'
     | '/tutorial/$category/$slug'
@@ -476,6 +520,7 @@ export interface FileRouteTypes {
     | '/hardware'
     | '/help'
     | '/messages'
+    | '/noticias'
     | '/notifications'
     | '/premium'
     | '/profile'
@@ -491,6 +536,8 @@ export interface FileRouteTypes {
     | '/admin/configuracion'
     | '/admin/historial'
     | '/admin/history'
+    | '/admin/news'
+    | '/admin/noticias'
     | '/admin/posts'
     | '/admin/projects'
     | '/admin/proyectos'
@@ -502,6 +549,7 @@ export interface FileRouteTypes {
     | '/admin/tutorials'
     | '/admin/users'
     | '/admin/usuarios'
+    | '/noticia/$slug'
     | '/u/$username'
     | '/tema/$category/$slug'
     | '/tutorial/$category/$slug'
@@ -519,6 +567,7 @@ export interface RootRouteChildren {
   HardwareRoute: typeof HardwareRoute
   HelpRoute: typeof HelpRoute
   MessagesRoute: typeof MessagesRoute
+  NoticiasRoute: typeof NoticiasRoute
   NotificationsRoute: typeof NotificationsRoute
   PremiumRoute: typeof PremiumRoute
   ProfileRoute: typeof ProfileRoute
@@ -529,6 +578,7 @@ export interface RootRouteChildren {
   StaffRoute: typeof StaffRoute
   TecnologiaRoute: typeof TecnologiaRoute
   TutorialesRoute: typeof TutorialesRoute
+  NoticiaSlugRoute: typeof NoticiaSlugRoute
   UUsernameRoute: typeof UUsernameRoute
   TemaCategorySlugRoute: typeof TemaCategorySlugRoute
   TutorialCategorySlugRoute: typeof TutorialCategorySlugRoute
@@ -604,6 +654,13 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/notifications'
       preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/noticias': {
+      id: '/noticias'
+      path: '/noticias'
+      fullPath: '/noticias'
+      preLoaderRoute: typeof NoticiasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/messages': {
@@ -690,6 +747,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/noticia/$slug': {
+      id: '/noticia/$slug'
+      path: '/noticia/$slug'
+      fullPath: '/noticia/$slug'
+      preLoaderRoute: typeof NoticiaSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/usuarios': {
       id: '/admin/usuarios'
       path: '/usuarios'
@@ -767,6 +831,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPostsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/noticias': {
+      id: '/admin/noticias'
+      path: '/noticias'
+      fullPath: '/admin/noticias'
+      preLoaderRoute: typeof AdminNoticiasRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/news': {
+      id: '/admin/news'
+      path: '/news'
+      fullPath: '/admin/news'
+      preLoaderRoute: typeof AdminNewsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/history': {
       id: '/admin/history'
       path: '/history'
@@ -825,6 +903,8 @@ interface AdminRouteChildren {
   AdminConfiguracionRoute: typeof AdminConfiguracionRoute
   AdminHistorialRoute: typeof AdminHistorialRoute
   AdminHistoryRoute: typeof AdminHistoryRoute
+  AdminNewsRoute: typeof AdminNewsRoute
+  AdminNoticiasRoute: typeof AdminNoticiasRoute
   AdminPostsRoute: typeof AdminPostsRoute
   AdminProjectsRoute: typeof AdminProjectsRoute
   AdminProyectosRoute: typeof AdminProyectosRoute
@@ -844,6 +924,8 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminConfiguracionRoute: AdminConfiguracionRoute,
   AdminHistorialRoute: AdminHistorialRoute,
   AdminHistoryRoute: AdminHistoryRoute,
+  AdminNewsRoute: AdminNewsRoute,
+  AdminNoticiasRoute: AdminNoticiasRoute,
   AdminPostsRoute: AdminPostsRoute,
   AdminProjectsRoute: AdminProjectsRoute,
   AdminProyectosRoute: AdminProyectosRoute,
@@ -871,6 +953,7 @@ const rootRouteChildren: RootRouteChildren = {
   HardwareRoute: HardwareRoute,
   HelpRoute: HelpRoute,
   MessagesRoute: MessagesRoute,
+  NoticiasRoute: NoticiasRoute,
   NotificationsRoute: NotificationsRoute,
   PremiumRoute: PremiumRoute,
   ProfileRoute: ProfileRoute,
@@ -881,6 +964,7 @@ const rootRouteChildren: RootRouteChildren = {
   StaffRoute: StaffRoute,
   TecnologiaRoute: TecnologiaRoute,
   TutorialesRoute: TutorialesRoute,
+  NoticiaSlugRoute: NoticiaSlugRoute,
   UUsernameRoute: UUsernameRoute,
   TemaCategorySlugRoute: TemaCategorySlugRoute,
   TutorialCategorySlugRoute: TutorialCategorySlugRoute,

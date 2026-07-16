@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import {
   Shield, Users, UserCheck, Crown, GraduationCap, FolderKanban,
-  MessageSquare, Ticket, Megaphone, History,
+  MessageSquare, Ticket, Megaphone, History, Newspaper,
   Activity, Bot, TrendingUp, Zap, Settings, ShieldCheck, Star, PlusCircle, Sparkles,
 } from "lucide-react";
 
@@ -87,6 +87,7 @@ function AdminDashboard() {
     { to: "/admin/staff", label: "Staff", icon: ShieldCheck, color: "text-neon-purple" },
     { to: "/admin/tutorials", label: "Tutoriales", icon: GraduationCap, color: "text-neon-blue" },
     { to: "/admin/tickets", label: "Tickets", icon: Ticket, color: "text-yellow-400" },
+    { to: "/admin/noticias", label: "Noticias", icon: Newspaper, color: "text-red-400" },
     { to: "/admin/announcements", label: "Anuncios", icon: Megaphone, color: "text-pink-400" },
     { to: "/admin/posts", label: "Publicaciones", icon: MessageSquare, color: "text-green-400" },
     { to: "/admin/projects", label: "Proyectos", icon: FolderKanban, color: "text-orange-400" },
@@ -168,8 +169,10 @@ function AdminDashboard() {
             <div className="flex flex-wrap gap-2">
               <QuickAction to="/admin/tutorials" icon={Sparkles} label="Generar tutorial NEXUS" />
               <QuickAction to="/admin/tutorials" icon={PlusCircle} label="Crear tutorial" />
+              <QuickAction to="/admin/noticias" icon={Newspaper} label="Publicar noticia" />
               <QuickAction to="/admin/announcements" icon={Megaphone} label="Crear anuncio" />
               <QuickAction to="/admin/posts" icon={MessageSquare} label="Moderar publicaciones" />
+
               <QuickAction to="/admin/projects" icon={FolderKanban} label="Gestionar proyectos" />
               <QuickAction to="/admin/tickets" icon={Ticket} label="Ver tickets" />
               {isFounder && <QuickAction to="/admin/users" icon={Crown} label="Otorgar Premium" />}
