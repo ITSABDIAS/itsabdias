@@ -87,6 +87,7 @@ function AdminDashboard() {
     { to: "/admin/staff", label: "Staff", icon: ShieldCheck, color: "text-neon-purple" },
     { to: "/admin/tutorials", label: "Tutoriales", icon: GraduationCap, color: "text-neon-blue" },
     { to: "/admin/tickets", label: "Tickets", icon: Ticket, color: "text-yellow-400" },
+    { to: "/admin/noticias", label: "Noticias", icon: Newspaper, color: "text-red-400" },
     { to: "/admin/announcements", label: "Anuncios", icon: Megaphone, color: "text-pink-400" },
     { to: "/admin/posts", label: "Publicaciones", icon: MessageSquare, color: "text-green-400" },
     { to: "/admin/projects", label: "Proyectos", icon: FolderKanban, color: "text-orange-400" },
