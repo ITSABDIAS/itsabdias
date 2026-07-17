@@ -5,9 +5,9 @@ import { SectionTitle } from "@/components/SectionTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useMyRoles } from "@/hooks/useMyRoles";
-import { RankBadge, RANK_META, topRank, type RankSlug } from "@/components/RankBadge";
-import { assignRole, revokeRole, grantPremium, revokePremium, setUserStatus } from "@/lib/staffActions";
-import { Search, Shield, Crown, Sparkles, Volume2, VolumeX, Ban, PauseCircle, UserCheck, UserX } from "lucide-react";
+import { RankBadge, RANK_META, RANK_PRIORITY, topRank, type RankSlug } from "@/components/RankBadge";
+import { assignRole, revokeRole, grantPremium, revokePremium, setUserStatus, type Role } from "@/lib/staffActions";
+import { Search, Shield, Crown, Sparkles, Volume2, VolumeX, Ban, PauseCircle, UserCheck, UserX, Plus, Minus } from "lucide-react";
 
 export const Route = createFileRoute("/admin/usuarios")({
   head: () => ({ meta: [{ title: "Admin · Usuarios — ItsaBDias" }] }),
