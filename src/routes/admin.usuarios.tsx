@@ -82,12 +82,12 @@ function AdminUsuariosPage() {
     return r === null ? null : r.trim();
   };
 
-  const actAssign = async (target: string, role: "admin" | "moderator" | "verified") => {
+  const actAssign = async (target: string, role: Role) => {
     const reason = promptReason(`Asignar rango ${role}`);
     if (reason === null) return;
     if (await assignRole(target, role, reason || undefined)) load();
   };
-  const actRevoke = async (target: string, role: "admin" | "moderator" | "verified") => {
+  const actRevoke = async (target: string, role: Role) => {
     const reason = promptReason(`Retirar rango ${role}`);
     if (reason === null) return;
     if (await revokeRole(target, role, reason || undefined)) load();
