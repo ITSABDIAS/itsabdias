@@ -5,9 +5,9 @@ import { SectionTitle } from "@/components/SectionTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useMyRoles } from "@/hooks/useMyRoles";
-import { RankBadge, RANK_META, topRank, type RankSlug } from "@/components/RankBadge";
-import { assignRole, revokeRole, grantPremium, revokePremium, setUserStatus } from "@/lib/staffActions";
-import { Search, Shield, Crown, Sparkles, Volume2, VolumeX, Ban, PauseCircle, UserCheck, UserX } from "lucide-react";
+import { RankBadge, RANK_META, RANK_PRIORITY, topRank, type RankSlug } from "@/components/RankBadge";
+import { assignRole, revokeRole, grantPremium, revokePremium, setUserStatus, type Role } from "@/lib/staffActions";
+import { Search, Shield, Crown, Sparkles, Volume2, VolumeX, Ban, PauseCircle, UserCheck, UserX, Plus, Minus } from "lucide-react";
 
 export const Route = createFileRoute("/admin/usuarios")({
   head: () => ({ meta: [{ title: "Admin · Usuarios — ItsaBDias" }] }),
@@ -82,12 +82,12 @@ function AdminUsuariosPage() {
     return r === null ? null : r.trim();
   };
 
-  const actAssign = async (target: string, role: "admin" | "moderator" | "verified") => {
+  const actAssign = async (target: string, role: Role) => {
     const reason = promptReason(`Asignar rango ${role}`);
     if (reason === null) return;
     if (await assignRole(target, role, reason || undefined)) load();
   };
-  const actRevoke = async (target: string, role: "admin" | "moderator" | "verified") => {
+  const actRevoke = async (target: string, role: Role) => {
     const reason = promptReason(`Retirar rango ${role}`);
     if (reason === null) return;
     if (await revokeRole(target, role, reason || undefined)) load();
@@ -223,6 +223,33 @@ function AdminUsuariosPage() {
                       )}
                     </div>
                   </div>
+                  {isFounder && !targetIsFounder && (
+                    <div className="mt-3 pt-3 border-t border-border/50">
+                      <p className="text-[10px] uppercase font-mono text-muted-foreground mb-1.5 flex items-center gap-1"><Crown className="h-3 w-3 text-yellow-300" /> Founder · gestionar cualquier rango</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(["admin","moderator","verified","developer","ai_expert","member"] as Role[]).map((r) => {
+                          const has = u.roles.includes(r);
+                          const meta = RANK_META[r as RankSlug];
+                          return (
+                            <button
+                              key={r}
+                              onClick={() => has ? actRevoke(u.id, r) : actAssign(u.id, r)}
+                              className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] border transition"
+                              style={{
+                                color: meta.color,
+                                borderColor: `${meta.color}66`,
+                                background: has ? `${meta.color}22` : "transparent",
+                              }}
+                              title={has ? `Quitar ${meta.label}` : `Asignar ${meta.label}`}
+                            >
+                              {has ? <Minus className="h-3 w-3" /> : <Plus className="h-3 w-3" />}
+                              {meta.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             })}

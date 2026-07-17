@@ -1,7 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-type Role = "admin" | "moderator" | "verified";
+export type Role = "admin" | "moderator" | "verified" | "developer" | "ai_expert" | "member";
 
 export async function assignRole(target: string, role: Role, reason?: string) {
   const { error } = await supabase.rpc("staff_assign_role" as any, { _target: target, _role: role, _reason: reason ?? null });
