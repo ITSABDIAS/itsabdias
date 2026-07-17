@@ -972,6 +972,12 @@ export type Database = {
         | "unhide_content"
         | "send_announcement"
         | "send_notification_broadcast"
+        | "assign_developer"
+        | "remove_developer"
+        | "assign_ai_expert"
+        | "remove_ai_expert"
+        | "assign_member"
+        | "remove_member"
       user_status_type: "active" | "muted" | "suspended" | "banned"
     }
     CompositeTypes: {
@@ -1140,6 +1146,12 @@ export const Constants = {
         "unhide_content",
         "send_announcement",
         "send_notification_broadcast",
+        "assign_developer",
+        "remove_developer",
+        "assign_ai_expert",
+        "remove_ai_expert",
+        "assign_member",
+        "remove_member",
       ],
       user_status_type: ["active", "muted", "suspended", "banned"],
     },
