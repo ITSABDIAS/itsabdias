@@ -223,6 +223,33 @@ function AdminUsuariosPage() {
                       )}
                     </div>
                   </div>
+                  {isFounder && !targetIsFounder && (
+                    <div className="mt-3 pt-3 border-t border-border/50">
+                      <p className="text-[10px] uppercase font-mono text-muted-foreground mb-1.5 flex items-center gap-1"><Crown className="h-3 w-3 text-yellow-300" /> Founder · gestionar cualquier rango</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(["admin","moderator","verified","developer","ai_expert","member"] as Role[]).map((r) => {
+                          const has = u.roles.includes(r);
+                          const meta = RANK_META[r as RankSlug];
+                          return (
+                            <button
+                              key={r}
+                              onClick={() => has ? actRevoke(u.id, r) : actAssign(u.id, r)}
+                              className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] border transition"
+                              style={{
+                                color: meta.color,
+                                borderColor: `${meta.color}66`,
+                                background: has ? `${meta.color}22` : "transparent",
+                              }}
+                              title={has ? `Quitar ${meta.label}` : `Asignar ${meta.label}`}
+                            >
+                              {has ? <Minus className="h-3 w-3" /> : <Plus className="h-3 w-3" />}
+                              {meta.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             })}
