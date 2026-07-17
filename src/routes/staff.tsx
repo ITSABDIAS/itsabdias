@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import { RankBadge, RANK_META, RANK_PRIORITY, type RankSlug } from "@/components/RankBadge";
 import { useMyRoles } from "@/hooks/useMyRoles";
 import { supabase } from "@/integrations/supabase/client";
-import { User as UserIcon, Shield } from "lucide-react";
+import { User as UserIcon, Shield, Search, Crown, Users, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/staff")({
   head: () => ({
@@ -32,6 +32,8 @@ const PUBLIC_RANKS: RankSlug[] = ["founder", "admin", "moderator", "developer", 
 function StaffPage() {
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
+  const [q, setQ] = useState("");
+  const [rankFilter, setRankFilter] = useState<RankSlug | "all">("all");
 
   useEffect(() => {
     (async () => {
@@ -75,10 +77,26 @@ function StaffPage() {
     })();
   }, []);
 
+  const filteredMembers = useMemo(() => {
+    let list = members;
+    if (rankFilter !== "all") list = list.filter((m) => m.roles.includes(rankFilter));
+    if (q.trim()) {
+      const s = q.toLowerCase();
+      list = list.filter((m) => (m.username ?? "").toLowerCase().includes(s) || (m.bio ?? "").toLowerCase().includes(s));
+    }
+    return list;
+  }, [members, q, rankFilter]);
+
+  const counts = useMemo(() => {
+    const c: Record<string, number> = {};
+    PUBLIC_RANKS.forEach((r) => { c[r] = members.filter((m) => m.roles.includes(r)).length; });
+    return c;
+  }, [members]);
+
   const grouped = PUBLIC_RANKS.map((slug) => ({
     slug,
     meta: RANK_META[slug],
-    members: members.filter((m) => {
+    members: filteredMembers.filter((m) => {
       const top = RANK_PRIORITY.find((r) => m.roles.includes(r) && PUBLIC_RANKS.includes(r));
       return top === slug;
     }),
@@ -95,9 +113,66 @@ function StaffPage() {
 
         <StaffToolsBar />
 
+        {/* Stats por rango */}
+        <div className="mx-auto max-w-6xl mb-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+          {PUBLIC_RANKS.map((r) => {
+            const meta = RANK_META[r];
+            const Icon = meta.Icon;
+            return (
+              <Link
+                key={r}
+                to="/rango/$slug"
+                params={{ slug: r }}
+                className="glass rounded-xl p-3 flex items-center gap-2 border border-border hover:-translate-y-0.5 transition"
+                style={{ borderColor: `${meta.color}44`, boxShadow: `0 0 14px ${meta.color}18` }}
+              >
+                <div className="h-8 w-8 rounded-lg flex items-center justify-center"
+                     style={{ background: `${meta.color}22`, color: meta.color }}>
+                  <Icon className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-bold truncate" style={{ color: meta.color }}>{meta.label}</p>
+                  <p className="text-[10px] text-muted-foreground font-mono">{counts[r] ?? 0} miembros</p>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Buscador + filtros */}
+        <div className="mx-auto max-w-6xl mb-8 glass rounded-xl p-3 flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Buscar por username o bio…"
+              className="w-full pl-9 pr-3 py-2 bg-input/40 border border-border rounded-md text-sm"
+            />
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            <button
+              onClick={() => setRankFilter("all")}
+              className={`px-3 py-1.5 rounded-md text-xs border ${rankFilter === "all" ? "bg-gradient-neon text-primary-foreground border-transparent" : "border-border text-muted-foreground"}`}
+            >Todos</button>
+            {PUBLIC_RANKS.map((r) => (
+              <button
+                key={r}
+                onClick={() => setRankFilter(r)}
+                className={`px-3 py-1.5 rounded-md text-xs border ${rankFilter === r ? "bg-gradient-neon text-primary-foreground border-transparent" : "border-border text-muted-foreground"}`}
+              >
+                {RANK_META[r].label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {loading && <p className="text-center text-muted-foreground">Cargando equipo...</p>}
         {!loading && members.length === 0 && (
           <p className="text-center text-muted-foreground">Aún no hay miembros con rango público.</p>
+        )}
+        {!loading && members.length > 0 && grouped.length === 0 && (
+          <p className="text-center text-muted-foreground">Sin resultados para tu búsqueda.</p>
         )}
 
         <div className="mx-auto max-w-6xl space-y-12">
@@ -116,6 +191,13 @@ function StaffPage() {
                     {group.meta.label}
                   </h3>
                   <span className="text-xs font-mono text-muted-foreground">· {group.members.length}</span>
+                  <Link
+                    to="/rango/$slug"
+                    params={{ slug: group.slug }}
+                    className="ml-auto inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-md border border-border hover:border-neon-cyan/60 text-muted-foreground hover:text-neon-cyan"
+                  >
+                    Ver todos <ArrowRight className="h-3 w-3" />
+                  </Link>
                 </div>
 
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -157,6 +239,17 @@ function StaffPage() {
                         {m.bio && (
                           <p className="mt-3 text-sm text-muted-foreground line-clamp-3 whitespace-pre-wrap">{m.bio}</p>
                         )}
+                        <div className="mt-3 flex flex-wrap gap-1.5">
+                          <Link
+                            to="/u/$username"
+                            params={{ username: m.username ?? "" }}
+                            className="text-[11px] px-2 py-1 rounded-md border border-border hover:border-neon-cyan/60 text-muted-foreground hover:text-neon-cyan"
+                          >Ver perfil</Link>
+                          <Link
+                            to="/messages"
+                            className="text-[11px] px-2 py-1 rounded-md border border-border hover:border-neon-cyan/60 text-muted-foreground hover:text-neon-cyan"
+                          >Mensaje</Link>
+                        </div>
                       </div>
                     );
                   })}
@@ -174,14 +267,29 @@ function StaffToolsBar() {
   const { isModerator, isAdmin, isFounder } = useMyRoles();
   if (!isModerator) return null;
   return (
-    <div className="mx-auto max-w-6xl mb-8 flex flex-wrap gap-2">
-      <Link to="/admin" className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs bg-gradient-neon text-primary-foreground font-bold">
-        <Shield className="h-3.5 w-3.5" /> Panel de moderación
-      </Link>
-      {isModerator && <Link to="/admin/usuarios" className="px-3 py-1.5 rounded-md text-xs border border-border hover:border-neon-cyan/60">Usuarios</Link>}
-      {isAdmin && <Link to="/admin/anuncios" className="px-3 py-1.5 rounded-md text-xs border border-border hover:border-neon-cyan/60">Anuncios</Link>}
-      {isModerator && <Link to="/admin/historial" className="px-3 py-1.5 rounded-md text-xs border border-border hover:border-neon-cyan/60">Historial</Link>}
-      {isFounder && <span className="px-2 py-1 rounded-md text-[10px] font-mono uppercase border border-yellow-400/50 text-yellow-300">Founder</span>}
+    <div className="mx-auto max-w-6xl mb-6 space-y-3">
+      {isFounder && (
+        <div className="glass rounded-xl p-4 border border-yellow-400/40 bg-yellow-400/5 flex flex-wrap items-center gap-3"
+             style={{ boxShadow: "0 0 24px rgba(250,204,21,0.15)" }}>
+          <Crown className="h-6 w-6 text-yellow-300" />
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-bold text-yellow-200">Panel Founder</p>
+            <p className="text-xs text-muted-foreground">Asigna y retira cualquier rango desde <span className="font-mono text-yellow-200">/admin/usuarios</span>.</p>
+          </div>
+          <Link to="/admin/usuarios" className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs bg-yellow-400/20 border border-yellow-400/60 text-yellow-200 font-bold hover:bg-yellow-400/30">
+            <Users className="h-3.5 w-3.5" /> Gestionar rangos
+          </Link>
+        </div>
+      )}
+      <div className="flex flex-wrap gap-2">
+        <Link to="/admin" className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs bg-gradient-neon text-primary-foreground font-bold">
+          <Shield className="h-3.5 w-3.5" /> Panel de moderación
+        </Link>
+        {isModerator && <Link to="/admin/usuarios" className="px-3 py-1.5 rounded-md text-xs border border-border hover:border-neon-cyan/60">Usuarios</Link>}
+        {isAdmin && <Link to="/admin/anuncios" className="px-3 py-1.5 rounded-md text-xs border border-border hover:border-neon-cyan/60">Anuncios</Link>}
+        {isModerator && <Link to="/admin/historial" className="px-3 py-1.5 rounded-md text-xs border border-border hover:border-neon-cyan/60">Historial</Link>}
+        {isFounder && <span className="px-2 py-1 rounded-md text-[10px] font-mono uppercase border border-yellow-400/50 text-yellow-300">Founder</span>}
+      </div>
     </div>
   );
 }
