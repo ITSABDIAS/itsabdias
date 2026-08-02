@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useRef, useState, useEffect } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
@@ -19,12 +19,26 @@ import {
   Cog,
   Rocket,
   Newspaper,
-  History,
+  MessageSquarePlus,
   Trash2,
+  ImagePlus,
+  Wand2,
+  Crown,
+  X,
+  History,
 } from "lucide-react";
-import { aiChat } from "@/lib/ai.functions";
-import { getChatHistory, saveChatMessage, clearChatHistory } from "@/lib/chat.functions";
+import { aiChat, aiGenerateImage } from "@/lib/ai.functions";
+import {
+  listConversations,
+  createConversation,
+  getConversationMessages,
+  saveChatMessage,
+  deleteConversation,
+  clearChatHistory,
+} from "@/lib/chat.functions";
 import { useAuth } from "@/hooks/useAuth";
+import { useMyRoles } from "@/hooks/useMyRoles";
+import { supabase } from "@/integrations/supabase/client";
 import { TutorialsSection } from "@/components/TutorialsSection";
 
 export const Route = createFileRoute("/ai")({
@@ -34,7 +48,18 @@ export const Route = createFileRoute("/ai")({
   head: () => ({
     meta: [
       { title: "Inteligencia Artificial — ItsaBDias" },
-      { name: "description", content: "Chat IA real con Gemini 2.5 Pro, herramientas, noticias y el centro tecnológico de ItsaBDias." },
+      {
+        name: "description",
+        content:
+          "NEXUS: chat IA con memoria, historial de conversaciones, análisis de imágenes y generación de imágenes Premium.",
+      },
+      { property: "og:title", content: "NEXUS · Inteligencia Artificial — ItsaBDias" },
+      {
+        property: "og:description",
+        content: "Chat IA con historial, memoria e imágenes. El centro tecnológico de ItsaBDias.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AI,
@@ -91,87 +116,275 @@ const suggestions = [
 ];
 
 const WELCOME =
-  "Hola, soy **NEXUS**, el núcleo de IA de **ItsaBDias** ⚡\n\nPuedo ayudarte con **programación**, **Roblox Studio**, **hardware**, **desarrollo de juegos** y **tecnología** en general.\n\nElige una sugerencia abajo o escríbeme directamente. ¿Por dónde empezamos?";
+  "Hola, soy **NEXUS**, el núcleo de IA de **ItsaBDias** ⚡\n\nRecuerdo nuestras conversaciones anteriores: puedes retomar cualquier chat desde el **historial**.\n\nSi eres **Premium**, además puedes **enviarme fotos** para que las analice y pedirme que **genere imágenes**.\n\n¿Por dónde empezamos?";
 
-type Msg = { role: "user" | "assistant"; content: string };
+type Msg = { role: "user" | "assistant"; content: string; imageUrl?: string | null };
+type Convo = { id: string; title: string; created_at: string; updated_at: string };
+
+/** Renders a stored image from the private nexus-images bucket via a signed URL. */
+function ChatImage({ path }: { path: string }) {
+  const [url, setUrl] = useState<string | null>(null);
+  useEffect(() => {
+    let cancel = false;
+    (async () => {
+      const { data } = await supabase.storage.from("nexus-images").createSignedUrl(path, 3600);
+      if (!cancel) setUrl(data?.signedUrl ?? null);
+    })();
+    return () => {
+      cancel = true;
+    };
+  }, [path]);
+
+  if (!url) {
+    return (
+      <div className="h-40 w-56 rounded-lg bg-muted/30 animate-pulse mb-2" aria-hidden="true" />
+    );
+  }
+  return (
+    <img
+      src={url}
+      alt="Imagen del chat con NEXUS"
+      loading="lazy"
+      className="rounded-lg mb-2 max-h-72 w-auto border border-neon-cyan/30"
+    />
+  );
+}
 
 function AI() {
   const { user } = useAuth();
+  const { isPremium } = useMyRoles();
   const { q } = Route.useSearch();
+
   const callAi = useServerFn(aiChat);
-  const fetchHistory = useServerFn(getChatHistory);
+  const genImage = useServerFn(aiGenerateImage);
+  const fetchConvos = useServerFn(listConversations);
+  const newConvo = useServerFn(createConversation);
+  const fetchMessages = useServerFn(getConversationMessages);
   const persistMsg = useServerFn(saveChatMessage);
+  const dropConvo = useServerFn(deleteConversation);
   const doClearHistory = useServerFn(clearChatHistory);
+
   const [input, setInput] = useState(q ?? "");
   const [loading, setLoading] = useState(false);
-  const [historyLoading, setHistoryLoading] = useState(true);
+  const [booting, setBooting] = useState(true);
+  const [convos, setConvos] = useState<Convo[]>([]);
+  const [activeId, setActiveId] = useState<string | null>(null);
   const [msgs, setMsgs] = useState<Msg[]>([{ role: "assistant", content: WELCOME }]);
+  const [pendingImage, setPendingImage] = useState<{ dataUrl: string; file: File } | null>(null);
+  const [imageMode, setImageMode] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [msgs, loading]);
 
-  // Load chat history on mount
+  const refreshConvos = useCallback(async () => {
+    const { conversations } = await fetchConvos({});
+    setConvos(conversations as Convo[]);
+    return conversations as Convo[];
+  }, [fetchConvos]);
+
+  // Load conversation list on mount and open the most recent one
   useEffect(() => {
     if (!user) {
-      setHistoryLoading(false);
+      setBooting(false);
       return;
     }
     let cancelled = false;
     (async () => {
       try {
-        const { messages } = await fetchHistory({});
-        if (!cancelled) {
-          if (messages.length > 0) {
-            setMsgs([{ role: "assistant", content: WELCOME }, ...messages]);
-          } else {
-            setMsgs([{ role: "assistant", content: WELCOME }]);
-          }
+        const list = await refreshConvos();
+        if (cancelled) return;
+        if (list.length > 0) {
+          setActiveId(list[0].id);
         }
       } catch {
-        if (!cancelled) setMsgs([{ role: "assistant", content: WELCOME }]);
+        /* ignore */
       } finally {
-        if (!cancelled) setHistoryLoading(false);
+        if (!cancelled) setBooting(false);
       }
     })();
-    return () => { cancelled = true; };
-  }, [user, fetchHistory]);
+    return () => {
+      cancelled = true;
+    };
+  }, [user, refreshConvos]);
+
+  // Load messages of the active conversation
+  useEffect(() => {
+    if (!activeId) {
+      setMsgs([{ role: "assistant", content: WELCOME }]);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const { messages } = await fetchMessages({ data: { conversationId: activeId } });
+        if (!cancelled) setMsgs([{ role: "assistant", content: WELCOME }, ...messages]);
+      } catch {
+        if (!cancelled) setMsgs([{ role: "assistant", content: WELCOME }]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [activeId, fetchMessages]);
+
+  const ensureConversation = async () => {
+    if (activeId) return activeId;
+    const { conversation } = await newConvo({ data: {} });
+    setActiveId(conversation.id);
+    setConvos((c) => [conversation as Convo, ...c]);
+    return conversation.id;
+  };
+
+  const startNewChat = async () => {
+    if (!user) return;
+    setActiveId(null);
+    setMsgs([{ role: "assistant", content: WELCOME }]);
+    setPendingImage(null);
+    setShowHistory(false);
+  };
+
+  const pickImage = () => {
+    if (!isPremium) {
+      toast.error("Enviar fotos a NEXUS es exclusivo de Premium ✨");
+      return;
+    }
+    fileRef.current?.click();
+  };
+
+  const onFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Solo se permiten imágenes");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("La imagen no puede superar 5 MB");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => setPendingImage({ dataUrl: String(reader.result), file });
+    reader.readAsDataURL(file);
+  };
+
+  const uploadImage = async (blob: Blob, ext: string) => {
+    if (!user) return null;
+    const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
+    const { error } = await supabase.storage.from("nexus-images").upload(path, blob, {
+      contentType: blob.type || `image/${ext}`,
+    });
+    if (error) {
+      console.error("upload error", error);
+      return null;
+    }
+    return path;
+  };
 
   const submit = async (text: string) => {
-    if (!text.trim() || loading) return;
+    if (loading) return;
     if (!user) {
       toast.error("Inicia sesión para chatear con NEXUS");
       return;
     }
-    const userMsg: Msg = { role: "user", content: text.trim() };
-    const next = [...msgs, userMsg];
-    setMsgs(next);
-    setInput("");
-    setLoading(true);
+    if (!text.trim() && !pendingImage) return;
 
-    // Persist user message
-    try {
-      await persistMsg({ data: userMsg });
-    } catch {
-      // Silently fail persistence; message is still in UI
+    // Premium image generation mode
+    if (imageMode) {
+      await runImageGeneration(text.trim());
+      return;
     }
 
+    const attached = pendingImage;
+    const prompt = text.trim() || "Analiza esta imagen y dime todo lo relevante.";
+    setInput("");
+    setPendingImage(null);
+    setLoading(true);
+
     try {
-      const res = await callAi({ data: { messages: next.slice(-40) } });
+      const conversationId = await ensureConversation();
+      let storedPath: string | null = null;
+      if (attached) {
+        storedPath = await uploadImage(attached.file, attached.file.name.split(".").pop() || "png");
+      }
+
+      const userMsg: Msg = { role: "user", content: prompt, imageUrl: storedPath };
+      const next = [...msgs, userMsg];
+      setMsgs(next);
+
+      await persistMsg({
+        data: { conversationId, role: "user", content: prompt, imageUrl: storedPath },
+      }).catch(() => undefined);
+
+      const payload = next.slice(-40).map((m, i, arr) => ({
+        role: m.role,
+        content: m.content,
+        // only send the raw image bytes for the message just sent
+        image: attached && i === arr.length - 1 ? attached.dataUrl : undefined,
+      }));
+
+      const res = await callAi({ data: { messages: payload } });
       const assistantMsg: Msg = { role: "assistant", content: res.content || "..." };
       setMsgs((m) => [...m, assistantMsg]);
-      // Persist assistant message
-      try {
-        await persistMsg({ data: assistantMsg });
-      } catch {
-        // Silently fail persistence
-      }
+      await persistMsg({
+        data: { conversationId, role: "assistant", content: assistantMsg.content },
+      }).catch(() => undefined);
+      refreshConvos().catch(() => undefined);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Error desconocido";
       toast.error(message);
-      const errorMsg: Msg = { role: "assistant", content: `⚠️ ${message}` };
-      setMsgs((m) => [...m, errorMsg]);
+      setMsgs((m) => [...m, { role: "assistant", content: `⚠️ ${message}` }]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const runImageGeneration = async (prompt: string) => {
+    if (!prompt) {
+      toast.error("Describe la imagen que quieres que NEXUS genere");
+      return;
+    }
+    if (!isPremium) {
+      toast.error("Generar imágenes es exclusivo de Premium ✨");
+      return;
+    }
+    setInput("");
+    setLoading(true);
+    try {
+      const conversationId = await ensureConversation();
+      const userMsg: Msg = { role: "user", content: `🎨 Genera una imagen: ${prompt}` };
+      setMsgs((m) => [...m, userMsg]);
+      await persistMsg({
+        data: { conversationId, role: "user", content: userMsg.content },
+      }).catch(() => undefined);
+
+      const { image, text } = await genImage({ data: { prompt } });
+      const blob = await (await fetch(image)).blob();
+      const path = await uploadImage(blob, "png");
+
+      const assistantMsg: Msg = {
+        role: "assistant",
+        content: text || "Aquí tienes tu imagen generada ✨",
+        imageUrl: path,
+      };
+      setMsgs((m) => [...m, assistantMsg]);
+      await persistMsg({
+        data: {
+          conversationId,
+          role: "assistant",
+          content: assistantMsg.content,
+          imageUrl: path,
+        },
+      }).catch(() => undefined);
+      refreshConvos().catch(() => undefined);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Error desconocido";
+      toast.error(message);
+      setMsgs((m) => [...m, { role: "assistant", content: `⚠️ ${message}` }]);
     } finally {
       setLoading(false);
     }
@@ -182,11 +395,28 @@ function AI() {
     submit(input);
   };
 
+  const handleDeleteConvo = async (id: string) => {
+    if (!confirm("¿Borrar esta conversación?")) return;
+    try {
+      await dropConvo({ data: { conversationId: id } });
+      setConvos((c) => c.filter((x) => x.id !== id));
+      if (activeId === id) {
+        setActiveId(null);
+        setMsgs([{ role: "assistant", content: WELCOME }]);
+      }
+      toast.success("Conversación borrada");
+    } catch {
+      toast.error("No se pudo borrar");
+    }
+  };
+
   const handleClearHistory = async () => {
     if (!user) return;
-    if (!confirm("¿Borrar todo tu historial de conversaciones con NEXUS?")) return;
+    if (!confirm("¿Borrar TODO tu historial de conversaciones con NEXUS?")) return;
     try {
       await doClearHistory({});
+      setConvos([]);
+      setActiveId(null);
       setMsgs([{ role: "assistant", content: WELCOME }]);
       toast.success("Historial borrado");
     } catch {
@@ -200,7 +430,7 @@ function AI() {
         <SectionTitle
           eyebrow="// ai.core"
           title="Inteligencia Artificial"
-          subtitle="El centro tecnológico de ItsaBDias. Chat real, herramientas y noticias del futuro."
+          subtitle="El centro tecnológico de ItsaBDias. Chat con memoria, historial e imágenes."
         />
 
         <div className="mx-auto max-w-5xl glass rounded-2xl p-6 sm:p-8 neon-border relative overflow-hidden">
@@ -210,9 +440,9 @@ function AI() {
             <div>
               <h3 className="text-xl sm:text-2xl font-bold">El motor del próximo salto humano</h3>
               <p className="mt-3 text-sm sm:text-base text-muted-foreground">
-                La <span className="text-foreground font-semibold">Inteligencia Artificial</span> compone música,
-                escribe código, diseña mundos y conversa contigo. Aquí la usamos para{" "}
-                <span className="text-neon-cyan">amplificar tu creatividad</span>.
+                NEXUS recuerda tus conversaciones anteriores y, con{" "}
+                <span className="text-neon-gold font-semibold">Premium</span>, analiza tus fotos y
+                genera imágenes por ti.
               </p>
               <a
                 href="#chat"
@@ -227,89 +457,241 @@ function AI() {
 
       {/* Chat */}
       <section id="chat" className="py-8 sm:py-12 px-4 sm:px-6 scroll-mt-20">
-        <div className="mx-auto max-w-3xl glass rounded-2xl p-4 sm:p-6 neon-border">
-          <div className="flex items-center gap-2 mb-4">
-            <Bot className="h-5 w-5 text-neon-cyan animate-glow-pulse" />
-            <h3 className="font-display font-bold text-lg sm:text-xl">NEXUS · Chat IA</h3>
-            <span className="ml-auto text-[10px] sm:text-xs font-mono text-muted-foreground">gemini · 2.5 pro</span>
-            {user && msgs.length > 1 && (
-              <button
-                type="button"
-                onClick={handleClearHistory}
-                title="Borrar historial"
-                className="p-1.5 rounded-md hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors"
-                aria-label="Borrar historial"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-
-          <div
-            ref={scrollRef}
-            className="space-y-3 max-h-[24rem] sm:max-h-[28rem] overflow-y-auto pr-1 sm:pr-2 mb-4"
+        <div className="mx-auto max-w-6xl grid lg:grid-cols-[16rem_1fr] gap-4">
+          {/* Conversation history */}
+          <aside
+            className={`glass rounded-2xl p-3 neon-border h-fit lg:block ${showHistory ? "block" : "hidden"}`}
           >
-            {msgs.map((m, i) => (
-              <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div
-                  className={`max-w-[90%] sm:max-w-[85%] px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-sm prose prose-sm prose-invert prose-pre:bg-black/60 prose-pre:border prose-pre:border-neon-cyan/20 prose-code:text-neon-cyan break-words ${
-                    m.role === "user"
-                      ? "bg-gradient-neon text-primary-foreground rounded-br-sm"
-                      : "glass border border-neon-cyan/30 rounded-bl-sm"
-                  }`}
+            <div className="flex items-center gap-2 mb-3">
+              <History className="h-4 w-4 text-neon-cyan" />
+              <h4 className="font-display font-bold text-sm">Historial</h4>
+              {convos.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleClearHistory}
+                  title="Borrar todo el historial"
+                  aria-label="Borrar todo el historial"
+                  className="ml-auto p-1 rounded hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors"
                 >
-                  <ReactMarkdown>{m.content}</ReactMarkdown>
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={startNewChat}
+              disabled={!user}
+              className="w-full mb-3 inline-flex items-center justify-center gap-2 px-3 py-2 rounded-md bg-gradient-neon text-primary-foreground text-xs font-bold shadow-neon-purple disabled:opacity-50"
+            >
+              <MessageSquarePlus className="h-4 w-4" /> Nueva conversación
+            </button>
+
+            <div className="space-y-1 max-h-[22rem] overflow-y-auto pr-1">
+              {booting && <p className="text-xs text-muted-foreground px-2">Cargando...</p>}
+              {!booting && convos.length === 0 && (
+                <p className="text-xs text-muted-foreground px-2">
+                  Aún no tienes conversaciones guardadas.
+                </p>
+              )}
+              {convos.map((c) => (
+                <div
+                  key={c.id}
+                  className={`group flex items-center gap-1 rounded-md px-2 py-1.5 text-xs cursor-pointer transition-colors ${
+                    activeId === c.id
+                      ? "bg-neon-purple/20 border border-neon-purple/40"
+                      : "hover:bg-muted/30 border border-transparent"
+                  }`}
+                  onClick={() => {
+                    setActiveId(c.id);
+                    setShowHistory(false);
+                  }}
+                >
+                  <span className="flex-1 truncate">{c.title}</span>
+                  <button
+                    type="button"
+                    aria-label="Borrar conversación"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteConvo(c.id);
+                    }}
+                    className="opacity-0 group-hover:opacity-100 p-0.5 text-muted-foreground hover:text-destructive transition-all"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
                 </div>
-              </div>
-            ))}
-            {loading && (
-              <div className="flex justify-start">
-                <div className="glass border border-neon-cyan/30 rounded-2xl rounded-bl-sm px-4 py-2.5 text-sm flex items-center gap-2 text-muted-foreground">
-                  <Loader2 className="h-4 w-4 animate-spin text-neon-cyan" />
-                  NEXUS está pensando...
+              ))}
+            </div>
+          </aside>
+
+          {/* Chat panel */}
+          <div className="glass rounded-2xl p-4 sm:p-6 neon-border min-w-0">
+            <div className="flex items-center gap-2 mb-4 flex-wrap">
+              <Bot className="h-5 w-5 text-neon-cyan animate-glow-pulse" />
+              <h3 className="font-display font-bold text-lg sm:text-xl">NEXUS · Chat IA</h3>
+              <span className="text-[10px] sm:text-xs font-mono text-muted-foreground">
+                gemini · memoria activa
+              </span>
+              <button
+                type="button"
+                onClick={() => setShowHistory((v) => !v)}
+                className="ml-auto lg:hidden inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md glass border border-neon-cyan/30 text-xs"
+              >
+                <History className="h-3.5 w-3.5 text-neon-cyan" /> Historial
+              </button>
+            </div>
+
+            <div
+              ref={scrollRef}
+              className="space-y-3 max-h-[24rem] sm:max-h-[30rem] overflow-y-auto pr-1 sm:pr-2 mb-4"
+            >
+              {msgs.map((m, i) => (
+                <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                  <div
+                    className={`max-w-[90%] sm:max-w-[85%] px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-sm prose prose-sm prose-invert prose-pre:bg-black/60 prose-pre:border prose-pre:border-neon-cyan/20 prose-code:text-neon-cyan break-words ${
+                      m.role === "user"
+                        ? "bg-gradient-neon text-primary-foreground rounded-br-sm"
+                        : "glass border border-neon-cyan/30 rounded-bl-sm"
+                    }`}
+                  >
+                    {m.imageUrl && <ChatImage path={m.imageUrl} />}
+                    <ReactMarkdown>{m.content}</ReactMarkdown>
+                  </div>
                 </div>
+              ))}
+              {loading && (
+                <div className="flex justify-start">
+                  <div className="glass border border-neon-cyan/30 rounded-2xl rounded-bl-sm px-4 py-2.5 text-sm flex items-center gap-2 text-muted-foreground">
+                    <Loader2 className="h-4 w-4 animate-spin text-neon-cyan" />
+                    {imageMode ? "NEXUS está dibujando..." : "NEXUS está pensando..."}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Suggestions */}
+            <div className="flex flex-wrap gap-2 mb-3">
+              {suggestions.map((s) => (
+                <button
+                  key={s.label}
+                  type="button"
+                  onClick={() => submit(s.prompt)}
+                  disabled={loading || !user}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium glass border border-neon-purple/30 hover:border-neon-purple hover:shadow-neon-purple transition-all disabled:opacity-40"
+                >
+                  <s.icon className="h-3.5 w-3.5 text-neon-cyan" />
+                  {s.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Premium controls */}
+            <div className="flex flex-wrap items-center gap-2 mb-3">
+              <button
+                type="button"
+                onClick={pickImage}
+                disabled={loading || !user}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all disabled:opacity-40 ${
+                  isPremium
+                    ? "border-neon-cyan/40 glass hover:border-neon-cyan"
+                    : "border-yellow-500/40 text-yellow-400/90 glass"
+                }`}
+              >
+                <ImagePlus className="h-3.5 w-3.5" /> Enviar foto
+                {!isPremium && <Crown className="h-3 w-3" />}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (!isPremium) {
+                    toast.error("Generar imágenes es exclusivo de Premium ✨");
+                    return;
+                  }
+                  setImageMode((v) => !v);
+                }}
+                disabled={loading || !user}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all disabled:opacity-40 ${
+                  imageMode
+                    ? "bg-gradient-neon text-primary-foreground border-transparent shadow-neon-purple"
+                    : isPremium
+                      ? "border-neon-purple/40 glass hover:border-neon-purple"
+                      : "border-yellow-500/40 text-yellow-400/90 glass"
+                }`}
+              >
+                <Wand2 className="h-3.5 w-3.5" /> Generar imagen
+                {!isPremium && <Crown className="h-3 w-3" />}
+              </button>
+
+              {!isPremium && (
+                <Link
+                  to="/premium"
+                  className="text-[11px] font-medium text-yellow-400 hover:underline inline-flex items-center gap-1"
+                >
+                  <Crown className="h-3 w-3" /> Hazte Premium
+                </Link>
+              )}
+            </div>
+
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              onChange={onFile}
+              className="hidden"
+              aria-label="Seleccionar imagen"
+            />
+
+            {pendingImage && (
+              <div className="mb-3 flex items-center gap-3 glass border border-neon-cyan/30 rounded-lg p-2">
+                <img
+                  src={pendingImage.dataUrl}
+                  alt="Imagen adjunta"
+                  className="h-14 w-14 object-cover rounded-md"
+                />
+                <span className="text-xs text-muted-foreground flex-1 truncate">
+                  {pendingImage.file.name}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setPendingImage(null)}
+                  aria-label="Quitar imagen"
+                  className="p-1 text-muted-foreground hover:text-destructive"
+                >
+                  <X className="h-4 w-4" />
+                </button>
               </div>
             )}
-          </div>
 
-          {/* Suggestions */}
-          <div className="flex flex-wrap gap-2 mb-3">
-            {suggestions.map((s) => (
-              <button
-                key={s.label}
-                type="button"
-                onClick={() => submit(s.prompt)}
+            <form onSubmit={send} className="flex gap-2">
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder={
+                  !user
+                    ? "Inicia sesión para chatear..."
+                    : imageMode
+                      ? "Describe la imagen que quieres crear..."
+                      : "Pregúntale algo a NEXUS..."
+                }
                 disabled={loading || !user}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium glass border border-neon-purple/30 hover:border-neon-purple hover:shadow-neon-purple transition-all disabled:opacity-40"
+                className="flex-1 min-w-0 bg-input/40 border border-border rounded-md px-3 sm:px-4 py-2.5 text-sm focus:outline-none focus:border-neon-blue focus:shadow-neon-blue transition-all disabled:opacity-50"
+              />
+              <button
+                type="submit"
+                disabled={loading || !user || (!input.trim() && !pendingImage)}
+                className="shrink-0 px-4 rounded-md bg-gradient-neon text-primary-foreground shadow-neon-purple disabled:opacity-50"
+                aria-label="Enviar"
               >
-                <s.icon className="h-3.5 w-3.5 text-neon-cyan" />
-                {s.label}
+                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
               </button>
-            ))}
+            </form>
+            {!user && (
+              <p className="mt-3 text-xs text-muted-foreground text-center">
+                NEXUS requiere cuenta para guardar tu historial. Es gratis.
+              </p>
+            )}
           </div>
-
-          <form onSubmit={send} className="flex gap-2">
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder={user ? "Pregúntale algo a NEXUS..." : "Inicia sesión para chatear..."}
-              disabled={loading || !user}
-              className="flex-1 min-w-0 bg-input/40 border border-border rounded-md px-3 sm:px-4 py-2.5 text-sm focus:outline-none focus:border-neon-blue focus:shadow-neon-blue transition-all disabled:opacity-50"
-            />
-            <button
-              type="submit"
-              disabled={loading || !user || !input.trim()}
-              className="shrink-0 px-4 rounded-md bg-gradient-neon text-primary-foreground shadow-neon-purple disabled:opacity-50"
-              aria-label="Enviar"
-            >
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-            </button>
-          </form>
-          {!user && (
-            <p className="mt-3 text-xs text-muted-foreground text-center">
-              NEXUS requiere cuenta para evitar abuso y rastrear uso. Es gratis.
-            </p>
-          )}
         </div>
       </section>
 
@@ -363,7 +745,7 @@ function AI() {
           </div>
         </div>
       </section>
-          <TutorialsSection category="ai" />
+      <TutorialsSection category="ai" />
     </PageShell>
   );
 }
