@@ -99,7 +99,9 @@ export const saveChatMessage = createServerFn({ method: "POST" })
       throw new Error("No se pudo guardar el mensaje");
     }
 
-    const patch: Record<string, string> = { updated_at: new Date().toISOString() };
+    const patch: { updated_at: string; title?: string } = {
+      updated_at: new Date().toISOString(),
+    };
     if (data.role === "user") {
       const { data: convo } = await supabase
         .from("ai_conversations")
