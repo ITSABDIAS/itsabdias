@@ -158,7 +158,7 @@ function AI() {
     }
 
     try {
-      const res = await callAi({ data: { messages: next.slice(-20) } });
+      const res = await callAi({ data: { messages: next.slice(-40) } });
       const assistantMsg: Msg = { role: "assistant", content: res.content || "..." };
       setMsgs((m) => [...m, assistantMsg]);
       // Persist assistant message
