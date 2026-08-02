@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_conversations: {
+        Row: {
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       announcements: {
         Row: {
           active: boolean
@@ -53,26 +77,40 @@ export type Database = {
       chat_messages: {
         Row: {
           content: string
+          conversation_id: string | null
           created_at: string
           id: string
+          image_url: string | null
           role: string
           user_id: string
         }
         Insert: {
           content: string
+          conversation_id?: string | null
           created_at?: string
           id?: string
+          image_url?: string | null
           role: string
           user_id: string
         }
         Update: {
           content?: string
+          conversation_id?: string | null
           created_at?: string
           id?: string
+          image_url?: string | null
           role?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "ai_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       comments: {
         Row: {
@@ -860,6 +898,7 @@ export type Database = {
       is_admin_or_higher: { Args: { _uid: string }; Returns: boolean }
       is_founder: { Args: { _uid: string }; Returns: boolean }
       is_moderator_or_higher: { Args: { _uid: string }; Returns: boolean }
+      is_premium: { Args: { _user_id: string }; Returns: boolean }
       record_activity: { Args: { _seconds: number }; Returns: number }
       staff_assign_role: {
         Args: {
