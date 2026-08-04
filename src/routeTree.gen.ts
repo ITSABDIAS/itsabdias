@@ -56,6 +56,7 @@ import { Route as AdminHistorialRouteImport } from './routes/admin.historial'
 import { Route as AdminConfiguracionRouteImport } from './routes/admin.configuracion'
 import { Route as AdminAnunciosRouteImport } from './routes/admin.anuncios'
 import { Route as AdminAnnouncementsRouteImport } from './routes/admin.announcements'
+import { Route as AdminAcademiaRouteImport } from './routes/admin.academia'
 import { Route as AcademyPathRouteImport } from './routes/academy.$path'
 import { Route as TutorialCategorySlugRouteImport } from './routes/tutorial.$category.$slug'
 import { Route as TemaCategorySlugRouteImport } from './routes/tema.$category.$slug'
@@ -295,6 +296,11 @@ const AdminAnnouncementsRoute = AdminAnnouncementsRouteImport.update({
   path: '/announcements',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAcademiaRoute = AdminAcademiaRouteImport.update({
+  id: '/academia',
+  path: '/academia',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AcademyPathRoute = AcademyPathRouteImport.update({
   id: '/academy/$path',
   path: '/academy/$path',
@@ -335,6 +341,7 @@ export interface FileRoutesByFullPath {
   '/tecnologia': typeof TecnologiaRoute
   '/tutoriales': typeof TutorialesRoute
   '/academy/$path': typeof AcademyPathRoute
+  '/admin/academia': typeof AdminAcademiaRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/anuncios': typeof AdminAnunciosRoute
   '/admin/configuracion': typeof AdminConfiguracionRoute
@@ -387,6 +394,7 @@ export interface FileRoutesByTo {
   '/tecnologia': typeof TecnologiaRoute
   '/tutoriales': typeof TutorialesRoute
   '/academy/$path': typeof AcademyPathRoute
+  '/admin/academia': typeof AdminAcademiaRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/anuncios': typeof AdminAnunciosRoute
   '/admin/configuracion': typeof AdminConfiguracionRoute
@@ -440,6 +448,7 @@ export interface FileRoutesById {
   '/tecnologia': typeof TecnologiaRoute
   '/tutoriales': typeof TutorialesRoute
   '/academy/$path': typeof AcademyPathRoute
+  '/admin/academia': typeof AdminAcademiaRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/anuncios': typeof AdminAnunciosRoute
   '/admin/configuracion': typeof AdminConfiguracionRoute
@@ -494,6 +503,7 @@ export interface FileRouteTypes {
     | '/tecnologia'
     | '/tutoriales'
     | '/academy/$path'
+    | '/admin/academia'
     | '/admin/announcements'
     | '/admin/anuncios'
     | '/admin/configuracion'
@@ -546,6 +556,7 @@ export interface FileRouteTypes {
     | '/tecnologia'
     | '/tutoriales'
     | '/academy/$path'
+    | '/admin/academia'
     | '/admin/announcements'
     | '/admin/anuncios'
     | '/admin/configuracion'
@@ -598,6 +609,7 @@ export interface FileRouteTypes {
     | '/tecnologia'
     | '/tutoriales'
     | '/academy/$path'
+    | '/admin/academia'
     | '/admin/announcements'
     | '/admin/anuncios'
     | '/admin/configuracion'
@@ -993,6 +1005,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAnnouncementsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/academia': {
+      id: '/admin/academia'
+      path: '/academia'
+      fullPath: '/admin/academia'
+      preLoaderRoute: typeof AdminAcademiaRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/academy/$path': {
       id: '/academy/$path'
       path: '/academy/$path'
@@ -1018,6 +1037,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminAcademiaRoute: typeof AdminAcademiaRoute
   AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
   AdminAnunciosRoute: typeof AdminAnunciosRoute
   AdminConfiguracionRoute: typeof AdminConfiguracionRoute
@@ -1039,6 +1059,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAcademiaRoute: AdminAcademiaRoute,
   AdminAnnouncementsRoute: AdminAnnouncementsRoute,
   AdminAnunciosRoute: AdminAnunciosRoute,
   AdminConfiguracionRoute: AdminConfiguracionRoute,

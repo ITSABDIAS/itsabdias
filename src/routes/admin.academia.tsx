@@ -150,7 +150,8 @@ function AdminAcademia() {
   };
 
   const toggle = async (c: AcademyCourse, field: "is_featured" | "is_published") => {
-    const { error } = await supabase.from("academy_courses").update({ [field]: !c[field] }).eq("id", c.id);
+    const patch = field === "is_featured" ? { is_featured: !c.is_featured } : { is_published: !c.is_published };
+    const { error } = await supabase.from("academy_courses").update(patch).eq("id", c.id);
     if (error) return toast.error(error.message);
     load();
   };
