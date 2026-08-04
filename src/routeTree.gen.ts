@@ -31,9 +31,13 @@ import { Route as AiRouteImport } from './routes/ai'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AcademyIndexRouteImport } from './routes/academy.index'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as RangoSlugRouteImport } from './routes/rango.$slug'
 import { Route as NoticiaSlugRouteImport } from './routes/noticia.$slug'
+import { Route as LeccionLessonIdRouteImport } from './routes/leccion.$lessonId'
+import { Route as CursoSlugRouteImport } from './routes/curso.$slug'
+import { Route as CertificadoCodeRouteImport } from './routes/certificado.$code'
 import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminTutorialsRouteImport } from './routes/admin.tutorials'
@@ -52,6 +56,8 @@ import { Route as AdminHistorialRouteImport } from './routes/admin.historial'
 import { Route as AdminConfiguracionRouteImport } from './routes/admin.configuracion'
 import { Route as AdminAnunciosRouteImport } from './routes/admin.anuncios'
 import { Route as AdminAnnouncementsRouteImport } from './routes/admin.announcements'
+import { Route as AdminAcademiaRouteImport } from './routes/admin.academia'
+import { Route as AcademyPathRouteImport } from './routes/academy.$path'
 import { Route as TutorialCategorySlugRouteImport } from './routes/tutorial.$category.$slug'
 import { Route as TemaCategorySlugRouteImport } from './routes/tema.$category.$slug'
 
@@ -165,6 +171,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AcademyIndexRoute = AcademyIndexRouteImport.update({
+  id: '/academy/',
+  path: '/academy/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UUsernameRoute = UUsernameRouteImport.update({
   id: '/u/$username',
   path: '/u/$username',
@@ -178,6 +189,21 @@ const RangoSlugRoute = RangoSlugRouteImport.update({
 const NoticiaSlugRoute = NoticiaSlugRouteImport.update({
   id: '/noticia/$slug',
   path: '/noticia/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeccionLessonIdRoute = LeccionLessonIdRouteImport.update({
+  id: '/leccion/$lessonId',
+  path: '/leccion/$lessonId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CursoSlugRoute = CursoSlugRouteImport.update({
+  id: '/curso/$slug',
+  path: '/curso/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CertificadoCodeRoute = CertificadoCodeRouteImport.update({
+  id: '/certificado/$code',
+  path: '/certificado/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
@@ -270,6 +296,16 @@ const AdminAnnouncementsRoute = AdminAnnouncementsRouteImport.update({
   path: '/announcements',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAcademiaRoute = AdminAcademiaRouteImport.update({
+  id: '/academia',
+  path: '/academia',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AcademyPathRoute = AcademyPathRouteImport.update({
+  id: '/academy/$path',
+  path: '/academy/$path',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TutorialCategorySlugRoute = TutorialCategorySlugRouteImport.update({
   id: '/tutorial/$category/$slug',
   path: '/tutorial/$category/$slug',
@@ -304,6 +340,8 @@ export interface FileRoutesByFullPath {
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
   '/tutoriales': typeof TutorialesRoute
+  '/academy/$path': typeof AcademyPathRoute
+  '/admin/academia': typeof AdminAcademiaRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/anuncios': typeof AdminAnunciosRoute
   '/admin/configuracion': typeof AdminConfiguracionRoute
@@ -322,9 +360,13 @@ export interface FileRoutesByFullPath {
   '/admin/tutorials': typeof AdminTutorialsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/certificado/$code': typeof CertificadoCodeRoute
+  '/curso/$slug': typeof CursoSlugRoute
+  '/leccion/$lessonId': typeof LeccionLessonIdRoute
   '/noticia/$slug': typeof NoticiaSlugRoute
   '/rango/$slug': typeof RangoSlugRoute
   '/u/$username': typeof UUsernameRoute
+  '/academy/': typeof AcademyIndexRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
   '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
 }
@@ -351,6 +393,8 @@ export interface FileRoutesByTo {
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
   '/tutoriales': typeof TutorialesRoute
+  '/academy/$path': typeof AcademyPathRoute
+  '/admin/academia': typeof AdminAcademiaRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/anuncios': typeof AdminAnunciosRoute
   '/admin/configuracion': typeof AdminConfiguracionRoute
@@ -369,9 +413,13 @@ export interface FileRoutesByTo {
   '/admin/tutorials': typeof AdminTutorialsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/certificado/$code': typeof CertificadoCodeRoute
+  '/curso/$slug': typeof CursoSlugRoute
+  '/leccion/$lessonId': typeof LeccionLessonIdRoute
   '/noticia/$slug': typeof NoticiaSlugRoute
   '/rango/$slug': typeof RangoSlugRoute
   '/u/$username': typeof UUsernameRoute
+  '/academy': typeof AcademyIndexRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
   '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
 }
@@ -399,6 +447,8 @@ export interface FileRoutesById {
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
   '/tutoriales': typeof TutorialesRoute
+  '/academy/$path': typeof AcademyPathRoute
+  '/admin/academia': typeof AdminAcademiaRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/anuncios': typeof AdminAnunciosRoute
   '/admin/configuracion': typeof AdminConfiguracionRoute
@@ -417,9 +467,13 @@ export interface FileRoutesById {
   '/admin/tutorials': typeof AdminTutorialsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/certificado/$code': typeof CertificadoCodeRoute
+  '/curso/$slug': typeof CursoSlugRoute
+  '/leccion/$lessonId': typeof LeccionLessonIdRoute
   '/noticia/$slug': typeof NoticiaSlugRoute
   '/rango/$slug': typeof RangoSlugRoute
   '/u/$username': typeof UUsernameRoute
+  '/academy/': typeof AcademyIndexRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
   '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
 }
@@ -448,6 +502,8 @@ export interface FileRouteTypes {
     | '/staff'
     | '/tecnologia'
     | '/tutoriales'
+    | '/academy/$path'
+    | '/admin/academia'
     | '/admin/announcements'
     | '/admin/anuncios'
     | '/admin/configuracion'
@@ -466,9 +522,13 @@ export interface FileRouteTypes {
     | '/admin/tutorials'
     | '/admin/users'
     | '/admin/usuarios'
+    | '/certificado/$code'
+    | '/curso/$slug'
+    | '/leccion/$lessonId'
     | '/noticia/$slug'
     | '/rango/$slug'
     | '/u/$username'
+    | '/academy/'
     | '/tema/$category/$slug'
     | '/tutorial/$category/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -495,6 +555,8 @@ export interface FileRouteTypes {
     | '/staff'
     | '/tecnologia'
     | '/tutoriales'
+    | '/academy/$path'
+    | '/admin/academia'
     | '/admin/announcements'
     | '/admin/anuncios'
     | '/admin/configuracion'
@@ -513,9 +575,13 @@ export interface FileRouteTypes {
     | '/admin/tutorials'
     | '/admin/users'
     | '/admin/usuarios'
+    | '/certificado/$code'
+    | '/curso/$slug'
+    | '/leccion/$lessonId'
     | '/noticia/$slug'
     | '/rango/$slug'
     | '/u/$username'
+    | '/academy'
     | '/tema/$category/$slug'
     | '/tutorial/$category/$slug'
   id:
@@ -542,6 +608,8 @@ export interface FileRouteTypes {
     | '/staff'
     | '/tecnologia'
     | '/tutoriales'
+    | '/academy/$path'
+    | '/admin/academia'
     | '/admin/announcements'
     | '/admin/anuncios'
     | '/admin/configuracion'
@@ -560,9 +628,13 @@ export interface FileRouteTypes {
     | '/admin/tutorials'
     | '/admin/users'
     | '/admin/usuarios'
+    | '/certificado/$code'
+    | '/curso/$slug'
+    | '/leccion/$lessonId'
     | '/noticia/$slug'
     | '/rango/$slug'
     | '/u/$username'
+    | '/academy/'
     | '/tema/$category/$slug'
     | '/tutorial/$category/$slug'
   fileRoutesById: FileRoutesById
@@ -590,9 +662,14 @@ export interface RootRouteChildren {
   StaffRoute: typeof StaffRoute
   TecnologiaRoute: typeof TecnologiaRoute
   TutorialesRoute: typeof TutorialesRoute
+  AcademyPathRoute: typeof AcademyPathRoute
+  CertificadoCodeRoute: typeof CertificadoCodeRoute
+  CursoSlugRoute: typeof CursoSlugRoute
+  LeccionLessonIdRoute: typeof LeccionLessonIdRoute
   NoticiaSlugRoute: typeof NoticiaSlugRoute
   RangoSlugRoute: typeof RangoSlugRoute
   UUsernameRoute: typeof UUsernameRoute
+  AcademyIndexRoute: typeof AcademyIndexRoute
   TemaCategorySlugRoute: typeof TemaCategorySlugRoute
   TutorialCategorySlugRoute: typeof TutorialCategorySlugRoute
 }
@@ -753,6 +830,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/academy/': {
+      id: '/academy/'
+      path: '/academy'
+      fullPath: '/academy/'
+      preLoaderRoute: typeof AcademyIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/u/$username': {
       id: '/u/$username'
       path: '/u/$username'
@@ -772,6 +856,27 @@ declare module '@tanstack/react-router' {
       path: '/noticia/$slug'
       fullPath: '/noticia/$slug'
       preLoaderRoute: typeof NoticiaSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leccion/$lessonId': {
+      id: '/leccion/$lessonId'
+      path: '/leccion/$lessonId'
+      fullPath: '/leccion/$lessonId'
+      preLoaderRoute: typeof LeccionLessonIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/curso/$slug': {
+      id: '/curso/$slug'
+      path: '/curso/$slug'
+      fullPath: '/curso/$slug'
+      preLoaderRoute: typeof CursoSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/certificado/$code': {
+      id: '/certificado/$code'
+      path: '/certificado/$code'
+      fullPath: '/certificado/$code'
+      preLoaderRoute: typeof CertificadoCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/usuarios': {
@@ -900,6 +1005,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAnnouncementsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/academia': {
+      id: '/admin/academia'
+      path: '/academia'
+      fullPath: '/admin/academia'
+      preLoaderRoute: typeof AdminAcademiaRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/academy/$path': {
+      id: '/academy/$path'
+      path: '/academy/$path'
+      fullPath: '/academy/$path'
+      preLoaderRoute: typeof AcademyPathRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tutorial/$category/$slug': {
       id: '/tutorial/$category/$slug'
       path: '/tutorial/$category/$slug'
@@ -918,6 +1037,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminAcademiaRoute: typeof AdminAcademiaRoute
   AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
   AdminAnunciosRoute: typeof AdminAnunciosRoute
   AdminConfiguracionRoute: typeof AdminConfiguracionRoute
@@ -939,6 +1059,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAcademiaRoute: AdminAcademiaRoute,
   AdminAnnouncementsRoute: AdminAnnouncementsRoute,
   AdminAnunciosRoute: AdminAnunciosRoute,
   AdminConfiguracionRoute: AdminConfiguracionRoute,
@@ -984,9 +1105,14 @@ const rootRouteChildren: RootRouteChildren = {
   StaffRoute: StaffRoute,
   TecnologiaRoute: TecnologiaRoute,
   TutorialesRoute: TutorialesRoute,
+  AcademyPathRoute: AcademyPathRoute,
+  CertificadoCodeRoute: CertificadoCodeRoute,
+  CursoSlugRoute: CursoSlugRoute,
+  LeccionLessonIdRoute: LeccionLessonIdRoute,
   NoticiaSlugRoute: NoticiaSlugRoute,
   RangoSlugRoute: RangoSlugRoute,
   UUsernameRoute: UUsernameRoute,
+  AcademyIndexRoute: AcademyIndexRoute,
   TemaCategorySlugRoute: TemaCategorySlugRoute,
   TutorialCategorySlugRoute: TutorialCategorySlugRoute,
 }
