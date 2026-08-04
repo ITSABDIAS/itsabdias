@@ -37,6 +37,7 @@ import { Route as RangoSlugRouteImport } from './routes/rango.$slug'
 import { Route as NoticiaSlugRouteImport } from './routes/noticia.$slug'
 import { Route as LeccionLessonIdRouteImport } from './routes/leccion.$lessonId'
 import { Route as CursoSlugRouteImport } from './routes/curso.$slug'
+import { Route as CertificadoCodeRouteImport } from './routes/certificado.$code'
 import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminTutorialsRouteImport } from './routes/admin.tutorials'
@@ -199,6 +200,11 @@ const CursoSlugRoute = CursoSlugRouteImport.update({
   path: '/curso/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CertificadoCodeRoute = CertificadoCodeRouteImport.update({
+  id: '/certificado/$code',
+  path: '/certificado/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
   id: '/usuarios',
   path: '/usuarios',
@@ -347,6 +353,7 @@ export interface FileRoutesByFullPath {
   '/admin/tutorials': typeof AdminTutorialsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/certificado/$code': typeof CertificadoCodeRoute
   '/curso/$slug': typeof CursoSlugRoute
   '/leccion/$lessonId': typeof LeccionLessonIdRoute
   '/noticia/$slug': typeof NoticiaSlugRoute
@@ -398,6 +405,7 @@ export interface FileRoutesByTo {
   '/admin/tutorials': typeof AdminTutorialsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/certificado/$code': typeof CertificadoCodeRoute
   '/curso/$slug': typeof CursoSlugRoute
   '/leccion/$lessonId': typeof LeccionLessonIdRoute
   '/noticia/$slug': typeof NoticiaSlugRoute
@@ -450,6 +458,7 @@ export interface FileRoutesById {
   '/admin/tutorials': typeof AdminTutorialsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/certificado/$code': typeof CertificadoCodeRoute
   '/curso/$slug': typeof CursoSlugRoute
   '/leccion/$lessonId': typeof LeccionLessonIdRoute
   '/noticia/$slug': typeof NoticiaSlugRoute
@@ -503,6 +512,7 @@ export interface FileRouteTypes {
     | '/admin/tutorials'
     | '/admin/users'
     | '/admin/usuarios'
+    | '/certificado/$code'
     | '/curso/$slug'
     | '/leccion/$lessonId'
     | '/noticia/$slug'
@@ -554,6 +564,7 @@ export interface FileRouteTypes {
     | '/admin/tutorials'
     | '/admin/users'
     | '/admin/usuarios'
+    | '/certificado/$code'
     | '/curso/$slug'
     | '/leccion/$lessonId'
     | '/noticia/$slug'
@@ -605,6 +616,7 @@ export interface FileRouteTypes {
     | '/admin/tutorials'
     | '/admin/users'
     | '/admin/usuarios'
+    | '/certificado/$code'
     | '/curso/$slug'
     | '/leccion/$lessonId'
     | '/noticia/$slug'
@@ -639,6 +651,7 @@ export interface RootRouteChildren {
   TecnologiaRoute: typeof TecnologiaRoute
   TutorialesRoute: typeof TutorialesRoute
   AcademyPathRoute: typeof AcademyPathRoute
+  CertificadoCodeRoute: typeof CertificadoCodeRoute
   CursoSlugRoute: typeof CursoSlugRoute
   LeccionLessonIdRoute: typeof LeccionLessonIdRoute
   NoticiaSlugRoute: typeof NoticiaSlugRoute
@@ -845,6 +858,13 @@ declare module '@tanstack/react-router' {
       path: '/curso/$slug'
       fullPath: '/curso/$slug'
       preLoaderRoute: typeof CursoSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/certificado/$code': {
+      id: '/certificado/$code'
+      path: '/certificado/$code'
+      fullPath: '/certificado/$code'
+      preLoaderRoute: typeof CertificadoCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/usuarios': {
@@ -1065,6 +1085,7 @@ const rootRouteChildren: RootRouteChildren = {
   TecnologiaRoute: TecnologiaRoute,
   TutorialesRoute: TutorialesRoute,
   AcademyPathRoute: AcademyPathRoute,
+  CertificadoCodeRoute: CertificadoCodeRoute,
   CursoSlugRoute: CursoSlugRoute,
   LeccionLessonIdRoute: LeccionLessonIdRoute,
   NoticiaSlugRoute: NoticiaSlugRoute,
