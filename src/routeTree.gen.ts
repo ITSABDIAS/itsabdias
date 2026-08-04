@@ -31,6 +31,7 @@ import { Route as AiRouteImport } from './routes/ai'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AcademyIndexRouteImport } from './routes/academy.index'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as RangoSlugRouteImport } from './routes/rango.$slug'
 import { Route as NoticiaSlugRouteImport } from './routes/noticia.$slug'
@@ -163,6 +164,11 @@ const AboutRoute = AboutRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AcademyIndexRoute = AcademyIndexRouteImport.update({
+  id: '/academy/',
+  path: '/academy/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UUsernameRoute = UUsernameRouteImport.update({
@@ -325,6 +331,7 @@ export interface FileRoutesByFullPath {
   '/noticia/$slug': typeof NoticiaSlugRoute
   '/rango/$slug': typeof RangoSlugRoute
   '/u/$username': typeof UUsernameRoute
+  '/academy/': typeof AcademyIndexRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
   '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
 }
@@ -372,6 +379,7 @@ export interface FileRoutesByTo {
   '/noticia/$slug': typeof NoticiaSlugRoute
   '/rango/$slug': typeof RangoSlugRoute
   '/u/$username': typeof UUsernameRoute
+  '/academy': typeof AcademyIndexRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
   '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
 }
@@ -420,6 +428,7 @@ export interface FileRoutesById {
   '/noticia/$slug': typeof NoticiaSlugRoute
   '/rango/$slug': typeof RangoSlugRoute
   '/u/$username': typeof UUsernameRoute
+  '/academy/': typeof AcademyIndexRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
   '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
 }
@@ -469,6 +478,7 @@ export interface FileRouteTypes {
     | '/noticia/$slug'
     | '/rango/$slug'
     | '/u/$username'
+    | '/academy/'
     | '/tema/$category/$slug'
     | '/tutorial/$category/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -516,6 +526,7 @@ export interface FileRouteTypes {
     | '/noticia/$slug'
     | '/rango/$slug'
     | '/u/$username'
+    | '/academy'
     | '/tema/$category/$slug'
     | '/tutorial/$category/$slug'
   id:
@@ -563,6 +574,7 @@ export interface FileRouteTypes {
     | '/noticia/$slug'
     | '/rango/$slug'
     | '/u/$username'
+    | '/academy/'
     | '/tema/$category/$slug'
     | '/tutorial/$category/$slug'
   fileRoutesById: FileRoutesById
@@ -593,6 +605,7 @@ export interface RootRouteChildren {
   NoticiaSlugRoute: typeof NoticiaSlugRoute
   RangoSlugRoute: typeof RangoSlugRoute
   UUsernameRoute: typeof UUsernameRoute
+  AcademyIndexRoute: typeof AcademyIndexRoute
   TemaCategorySlugRoute: typeof TemaCategorySlugRoute
   TutorialCategorySlugRoute: typeof TutorialCategorySlugRoute
 }
@@ -751,6 +764,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/academy/': {
+      id: '/academy/'
+      path: '/academy'
+      fullPath: '/academy/'
+      preLoaderRoute: typeof AcademyIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/u/$username': {
@@ -987,6 +1007,7 @@ const rootRouteChildren: RootRouteChildren = {
   NoticiaSlugRoute: NoticiaSlugRoute,
   RangoSlugRoute: RangoSlugRoute,
   UUsernameRoute: UUsernameRoute,
+  AcademyIndexRoute: AcademyIndexRoute,
   TemaCategorySlugRoute: TemaCategorySlugRoute,
   TutorialCategorySlugRoute: TutorialCategorySlugRoute,
 }

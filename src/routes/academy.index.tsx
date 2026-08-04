@@ -9,7 +9,7 @@ import { COURSE_SELECT, type AcademyCourse, type AcademyPath } from "@/lib/acade
 import { LEVELS } from "@/lib/tutorials";
 import { Search, GraduationCap, Sparkles, Award, TrendingUp } from "lucide-react";
 
-export const Route = createFileRoute("/academy")({
+export const Route = createFileRoute("/academy/")({
   head: () => ({
     meta: [
       { title: "ITSABDIAS Academy — Centro de aprendizaje tecnológico" },
