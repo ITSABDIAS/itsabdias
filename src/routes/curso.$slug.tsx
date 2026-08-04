@@ -80,7 +80,7 @@ function CoursePage() {
     if (error) return toast.error(error.message);
     setEnrolled(true);
     toast.success("¡Inscrito! Empieza cuando quieras 🎓");
-    if (lessons[0]) nav({ to: "/curso/$slug/$lessonId", params: { slug: c.slug, lessonId: lessons[0].id } });
+    if (lessons[0]) nav({ to: "/leccion/$lessonId", params: { lessonId: lessons[0].id } });
   };
 
   const share = async () => {
@@ -147,7 +147,7 @@ function CoursePage() {
             <div className="mt-5 flex flex-wrap gap-2">
               {next ? (
                 enrolled ? (
-                  <Link to="/curso/$slug/$lessonId" params={{ slug: c.slug, lessonId: next.id }} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-gradient-neon text-primary-foreground text-sm font-bold">
+                  <Link to="/leccion/$lessonId" params={{ lessonId: next.id }} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-gradient-neon text-primary-foreground text-sm font-bold">
                     <Play className="h-4 w-4" /> {percent > 0 ? "Continuar curso" : "Empezar curso"}
                   </Link>
                 ) : (
@@ -177,8 +177,8 @@ function CoursePage() {
                 return (
                   <Link
                     key={l.id}
-                    to="/curso/$slug/$lessonId"
-                    params={{ slug: c.slug, lessonId: l.id }}
+                    to="/leccion/$lessonId"
+                    params={{ lessonId: l.id }}
                     className="flex items-center gap-3 glass rounded-lg p-3 hover:border-neon-cyan/50 border border-transparent transition-all"
                   >
                     {done ? <CheckCircle2 className="h-4 w-4 text-green-400 shrink-0" /> : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
