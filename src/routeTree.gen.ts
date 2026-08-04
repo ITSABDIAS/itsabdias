@@ -35,6 +35,7 @@ import { Route as AcademyIndexRouteImport } from './routes/academy.index'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as RangoSlugRouteImport } from './routes/rango.$slug'
 import { Route as NoticiaSlugRouteImport } from './routes/noticia.$slug'
+import { Route as LeccionLessonIdRouteImport } from './routes/leccion.$lessonId'
 import { Route as CursoSlugRouteImport } from './routes/curso.$slug'
 import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
@@ -186,6 +187,11 @@ const RangoSlugRoute = RangoSlugRouteImport.update({
 const NoticiaSlugRoute = NoticiaSlugRouteImport.update({
   id: '/noticia/$slug',
   path: '/noticia/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeccionLessonIdRoute = LeccionLessonIdRouteImport.update({
+  id: '/leccion/$lessonId',
+  path: '/leccion/$lessonId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CursoSlugRoute = CursoSlugRouteImport.update({
@@ -342,6 +348,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/curso/$slug': typeof CursoSlugRoute
+  '/leccion/$lessonId': typeof LeccionLessonIdRoute
   '/noticia/$slug': typeof NoticiaSlugRoute
   '/rango/$slug': typeof RangoSlugRoute
   '/u/$username': typeof UUsernameRoute
@@ -392,6 +399,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/curso/$slug': typeof CursoSlugRoute
+  '/leccion/$lessonId': typeof LeccionLessonIdRoute
   '/noticia/$slug': typeof NoticiaSlugRoute
   '/rango/$slug': typeof RangoSlugRoute
   '/u/$username': typeof UUsernameRoute
@@ -443,6 +451,7 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/curso/$slug': typeof CursoSlugRoute
+  '/leccion/$lessonId': typeof LeccionLessonIdRoute
   '/noticia/$slug': typeof NoticiaSlugRoute
   '/rango/$slug': typeof RangoSlugRoute
   '/u/$username': typeof UUsernameRoute
@@ -495,6 +504,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/usuarios'
     | '/curso/$slug'
+    | '/leccion/$lessonId'
     | '/noticia/$slug'
     | '/rango/$slug'
     | '/u/$username'
@@ -545,6 +555,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/usuarios'
     | '/curso/$slug'
+    | '/leccion/$lessonId'
     | '/noticia/$slug'
     | '/rango/$slug'
     | '/u/$username'
@@ -595,6 +606,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/usuarios'
     | '/curso/$slug'
+    | '/leccion/$lessonId'
     | '/noticia/$slug'
     | '/rango/$slug'
     | '/u/$username'
@@ -628,6 +640,7 @@ export interface RootRouteChildren {
   TutorialesRoute: typeof TutorialesRoute
   AcademyPathRoute: typeof AcademyPathRoute
   CursoSlugRoute: typeof CursoSlugRoute
+  LeccionLessonIdRoute: typeof LeccionLessonIdRoute
   NoticiaSlugRoute: typeof NoticiaSlugRoute
   RangoSlugRoute: typeof RangoSlugRoute
   UUsernameRoute: typeof UUsernameRoute
@@ -818,6 +831,13 @@ declare module '@tanstack/react-router' {
       path: '/noticia/$slug'
       fullPath: '/noticia/$slug'
       preLoaderRoute: typeof NoticiaSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leccion/$lessonId': {
+      id: '/leccion/$lessonId'
+      path: '/leccion/$lessonId'
+      fullPath: '/leccion/$lessonId'
+      preLoaderRoute: typeof LeccionLessonIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/curso/$slug': {
@@ -1046,6 +1066,7 @@ const rootRouteChildren: RootRouteChildren = {
   TutorialesRoute: TutorialesRoute,
   AcademyPathRoute: AcademyPathRoute,
   CursoSlugRoute: CursoSlugRoute,
+  LeccionLessonIdRoute: LeccionLessonIdRoute,
   NoticiaSlugRoute: NoticiaSlugRoute,
   RangoSlugRoute: RangoSlugRoute,
   UUsernameRoute: UUsernameRoute,
