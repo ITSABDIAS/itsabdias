@@ -67,14 +67,35 @@ function AdminAcademia() {
   const runGenerate = async () => {
     if (!gen.pathId) return toast.error("Elige una ruta");
     setBusy(true);
+    setProgress("Diseñando el plan del curso...");
     try {
       const r = await generateCourse({ data: { pathId: gen.pathId, level: gen.level as any, topic: gen.topic.trim() || undefined, lessons: gen.lessons } });
-      toast.success(`Curso creado: ${r.title} (${r.lessons} lecciones)`);
+      toast.success(`Plan creado: ${r.title} · ${r.plan.length} lecciones`);
+
+      let done = 0;
+      for (const [i, l] of r.plan.entries()) {
+        setProgress(`Escribiendo lección ${i + 1}/${r.plan.length}: ${l.title}`);
+        try {
+          await generateLesson({ data: { courseId: r.id, topic: `${l.title}. ${l.focus}`.slice(0, 200) } });
+          done++;
+        } catch (e: any) {
+          toast.error(`Lección ${i + 1} falló: ${e?.message ?? "error"}`);
+        }
+      }
+
+      if (done > 0) {
+        setProgress("Publicando curso...");
+        await setCoursePublished({ data: { courseId: r.id, published: true } });
+        toast.success(`Curso publicado con ${done} lecciones ✨`);
+      } else {
+        toast.error("No se pudo escribir ninguna lección. El curso queda sin publicar.");
+      }
       setGen((g) => ({ ...g, topic: "" }));
       load();
     } catch (e: any) {
       toast.error(e?.message ?? "Error generando el curso");
     } finally {
+      setProgress("");
       setBusy(false);
     }
   };
