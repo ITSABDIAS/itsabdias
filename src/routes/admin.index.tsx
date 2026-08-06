@@ -10,7 +10,7 @@ import {
   Activity, Bot, TrendingUp, Zap, Settings, ShieldCheck, Star, PlusCircle, Sparkles,
 } from "lucide-react";
 
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/admin/")({
   head: () => ({ meta: [{ title: "Panel Admin — ItsaBDias" }] }),
   component: AdminDashboard,
 });
