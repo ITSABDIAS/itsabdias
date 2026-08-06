@@ -1259,6 +1259,15 @@ export type Database = {
         Returns: undefined
       }
       touch_last_seen: { Args: never; Returns: undefined }
+      verify_certificate: {
+        Args: { _code: string }
+        Returns: {
+          code: string
+          course_title: string
+          issued_at: string
+          username: string
+        }[]
+      }
     }
     Enums: {
       app_role:

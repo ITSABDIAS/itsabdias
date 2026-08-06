@@ -27,23 +27,20 @@ function CertificatePage() {
   useEffect(() => {
     let cancel = false;
     (async () => {
-      const { data: cert } = await supabase
-        .from("academy_certificates")
-        .select("user_id, course_id, issued_at")
-        .eq("code", code)
-        .maybeSingle();
+      const { data: rows } = await supabase.rpc("verify_certificate", { _code: code });
       if (cancel) return;
+      const cert = Array.isArray(rows) ? rows[0] : null;
       if (!cert) { setLoading(false); return; }
-      const [{ data: p }, { data: c }] = await Promise.all([
-        supabase.from("profiles").select("username").eq("id", cert.user_id).maybeSingle(),
-        supabase.from("academy_courses").select("title").eq("id", cert.course_id).maybeSingle(),
-      ]);
-      if (cancel) return;
-      setData({ username: p?.username ?? "Estudiante", course: c?.title ?? "Curso ITSABDIAS", issued: cert.issued_at });
+      setData({
+        username: cert.username ?? "Estudiante",
+        course: cert.course_title ?? "Curso ITSABDIAS",
+        issued: cert.issued_at,
+      });
       setLoading(false);
     })();
     return () => { cancel = true; };
   }, [code]);
+
 
   const share = async () => {
     const url = window.location.href;
