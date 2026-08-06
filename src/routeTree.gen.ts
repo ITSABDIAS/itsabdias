@@ -28,9 +28,9 @@ import { Route as ElectricidadRouteImport } from './routes/electricidad'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiRouteImport } from './routes/ai'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AcademyIndexRouteImport } from './routes/academy.index'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as RangoSlugRouteImport } from './routes/rango.$slug'
@@ -156,11 +156,6 @@ const AiRoute = AiRouteImport.update({
   path: '/ai',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -169,6 +164,11 @@ const AboutRoute = AboutRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AcademyIndexRoute = AcademyIndexRouteImport.update({
@@ -207,99 +207,99 @@ const CertificadoCodeRoute = CertificadoCodeRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
-  id: '/usuarios',
-  path: '/usuarios',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/usuarios',
+  path: '/admin/usuarios',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminUsersRoute = AdminUsersRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminTutorialsRoute = AdminTutorialsRouteImport.update({
-  id: '/tutorials',
-  path: '/tutorials',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/tutorials',
+  path: '/admin/tutorials',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminTutorialesRoute = AdminTutorialesRouteImport.update({
-  id: '/tutoriales',
-  path: '/tutoriales',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/tutoriales',
+  path: '/admin/tutoriales',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminTicketsRoute = AdminTicketsRouteImport.update({
-  id: '/tickets',
-  path: '/tickets',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/tickets',
+  path: '/admin/tickets',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminStaffRoute = AdminStaffRouteImport.update({
-  id: '/staff',
-  path: '/staff',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/staff',
+  path: '/admin/staff',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/settings',
+  path: '/admin/settings',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminPublicacionesRoute = AdminPublicacionesRouteImport.update({
-  id: '/publicaciones',
-  path: '/publicaciones',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/publicaciones',
+  path: '/admin/publicaciones',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminProyectosRoute = AdminProyectosRouteImport.update({
-  id: '/proyectos',
-  path: '/proyectos',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/proyectos',
+  path: '/admin/proyectos',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminProjectsRoute = AdminProjectsRouteImport.update({
-  id: '/projects',
-  path: '/projects',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/projects',
+  path: '/admin/projects',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminPostsRoute = AdminPostsRouteImport.update({
-  id: '/posts',
-  path: '/posts',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/posts',
+  path: '/admin/posts',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminNoticiasRoute = AdminNoticiasRouteImport.update({
-  id: '/noticias',
-  path: '/noticias',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/noticias',
+  path: '/admin/noticias',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminNewsRoute = AdminNewsRouteImport.update({
-  id: '/news',
-  path: '/news',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/news',
+  path: '/admin/news',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminHistoryRoute = AdminHistoryRouteImport.update({
-  id: '/history',
-  path: '/history',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/history',
+  path: '/admin/history',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminHistorialRoute = AdminHistorialRouteImport.update({
-  id: '/historial',
-  path: '/historial',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/historial',
+  path: '/admin/historial',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminConfiguracionRoute = AdminConfiguracionRouteImport.update({
-  id: '/configuracion',
-  path: '/configuracion',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/configuracion',
+  path: '/admin/configuracion',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminAnunciosRoute = AdminAnunciosRouteImport.update({
-  id: '/anuncios',
-  path: '/anuncios',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/anuncios',
+  path: '/admin/anuncios',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminAnnouncementsRoute = AdminAnnouncementsRouteImport.update({
-  id: '/announcements',
-  path: '/announcements',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/announcements',
+  path: '/admin/announcements',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminAcademiaRoute = AdminAcademiaRouteImport.update({
-  id: '/academia',
-  path: '/academia',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/academia',
+  path: '/admin/academia',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AcademyPathRoute = AcademyPathRouteImport.update({
   id: '/academy/$path',
@@ -320,7 +320,6 @@ const TemaCategorySlugRoute = TemaCategorySlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRouteWithChildren
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
@@ -367,13 +366,13 @@ export interface FileRoutesByFullPath {
   '/rango/$slug': typeof RangoSlugRoute
   '/u/$username': typeof UUsernameRoute
   '/academy/': typeof AcademyIndexRoute
+  '/admin/': typeof AdminIndexRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
   '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRouteWithChildren
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
@@ -420,6 +419,7 @@ export interface FileRoutesByTo {
   '/rango/$slug': typeof RangoSlugRoute
   '/u/$username': typeof UUsernameRoute
   '/academy': typeof AcademyIndexRoute
+  '/admin': typeof AdminIndexRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
   '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
 }
@@ -427,7 +427,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRouteWithChildren
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
@@ -474,6 +473,7 @@ export interface FileRoutesById {
   '/rango/$slug': typeof RangoSlugRoute
   '/u/$username': typeof UUsernameRoute
   '/academy/': typeof AcademyIndexRoute
+  '/admin/': typeof AdminIndexRoute
   '/tema/$category/$slug': typeof TemaCategorySlugRoute
   '/tutorial/$category/$slug': typeof TutorialCategorySlugRoute
 }
@@ -482,7 +482,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
-    | '/admin'
     | '/ai'
     | '/auth'
     | '/community'
@@ -529,13 +528,13 @@ export interface FileRouteTypes {
     | '/rango/$slug'
     | '/u/$username'
     | '/academy/'
+    | '/admin/'
     | '/tema/$category/$slug'
     | '/tutorial/$category/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
-    | '/admin'
     | '/ai'
     | '/auth'
     | '/community'
@@ -582,13 +581,13 @@ export interface FileRouteTypes {
     | '/rango/$slug'
     | '/u/$username'
     | '/academy'
+    | '/admin'
     | '/tema/$category/$slug'
     | '/tutorial/$category/$slug'
   id:
     | '__root__'
     | '/'
     | '/about'
-    | '/admin'
     | '/ai'
     | '/auth'
     | '/community'
@@ -635,6 +634,7 @@ export interface FileRouteTypes {
     | '/rango/$slug'
     | '/u/$username'
     | '/academy/'
+    | '/admin/'
     | '/tema/$category/$slug'
     | '/tutorial/$category/$slug'
   fileRoutesById: FileRoutesById
@@ -642,7 +642,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  AdminRoute: typeof AdminRouteWithChildren
   AiRoute: typeof AiRoute
   AuthRoute: typeof AuthRoute
   CommunityRoute: typeof CommunityRoute
@@ -663,6 +662,25 @@ export interface RootRouteChildren {
   TecnologiaRoute: typeof TecnologiaRoute
   TutorialesRoute: typeof TutorialesRoute
   AcademyPathRoute: typeof AcademyPathRoute
+  AdminAcademiaRoute: typeof AdminAcademiaRoute
+  AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
+  AdminAnunciosRoute: typeof AdminAnunciosRoute
+  AdminConfiguracionRoute: typeof AdminConfiguracionRoute
+  AdminHistorialRoute: typeof AdminHistorialRoute
+  AdminHistoryRoute: typeof AdminHistoryRoute
+  AdminNewsRoute: typeof AdminNewsRoute
+  AdminNoticiasRoute: typeof AdminNoticiasRoute
+  AdminPostsRoute: typeof AdminPostsRoute
+  AdminProjectsRoute: typeof AdminProjectsRoute
+  AdminProyectosRoute: typeof AdminProyectosRoute
+  AdminPublicacionesRoute: typeof AdminPublicacionesRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminStaffRoute: typeof AdminStaffRoute
+  AdminTicketsRoute: typeof AdminTicketsRoute
+  AdminTutorialesRoute: typeof AdminTutorialesRoute
+  AdminTutorialsRoute: typeof AdminTutorialsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+  AdminUsuariosRoute: typeof AdminUsuariosRoute
   CertificadoCodeRoute: typeof CertificadoCodeRoute
   CursoSlugRoute: typeof CursoSlugRoute
   LeccionLessonIdRoute: typeof LeccionLessonIdRoute
@@ -670,6 +688,7 @@ export interface RootRouteChildren {
   RangoSlugRoute: typeof RangoSlugRoute
   UUsernameRoute: typeof UUsernameRoute
   AcademyIndexRoute: typeof AcademyIndexRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   TemaCategorySlugRoute: typeof TemaCategorySlugRoute
   TutorialCategorySlugRoute: typeof TutorialCategorySlugRoute
 }
@@ -809,13 +828,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AiRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -828,6 +840,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/academy/': {
@@ -881,136 +900,136 @@ declare module '@tanstack/react-router' {
     }
     '/admin/usuarios': {
       id: '/admin/usuarios'
-      path: '/usuarios'
+      path: '/admin/usuarios'
       fullPath: '/admin/usuarios'
       preLoaderRoute: typeof AdminUsuariosRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/users': {
       id: '/admin/users'
-      path: '/users'
+      path: '/admin/users'
       fullPath: '/admin/users'
       preLoaderRoute: typeof AdminUsersRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/tutorials': {
       id: '/admin/tutorials'
-      path: '/tutorials'
+      path: '/admin/tutorials'
       fullPath: '/admin/tutorials'
       preLoaderRoute: typeof AdminTutorialsRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/tutoriales': {
       id: '/admin/tutoriales'
-      path: '/tutoriales'
+      path: '/admin/tutoriales'
       fullPath: '/admin/tutoriales'
       preLoaderRoute: typeof AdminTutorialesRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/tickets': {
       id: '/admin/tickets'
-      path: '/tickets'
+      path: '/admin/tickets'
       fullPath: '/admin/tickets'
       preLoaderRoute: typeof AdminTicketsRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/staff': {
       id: '/admin/staff'
-      path: '/staff'
+      path: '/admin/staff'
       fullPath: '/admin/staff'
       preLoaderRoute: typeof AdminStaffRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/settings': {
       id: '/admin/settings'
-      path: '/settings'
+      path: '/admin/settings'
       fullPath: '/admin/settings'
       preLoaderRoute: typeof AdminSettingsRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/publicaciones': {
       id: '/admin/publicaciones'
-      path: '/publicaciones'
+      path: '/admin/publicaciones'
       fullPath: '/admin/publicaciones'
       preLoaderRoute: typeof AdminPublicacionesRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/proyectos': {
       id: '/admin/proyectos'
-      path: '/proyectos'
+      path: '/admin/proyectos'
       fullPath: '/admin/proyectos'
       preLoaderRoute: typeof AdminProyectosRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/projects': {
       id: '/admin/projects'
-      path: '/projects'
+      path: '/admin/projects'
       fullPath: '/admin/projects'
       preLoaderRoute: typeof AdminProjectsRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/posts': {
       id: '/admin/posts'
-      path: '/posts'
+      path: '/admin/posts'
       fullPath: '/admin/posts'
       preLoaderRoute: typeof AdminPostsRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/noticias': {
       id: '/admin/noticias'
-      path: '/noticias'
+      path: '/admin/noticias'
       fullPath: '/admin/noticias'
       preLoaderRoute: typeof AdminNoticiasRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/news': {
       id: '/admin/news'
-      path: '/news'
+      path: '/admin/news'
       fullPath: '/admin/news'
       preLoaderRoute: typeof AdminNewsRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/history': {
       id: '/admin/history'
-      path: '/history'
+      path: '/admin/history'
       fullPath: '/admin/history'
       preLoaderRoute: typeof AdminHistoryRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/historial': {
       id: '/admin/historial'
-      path: '/historial'
+      path: '/admin/historial'
       fullPath: '/admin/historial'
       preLoaderRoute: typeof AdminHistorialRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/configuracion': {
       id: '/admin/configuracion'
-      path: '/configuracion'
+      path: '/admin/configuracion'
       fullPath: '/admin/configuracion'
       preLoaderRoute: typeof AdminConfiguracionRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/anuncios': {
       id: '/admin/anuncios'
-      path: '/anuncios'
+      path: '/admin/anuncios'
       fullPath: '/admin/anuncios'
       preLoaderRoute: typeof AdminAnunciosRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/announcements': {
       id: '/admin/announcements'
-      path: '/announcements'
+      path: '/admin/announcements'
       fullPath: '/admin/announcements'
       preLoaderRoute: typeof AdminAnnouncementsRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/academia': {
       id: '/admin/academia'
-      path: '/academia'
+      path: '/admin/academia'
       fullPath: '/admin/academia'
       preLoaderRoute: typeof AdminAcademiaRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
     '/academy/$path': {
       id: '/academy/$path'
@@ -1036,56 +1055,9 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AdminRouteChildren {
-  AdminAcademiaRoute: typeof AdminAcademiaRoute
-  AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
-  AdminAnunciosRoute: typeof AdminAnunciosRoute
-  AdminConfiguracionRoute: typeof AdminConfiguracionRoute
-  AdminHistorialRoute: typeof AdminHistorialRoute
-  AdminHistoryRoute: typeof AdminHistoryRoute
-  AdminNewsRoute: typeof AdminNewsRoute
-  AdminNoticiasRoute: typeof AdminNoticiasRoute
-  AdminPostsRoute: typeof AdminPostsRoute
-  AdminProjectsRoute: typeof AdminProjectsRoute
-  AdminProyectosRoute: typeof AdminProyectosRoute
-  AdminPublicacionesRoute: typeof AdminPublicacionesRoute
-  AdminSettingsRoute: typeof AdminSettingsRoute
-  AdminStaffRoute: typeof AdminStaffRoute
-  AdminTicketsRoute: typeof AdminTicketsRoute
-  AdminTutorialesRoute: typeof AdminTutorialesRoute
-  AdminTutorialsRoute: typeof AdminTutorialsRoute
-  AdminUsersRoute: typeof AdminUsersRoute
-  AdminUsuariosRoute: typeof AdminUsuariosRoute
-}
-
-const AdminRouteChildren: AdminRouteChildren = {
-  AdminAcademiaRoute: AdminAcademiaRoute,
-  AdminAnnouncementsRoute: AdminAnnouncementsRoute,
-  AdminAnunciosRoute: AdminAnunciosRoute,
-  AdminConfiguracionRoute: AdminConfiguracionRoute,
-  AdminHistorialRoute: AdminHistorialRoute,
-  AdminHistoryRoute: AdminHistoryRoute,
-  AdminNewsRoute: AdminNewsRoute,
-  AdminNoticiasRoute: AdminNoticiasRoute,
-  AdminPostsRoute: AdminPostsRoute,
-  AdminProjectsRoute: AdminProjectsRoute,
-  AdminProyectosRoute: AdminProyectosRoute,
-  AdminPublicacionesRoute: AdminPublicacionesRoute,
-  AdminSettingsRoute: AdminSettingsRoute,
-  AdminStaffRoute: AdminStaffRoute,
-  AdminTicketsRoute: AdminTicketsRoute,
-  AdminTutorialesRoute: AdminTutorialesRoute,
-  AdminTutorialsRoute: AdminTutorialsRoute,
-  AdminUsersRoute: AdminUsersRoute,
-  AdminUsuariosRoute: AdminUsuariosRoute,
-}
-
-const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  AdminRoute: AdminRouteWithChildren,
   AiRoute: AiRoute,
   AuthRoute: AuthRoute,
   CommunityRoute: CommunityRoute,
@@ -1106,6 +1078,25 @@ const rootRouteChildren: RootRouteChildren = {
   TecnologiaRoute: TecnologiaRoute,
   TutorialesRoute: TutorialesRoute,
   AcademyPathRoute: AcademyPathRoute,
+  AdminAcademiaRoute: AdminAcademiaRoute,
+  AdminAnnouncementsRoute: AdminAnnouncementsRoute,
+  AdminAnunciosRoute: AdminAnunciosRoute,
+  AdminConfiguracionRoute: AdminConfiguracionRoute,
+  AdminHistorialRoute: AdminHistorialRoute,
+  AdminHistoryRoute: AdminHistoryRoute,
+  AdminNewsRoute: AdminNewsRoute,
+  AdminNoticiasRoute: AdminNoticiasRoute,
+  AdminPostsRoute: AdminPostsRoute,
+  AdminProjectsRoute: AdminProjectsRoute,
+  AdminProyectosRoute: AdminProyectosRoute,
+  AdminPublicacionesRoute: AdminPublicacionesRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminStaffRoute: AdminStaffRoute,
+  AdminTicketsRoute: AdminTicketsRoute,
+  AdminTutorialesRoute: AdminTutorialesRoute,
+  AdminTutorialsRoute: AdminTutorialsRoute,
+  AdminUsersRoute: AdminUsersRoute,
+  AdminUsuariosRoute: AdminUsuariosRoute,
   CertificadoCodeRoute: CertificadoCodeRoute,
   CursoSlugRoute: CursoSlugRoute,
   LeccionLessonIdRoute: LeccionLessonIdRoute,
@@ -1113,6 +1104,7 @@ const rootRouteChildren: RootRouteChildren = {
   RangoSlugRoute: RangoSlugRoute,
   UUsernameRoute: UUsernameRoute,
   AcademyIndexRoute: AcademyIndexRoute,
+  AdminIndexRoute: AdminIndexRoute,
   TemaCategorySlugRoute: TemaCategorySlugRoute,
   TutorialCategorySlugRoute: TutorialCategorySlugRoute,
 }
