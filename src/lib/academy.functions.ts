@@ -93,7 +93,7 @@ export const generateCourse = createServerFn({ method: "POST" })
       .maybeSingle();
     if (!path) throw new Error("Ruta de aprendizaje no encontrada");
 
-    const prompt = `Crea un curso de nivel ${data.level} con exactamente ${data.lessons} lecciones para la ruta "${path.title}" (${path.description}). ${
+    const prompt = `Diseña el plan de un curso de nivel ${data.level} con exactamente ${data.lessons} lecciones para la ruta "${path.title}" (${path.description}). ${
       data.topic ? `Tema concreto: "${data.topic}".` : "Elige un tema útil y muy demandado dentro de esa ruta."
     }`;
 
@@ -102,6 +102,14 @@ export const generateCourse = createServerFn({ method: "POST" })
     let slug = slugify(title);
     const { data: dup } = await supabaseAdmin.from("academy_courses").select("id").eq("slug", slug).maybeSingle();
     if (dup) slug = `${slug}-${Math.random().toString(36).slice(2, 6)}`;
+
+    const plan: { title: string; focus: string }[] = (Array.isArray(out?.lessons) ? out.lessons : [])
+      .slice(0, data.lessons)
+      .map((l: any, i: number) => ({
+        title: String(l?.title ?? `Lección ${i + 1}`),
+        focus: String(l?.focus ?? ""),
+      }));
+    if (plan.length === 0) throw new Error("NEXUS no devolvió ninguna lección para este curso");
 
     const { data: course, error: cErr } = await supabaseAdmin
       .from("academy_courses")
@@ -114,31 +122,41 @@ export const generateCourse = createServerFn({ method: "POST" })
         estimated_minutes: Math.min(600, Math.max(20, Number(out?.estimated_minutes) || 90)),
         author_id: context.userId,
         is_nexus: true,
-        is_published: true,
+        // Se publica sólo cuando las lecciones estén escritas.
+        is_published: false,
         tags: Array.isArray(out?.tags) ? out.tags.slice(0, 6).map(String) : [],
       })
       .select("id, slug, title")
       .single();
     if (cErr) throw new Error(cErr.message);
 
-    const lessons = Array.isArray(out?.lessons) ? out.lessons : [];
-    if (lessons.length) {
-      const rows = lessons.map((l: any, i: number) => ({
-        course_id: course.id,
-        position: i + 1,
-        title: String(l?.title ?? `Lección ${i + 1}`),
-        content: String(l?.content ?? ""),
-        exercise: l?.exercise ? String(l.exercise) : null,
-        tips: l?.tips ? String(l.tips) : null,
-        common_mistakes: l?.common_mistakes ? String(l.common_mistakes) : null,
-        summary: l?.summary ? String(l.summary) : null,
-        duration_minutes: Math.min(45, Math.max(3, Number(l?.duration_minutes) || 10)),
-      }));
-      const { error: lErr } = await supabaseAdmin.from("academy_lessons").insert(rows);
-      if (lErr) throw new Error(lErr.message);
+    return { id: course.id, slug: course.slug, title: course.title, plan };
+  });
+
+/** Publica (o despublica) un curso una vez sus lecciones están escritas. */
+export const setCoursePublished = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z.object({ courseId: z.string().uuid(), published: z.boolean() }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    await assertStaff(context.supabase as never, context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    if (data.published) {
+      const { count } = await supabaseAdmin
+        .from("academy_lessons")
+        .select("id", { count: "exact", head: true })
+        .eq("course_id", data.courseId);
+      if (!count) throw new Error("El curso no tiene lecciones todavía: no se puede publicar");
     }
 
-    return { id: course.id, slug: course.slug, title: course.title, lessons: lessons.length };
+    const { error } = await supabaseAdmin
+      .from("academy_courses")
+      .update({ is_published: data.published })
+      .eq("id", data.courseId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
   });
 
 const LESSON_SYSTEM = `Eres NEXUS, profesor de ITSABDIAS Academy. Devuelves SIEMPRE json con las claves:
