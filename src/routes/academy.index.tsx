@@ -4,6 +4,7 @@ import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useMyRoles } from "@/hooks/useMyRoles";
 import { CourseCard } from "@/components/CourseCard";
 import { COURSE_SELECT, type AcademyCourse, type AcademyPath } from "@/lib/academy";
 import { LEVELS } from "@/lib/tutorials";
@@ -25,6 +26,7 @@ export const Route = createFileRoute("/academy/")({
 
 function AcademyPage() {
   const { user } = useAuth();
+  const { isAdmin } = useMyRoles();
   const [paths, setPaths] = useState<AcademyPath[]>([]);
   const [courses, setCourses] = useState<AcademyCourse[]>([]);
   const [progress, setProgress] = useState<Record<string, number>>({});
@@ -153,9 +155,13 @@ function AcademyPage() {
             <div className="glass rounded-xl p-8 text-center">
               <Sparkles className="h-10 w-10 mx-auto text-neon-purple mb-3" />
               <p className="text-muted-foreground">Aún no hay cursos con estos filtros.</p>
-              <Link to="/admin/academia" className="mt-3 inline-flex px-4 py-2 rounded-md bg-gradient-neon text-primary-foreground text-sm font-bold">
-                Generar cursos con NEXUS
-              </Link>
+              {isAdmin ? (
+                <Link to="/admin/academia" className="mt-3 inline-flex px-4 py-2 rounded-md bg-gradient-neon text-primary-foreground text-sm font-bold">
+                  Generar cursos con NEXUS
+                </Link>
+              ) : (
+                <p className="mt-2 text-xs text-muted-foreground">El staff está preparando los primeros cursos. Vuelve pronto.</p>
+              )}
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
