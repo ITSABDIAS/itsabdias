@@ -22,6 +22,7 @@ export const Route = createFileRoute("/tutoriales")({
 
 function TutorialesPage() {
   const [items, setItems] = useState<TutorialCardData[]>([]);
+  const { isAdmin } = useMyRoles();
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<string>("all");
   const [lvl, setLvl] = useState<string>("all");
