@@ -69,12 +69,12 @@ async function assertStaff(
   if (!data || data.length === 0) throw new Error("No autorizado");
 }
 
-const COURSE_SYSTEM = `Eres NEXUS, el profesor de IA de ITSABDIAS Academy. Creas cursos completos en español.
+const COURSE_SYSTEM = `Eres NEXUS, el profesor de IA de ITSABDIAS Academy. Diseñas el plan de cursos en español.
 Devuelves SIEMPRE un objeto json con EXACTAMENTE estas claves:
 title (string), description (string, 2 frases), tags (array 3-6 strings cortos),
 estimated_minutes (int 30-600),
-lessons (array de objetos con: title (string), content (markdown extenso con explicación paso a paso y ejemplos de código en bloques \`\`\`lang), exercise (string, ejercicio práctico), tips (string, consejos y buenas prácticas), common_mistakes (string, errores comunes), summary (string, resumen corto), duration_minutes (int 5-45))).
-El contenido debe ser real, técnico y útil, progresando de lección en lección. Nunca uses texto fuera del json.`;
+lessons (array de objetos con SOLO: title (string) y focus (string, 1 frase con lo que enseña la lección)).
+El plan debe ser real, técnico y progresivo. Nunca uses texto fuera del json.`;
 
 export const generateCourse = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
