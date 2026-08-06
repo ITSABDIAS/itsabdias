@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import { supabase } from "@/integrations/supabase/client";
+import { useMyRoles } from "@/hooks/useMyRoles";
 import { TutorialCard, type TutorialCardData } from "@/components/TutorialCard";
 import { TUTORIAL_CATEGORIES, LEVELS } from "@/lib/tutorials";
 import { Search, Sparkles } from "lucide-react";
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/tutoriales")({
 
 function TutorialesPage() {
   const [items, setItems] = useState<TutorialCardData[]>([]);
+  const { isAdmin } = useMyRoles();
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<string>("all");
   const [lvl, setLvl] = useState<string>("all");
@@ -95,9 +97,11 @@ function TutorialesPage() {
               <div className="col-span-full glass rounded-xl p-8 text-center">
                 <Sparkles className="h-10 w-10 mx-auto text-neon-purple mb-3" />
                 <p className="text-muted-foreground">Aún no hay tutoriales en esta selección.</p>
-                <Link to="/admin" className="mt-3 inline-flex px-4 py-2 rounded-md bg-gradient-neon text-primary-foreground text-sm font-bold">
-                  Generar con NEXUS
-                </Link>
+                {isAdmin && (
+                  <Link to="/admin/tutoriales" className="mt-3 inline-flex px-4 py-2 rounded-md bg-gradient-neon text-primary-foreground text-sm font-bold">
+                    Generar con NEXUS
+                  </Link>
+                )}
               </div>
             )}
             {filtered.map((t) => (<TutorialCard key={t.id} t={t} />))}

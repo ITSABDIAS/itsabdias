@@ -10,7 +10,7 @@ import {
   Activity, Bot, TrendingUp, Zap, Settings, ShieldCheck, Star, PlusCircle, Sparkles,
 } from "lucide-react";
 
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/admin/")({
   head: () => ({ meta: [{ title: "Panel Admin — ItsaBDias" }] }),
   component: AdminDashboard,
 });
@@ -86,6 +86,7 @@ function AdminDashboard() {
     { to: "/admin/users", label: "Usuarios", icon: Users, color: "text-neon-cyan" },
     { to: "/admin/staff", label: "Staff", icon: ShieldCheck, color: "text-neon-purple" },
     { to: "/admin/tutorials", label: "Tutoriales", icon: GraduationCap, color: "text-neon-blue" },
+    { to: "/admin/academia", label: "Academia", icon: Sparkles, color: "text-neon-purple" },
     { to: "/admin/tickets", label: "Tickets", icon: Ticket, color: "text-yellow-400" },
     { to: "/admin/noticias", label: "Noticias", icon: Newspaper, color: "text-red-400" },
     { to: "/admin/announcements", label: "Anuncios", icon: Megaphone, color: "text-pink-400" },
@@ -168,6 +169,7 @@ function AdminDashboard() {
             <h3 className="font-display text-lg font-bold mb-3 flex items-center gap-2"><Zap className="h-5 w-5 text-yellow-400" /> Acciones rápidas</h3>
             <div className="flex flex-wrap gap-2">
               <QuickAction to="/admin/tutorials" icon={Sparkles} label="Generar tutorial NEXUS" />
+              <QuickAction to="/admin/academia" icon={GraduationCap} label="Generar curso NEXUS" />
               <QuickAction to="/admin/tutorials" icon={PlusCircle} label="Crear tutorial" />
               <QuickAction to="/admin/noticias" icon={Newspaper} label="Publicar noticia" />
               <QuickAction to="/admin/announcements" icon={Megaphone} label="Crear anuncio" />

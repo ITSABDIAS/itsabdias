@@ -5,7 +5,7 @@ import { SectionTitle } from "@/components/SectionTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
-import { generateCourse, generateLesson } from "@/lib/academy.functions";
+import { generateCourse, generateLesson, setCoursePublished } from "@/lib/academy.functions";
 import { COURSE_SELECT, type AcademyCourse, type AcademyPath } from "@/lib/academy";
 import { LEVELS } from "@/lib/tutorials";
 import { Shield, Sparkles, Star, Loader2, Trash2, Eye, EyeOff, Plus, Search, GraduationCap, Pencil, Save, X } from "lucide-react";
@@ -24,6 +24,7 @@ function AdminAcademia() {
   const [courses, setCourses] = useState<AcademyCourse[]>([]);
   const [q, setQ] = useState("");
   const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState("");
   const [editing, setEditing] = useState<AcademyCourse | null>(null);
 
   const [gen, setGen] = useState({ pathId: "", level: "principiante", topic: "", lessons: 6 });
@@ -67,14 +68,35 @@ function AdminAcademia() {
   const runGenerate = async () => {
     if (!gen.pathId) return toast.error("Elige una ruta");
     setBusy(true);
+    setProgress("Diseñando el plan del curso...");
     try {
       const r = await generateCourse({ data: { pathId: gen.pathId, level: gen.level as any, topic: gen.topic.trim() || undefined, lessons: gen.lessons } });
-      toast.success(`Curso creado: ${r.title} (${r.lessons} lecciones)`);
+      toast.success(`Plan creado: ${r.title} · ${r.plan.length} lecciones`);
+
+      let done = 0;
+      for (const [i, l] of r.plan.entries()) {
+        setProgress(`Escribiendo lección ${i + 1}/${r.plan.length}: ${l.title}`);
+        try {
+          await generateLesson({ data: { courseId: r.id, topic: `${l.title}. ${l.focus}`.slice(0, 200) } });
+          done++;
+        } catch (e: any) {
+          toast.error(`Lección ${i + 1} falló: ${e?.message ?? "error"}`);
+        }
+      }
+
+      if (done > 0) {
+        setProgress("Publicando curso...");
+        await setCoursePublished({ data: { courseId: r.id, published: true } });
+        toast.success(`Curso publicado con ${done} lecciones ✨`);
+      } else {
+        toast.error("No se pudo escribir ninguna lección. El curso queda sin publicar.");
+      }
       setGen((g) => ({ ...g, topic: "" }));
       load();
     } catch (e: any) {
       toast.error(e?.message ?? "Error generando el curso");
     } finally {
+      setProgress("");
       setBusy(false);
     }
   };
@@ -196,6 +218,8 @@ function AdminAcademia() {
             <button onClick={runGenerate} disabled={busy} className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gradient-neon text-primary-foreground text-sm font-bold disabled:opacity-60">
               {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />} Generar curso completo
             </button>
+            {progress && <p className="mt-2 text-xs font-mono text-neon-cyan">{progress}</p>}
+            <p className="mt-2 text-[11px] text-muted-foreground">NEXUS escribe una lección a la vez. Puede tardar 1-3 minutos; no cierres la página.</p>
           </div>
 
           {/* Paths */}
