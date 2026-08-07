@@ -8,17 +8,56 @@ import { levelMeta } from "@/lib/tutorials";
 import { toast } from "sonner";
 import { ArrowLeft, BookOpen, CheckCircle2, Circle, Clock, Play, Share2, Sparkles, Users, Award } from "lucide-react";
 
+const BASE_URL = "https://itsabdias.lovable.app";
+
 export const Route = createFileRoute("/curso/$slug")({
-  head: ({ params }) => ({
-    meta: [
-      { title: `Curso ${params.slug} — ITSABDIAS Academy` },
-      { name: "description", content: `Curso completo con lecciones paso a paso en ITSABDIAS Academy.` },
-      { property: "og:title", content: `Curso ${params.slug} — ITSABDIAS Academy` },
-      { property: "og:description", content: "Aprende con lecciones, ejercicios y certificado al completar el curso." },
-      { property: "og:type", content: "article" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  loader: async ({ params }) => {
+    const { data } = await supabase
+      .from("academy_courses")
+      .select("title, description, slug")
+      .eq("slug", params.slug)
+      .maybeSingle();
+    return { course: data ?? null };
+  },
+  head: ({ params, loaderData }) => {
+    const c = loaderData?.course;
+    const rawTitle = c?.title ? `${c.title} — ITSABDIAS Academy` : `Curso ${params.slug} — ITSABDIAS Academy`;
+    const title = rawTitle.length > 60 ? `${rawTitle.slice(0, 57)}...` : rawTitle;
+    const base = (c?.description ?? "").trim();
+    const desc =
+      base.length >= 50
+        ? base.length > 158
+          ? `${base.slice(0, 155)}...`
+          : base
+        : "Curso completo con lecciones paso a paso, ejercicios prácticos y certificado al finalizar en ITSABDIAS Academy.";
+    const url = `${BASE_URL}/curso/${params.slug}`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: c?.title ?? `Curso ${params.slug}` },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Course",
+            name: c?.title ?? `Curso ${params.slug}`,
+            description: desc,
+            url,
+            inLanguage: "es",
+            provider: { "@type": "Organization", name: "ITSABDIAS Academy", url: BASE_URL },
+          }),
+        },
+      ],
+    };
+  },
   component: CoursePage,
 });
 
