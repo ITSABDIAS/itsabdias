@@ -5,8 +5,67 @@ import { supabase } from "@/integrations/supabase/client";
 import { TutorialContent } from "@/components/TutorialContent";
 import { Newspaper, Clock, Eye, ArrowLeft, Star } from "lucide-react";
 
+const BASE_URL = "https://itsabdias.lovable.app";
+
+function clampDesc(text: string | null | undefined, fallback: string) {
+  const t = (text ?? "").trim();
+  if (t.length < 50) return fallback;
+  return t.length > 158 ? `${t.slice(0, 155)}...` : t;
+}
+
 export const Route = createFileRoute("/noticia/$slug")({
-  head: () => ({ meta: [{ title: "Noticia — ItsaBDias" }] }),
+  loader: async ({ params }) => {
+    const { data } = await supabase
+      .from("news")
+      .select("title, summary, cover_url, published_at, category")
+      .eq("slug", params.slug)
+      .maybeSingle();
+    return { news: data ?? null };
+  },
+  head: ({ params, loaderData }) => {
+    const n = loaderData?.news;
+    const title = n?.title ? `${n.title} — Noticias ItsaBDias` : "Noticia — ItsaBDias";
+    const desc = clampDesc(
+      n?.summary,
+      "Noticias de tecnología, IA, hardware y videojuegos en ItsaBDias, la comunidad tech y gamer.",
+    );
+    const url = `${BASE_URL}/noticia/${params.slug}`;
+    const meta: Array<Record<string, string>> = [
+      { title: title.length > 60 ? `${title.slice(0, 57)}...` : title },
+      { name: "description", content: desc },
+      { property: "og:title", content: n?.title ?? "Noticia — ItsaBDias" },
+      { property: "og:description", content: desc },
+      { property: "og:type", content: "article" },
+      { property: "og:url", content: url },
+      { name: "twitter:card", content: "summary_large_image" },
+    ];
+    if (n?.cover_url?.startsWith("https://")) {
+      meta.push({ property: "og:image", content: n.cover_url });
+      meta.push({ name: "twitter:image", content: n.cover_url });
+    }
+    return {
+      meta,
+      links: [{ rel: "canonical", href: url }],
+      scripts: n
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "NewsArticle",
+                headline: n.title,
+                description: n.summary ?? undefined,
+                image: n.cover_url ?? undefined,
+                datePublished: n.published_at ?? undefined,
+                articleSection: n.category ?? undefined,
+                mainEntityOfPage: url,
+                publisher: { "@type": "Organization", name: "ItsaBDias", url: BASE_URL },
+              }),
+            },
+          ]
+        : [],
+    };
+  },
   component: NoticiaDetail,
 });
 
