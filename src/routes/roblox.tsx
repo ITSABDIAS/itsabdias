@@ -50,7 +50,7 @@ function Roblox() {
   return (
     <PageShell>
       <section className="py-12 sm:py-20 px-4 sm:px-6">
-        <SectionTitle
+        <SectionTitle as="h1"
           eyebrow="// roblox.studio"
           title="Roblox Studio"
           subtitle="Aprende Lua, crea sistemas y publica experiencias profesionales."

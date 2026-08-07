@@ -151,7 +151,7 @@ function Community() {
   return (
     <PageShell>
       <section className="py-20 px-6">
-        <SectionTitle eyebrow="// social.feed" title="Comunidad ItsaBDias" subtitle="Tu voz, tus ideas, tu tribu tech." />
+        <SectionTitle as="h1" eyebrow="// social.feed" title="Comunidad ItsaBDias" subtitle="Tu voz, tus ideas, tu tribu tech." />
 
         <div className="mx-auto max-w-3xl space-y-6">
           {/* Composer */}

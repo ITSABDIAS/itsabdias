@@ -117,7 +117,7 @@ function PremiumPage() {
           <div className="absolute top-1/3 left-0 h-[300px] w-[300px] rounded-full bg-[#22d3ee]/10 blur-[100px]" />
         </div>
 
-        <SectionTitle
+        <SectionTitle as="h1"
           eyebrow="// premium.access"
           title="Hazte Premium"
           subtitle="Desbloquea el círculo dorado de ItsaBDias y lleva tu experiencia al siguiente nivel."

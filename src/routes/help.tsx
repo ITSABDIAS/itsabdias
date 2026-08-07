@@ -109,7 +109,7 @@ function Help() {
   return (
     <PageShell>
       <section className="py-20 px-6">
-        <SectionTitle
+        <SectionTitle as="h1"
           eyebrow="// support.center"
           title="Centro de Ayuda Tech"
           subtitle="Describe tu problema. Nuestra comunidad de creadores te responderá."

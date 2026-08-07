@@ -161,7 +161,7 @@ function ProjectsPage() {
           <div className="absolute bottom-0 right-0 h-[300px] w-[400px] rounded-full bg-neon-cyan/10 blur-[100px]" />
         </div>
 
-        <SectionTitle
+        <SectionTitle as="h1"
           eyebrow="// builds.gallery"
           title="Proyectos de la comunidad"
           subtitle="Comparte tus creaciones, recibe likes y comentarios. Donde las ideas se compilan."

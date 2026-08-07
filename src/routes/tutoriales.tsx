@@ -59,7 +59,7 @@ function TutorialesPage() {
   return (
     <PageShell>
       <section className="py-10 sm:py-16 px-4 sm:px-6">
-        <SectionTitle eyebrow="// tutorials.hub" title="Tutoriales" subtitle="Aprende, guarda y comparte. Todo conectado y en tiempo real." />
+        <SectionTitle as="h1" eyebrow="// tutorials.hub" title="Tutoriales" subtitle="Aprende, guarda y comparte. Todo conectado y en tiempo real." />
 
         <div className="mx-auto max-w-6xl">
           <div className="glass rounded-2xl p-4 sm:p-5 neon-border flex flex-col gap-3">

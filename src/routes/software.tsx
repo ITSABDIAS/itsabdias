@@ -34,7 +34,7 @@ function Software() {
   return (
     <PageShell>
       <section className="py-12 sm:py-20 px-4 sm:px-6">
-        <SectionTitle eyebrow="// engineering.core" title="Software & Ingeniería" subtitle="Diseña, construye y escala software de nivel profesional." />
+        <SectionTitle as="h1" eyebrow="// engineering.core" title="Software & Ingeniería" subtitle="Diseña, construye y escala software de nivel profesional." />
         <div className="mx-auto max-w-5xl glass rounded-2xl p-6 sm:p-8 neon-border relative overflow-hidden">
           <div className="absolute -top-20 -left-20 w-72 h-72 bg-neon-blue/30 rounded-full blur-3xl" />
           <div className="relative grid sm:grid-cols-[auto_1fr] gap-4 sm:gap-6 items-start">
