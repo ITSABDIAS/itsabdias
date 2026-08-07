@@ -15,7 +15,13 @@ export const Route = createFileRoute("/community")({
     meta: [
       { title: "Comunidad — ItsaBDias" },
       { name: "description", content: "Comparte, comenta y conecta con la comunidad gamer y tecnológica." },
+      { property: "og:title", content: "Comunidad ItsaBDias — Comparte y conecta" },
+      { property: "og:description", content: "Publica, comenta y conecta con creadores de tecnología, IA, hardware y videojuegos en la comunidad de ItsaBDias." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://itsabdias.lovable.app/community" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://itsabdias.lovable.app/community" }],
   }),
   component: Community,
 });

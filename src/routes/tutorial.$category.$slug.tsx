@@ -21,7 +21,60 @@ import {
   Star,
 } from "lucide-react";
 
+const BASE_URL = "https://itsabdias.lovable.app";
+
 export const Route = createFileRoute("/tutorial/$category/$slug")({
+  loader: async ({ params }) => {
+    const { data } = await supabase
+      .from("tutorials")
+      .select("title, description, created_at, category")
+      .eq("category", params.category)
+      .eq("slug", params.slug)
+      .maybeSingle();
+    return { tutorial: data ?? null };
+  },
+  head: ({ params, loaderData }) => {
+    const t = loaderData?.tutorial;
+    const rawTitle = t?.title ? `${t.title} — Tutorial ItsaBDias` : "Tutorial — ItsaBDias";
+    const title = rawTitle.length > 60 ? `${rawTitle.slice(0, 57)}...` : rawTitle;
+    const base = (t?.description ?? "").trim();
+    const desc =
+      base.length >= 50
+        ? base.length > 158
+          ? `${base.slice(0, 155)}...`
+          : base
+        : `Tutorial paso a paso de ${categoryLabel(params.category)} en ItsaBDias: ejemplos, código y buenas prácticas explicadas con claridad.`;
+    const url = `${BASE_URL}/tutorial/${params.category}/${params.slug}`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: t?.title ?? "Tutorial — ItsaBDias" },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: t
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Article",
+                headline: t.title,
+                description: t.description ?? undefined,
+                datePublished: t.created_at ?? undefined,
+                articleSection: categoryLabel(params.category),
+                mainEntityOfPage: url,
+                publisher: { "@type": "Organization", name: "ItsaBDias", url: BASE_URL },
+              }),
+            },
+          ]
+        : [],
+    };
+  },
   component: TutorialPage,
 });
 

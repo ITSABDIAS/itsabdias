@@ -9,7 +9,13 @@ export const Route = createFileRoute("/about")({
     meta: [
       { title: "Sobre mí — ItsaBDias" },
       { name: "description", content: "Creador gamer y tecnológico apasionado por Roblox, Minecraft, IA y desarrollo de juegos." },
+      { property: "og:title", content: "Sobre ItsaBDias — Creador gamer y tecnológico" },
+      { property: "og:description", content: "Conoce la historia detrás de ItsaBDias: Roblox, Minecraft, inteligencia artificial y desarrollo de videojuegos." },
+      { property: "og:type", content: "profile" },
+      { property: "og:url", content: "https://itsabdias.lovable.app/about" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://itsabdias.lovable.app/about" }],
   }),
   component: About,
 });
