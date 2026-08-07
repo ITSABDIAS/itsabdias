@@ -66,7 +66,7 @@ function Programacion() {
   return (
     <PageShell>
       <section className="py-12 sm:py-20 px-4 sm:px-6">
-        <SectionTitle
+        <SectionTitle as="h1"
           eyebrow="// dev.core"
           title="Programación"
           subtitle="Los lenguajes y herramientas que construyen el futuro."

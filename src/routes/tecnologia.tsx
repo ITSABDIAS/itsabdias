@@ -36,7 +36,7 @@ function Tecnologia() {
   return (
     <PageShell>
       <section className="py-12 sm:py-20 px-4 sm:px-6">
-        <SectionTitle eyebrow="// tech.pulse" title="Tecnología" subtitle="El pulso del mundo digital: lo que pasa hoy y lo que viene mañana." />
+        <SectionTitle as="h1" eyebrow="// tech.pulse" title="Tecnología" subtitle="El pulso del mundo digital: lo que pasa hoy y lo que viene mañana." />
         <div className="mx-auto max-w-5xl glass rounded-2xl p-6 sm:p-8 neon-border relative overflow-hidden">
           <div className="absolute -top-20 -right-20 w-72 h-72 bg-neon-purple/30 rounded-full blur-3xl" />
           <div className="relative grid sm:grid-cols-[auto_1fr] gap-4 sm:gap-6 items-start">

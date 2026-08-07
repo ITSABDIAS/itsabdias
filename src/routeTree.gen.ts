@@ -13,6 +13,7 @@ import { Route as TutorialesRouteImport } from './routes/tutoriales'
 import { Route as TecnologiaRouteImport } from './routes/tecnologia'
 import { Route as StaffRouteImport } from './routes/staff'
 import { Route as SoftwareRouteImport } from './routes/software'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RobloxRouteImport } from './routes/roblox'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ProgramacionRouteImport } from './routes/programacion'
@@ -79,6 +80,11 @@ const StaffRoute = StaffRouteImport.update({
 const SoftwareRoute = SoftwareRouteImport.update({
   id: '/software',
   path: '/software',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RobloxRoute = RobloxRouteImport.update({
@@ -335,6 +341,7 @@ export interface FileRoutesByFullPath {
   '/programacion': typeof ProgramacionRoute
   '/projects': typeof ProjectsRoute
   '/roblox': typeof RobloxRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/software': typeof SoftwareRoute
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
@@ -388,6 +395,7 @@ export interface FileRoutesByTo {
   '/programacion': typeof ProgramacionRoute
   '/projects': typeof ProjectsRoute
   '/roblox': typeof RobloxRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/software': typeof SoftwareRoute
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
@@ -442,6 +450,7 @@ export interface FileRoutesById {
   '/programacion': typeof ProgramacionRoute
   '/projects': typeof ProjectsRoute
   '/roblox': typeof RobloxRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/software': typeof SoftwareRoute
   '/staff': typeof StaffRoute
   '/tecnologia': typeof TecnologiaRoute
@@ -497,6 +506,7 @@ export interface FileRouteTypes {
     | '/programacion'
     | '/projects'
     | '/roblox'
+    | '/sitemap.xml'
     | '/software'
     | '/staff'
     | '/tecnologia'
@@ -550,6 +560,7 @@ export interface FileRouteTypes {
     | '/programacion'
     | '/projects'
     | '/roblox'
+    | '/sitemap.xml'
     | '/software'
     | '/staff'
     | '/tecnologia'
@@ -603,6 +614,7 @@ export interface FileRouteTypes {
     | '/programacion'
     | '/projects'
     | '/roblox'
+    | '/sitemap.xml'
     | '/software'
     | '/staff'
     | '/tecnologia'
@@ -657,6 +669,7 @@ export interface RootRouteChildren {
   ProgramacionRoute: typeof ProgramacionRoute
   ProjectsRoute: typeof ProjectsRoute
   RobloxRoute: typeof RobloxRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SoftwareRoute: typeof SoftwareRoute
   StaffRoute: typeof StaffRoute
   TecnologiaRoute: typeof TecnologiaRoute
@@ -721,6 +734,13 @@ declare module '@tanstack/react-router' {
       path: '/software'
       fullPath: '/software'
       preLoaderRoute: typeof SoftwareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/roblox': {
@@ -1073,6 +1093,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProgramacionRoute: ProgramacionRoute,
   ProjectsRoute: ProjectsRoute,
   RobloxRoute: RobloxRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SoftwareRoute: SoftwareRoute,
   StaffRoute: StaffRoute,
   TecnologiaRoute: TecnologiaRoute,

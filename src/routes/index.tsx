@@ -12,6 +12,32 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Comunidad gamer y tecnológica: programación, IA, hardware, Roblox y desarrollo de videojuegos." },
       { property: "og:title", content: "ItsaBDias — Comunidad Tech & Gamer" },
       { property: "og:description", content: "Aprende tecnología, crea el futuro." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://itsabdias.lovable.app/" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "https://itsabdias.lovable.app/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              name: "ItsaBDias",
+              url: "https://itsabdias.lovable.app/",
+              description: "Comunidad gamer y tecnológica: programación, IA, hardware, Roblox y desarrollo de videojuegos.",
+            },
+            {
+              "@type": "WebSite",
+              name: "ItsaBDias",
+              url: "https://itsabdias.lovable.app/",
+              inLanguage: "es",
+            },
+          ],
+        }),
+      },
     ],
   }),
   component: Home,

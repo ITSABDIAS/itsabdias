@@ -427,7 +427,7 @@ function AI() {
   return (
     <PageShell>
       <section className="py-12 sm:py-20 px-4 sm:px-6">
-        <SectionTitle
+        <SectionTitle as="h1"
           eyebrow="// ai.core"
           title="Inteligencia Artificial"
           subtitle="El centro tecnológico de ItsaBDias. Chat con memoria, historial e imágenes."

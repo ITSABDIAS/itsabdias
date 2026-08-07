@@ -30,7 +30,17 @@ export const Route = createFileRoute("/projects")({
         content:
           "Explora y publica proyectos en ItsaBDias: imágenes, tecnologías, progreso, likes y comentarios.",
       },
+      { property: "og:title", content: "Proyectos de la comunidad — ItsaBDias" },
+      {
+        property: "og:description",
+        content:
+          "Galería de proyectos tech creados por la comunidad: tecnologías usadas, progreso, likes y comentarios.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://itsabdias.lovable.app/projects" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://itsabdias.lovable.app/projects" }],
   }),
   component: ProjectsPage,
 });
@@ -161,7 +171,7 @@ function ProjectsPage() {
           <div className="absolute bottom-0 right-0 h-[300px] w-[400px] rounded-full bg-neon-cyan/10 blur-[100px]" />
         </div>
 
-        <SectionTitle
+        <SectionTitle as="h1"
           eyebrow="// builds.gallery"
           title="Proyectos de la comunidad"
           subtitle="Comparte tus creaciones, recibe likes y comentarios. Donde las ideas se compilan."

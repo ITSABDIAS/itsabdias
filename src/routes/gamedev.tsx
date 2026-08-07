@@ -33,7 +33,7 @@ function GameDev() {
   return (
     <PageShell>
       <section className="py-12 sm:py-20 px-4 sm:px-6">
-        <SectionTitle eyebrow="// gamedev.core" title="Desarrollo de Juegos" subtitle="De la idea al lanzamiento. Motores, arte y publicación." />
+        <SectionTitle as="h1" eyebrow="// gamedev.core" title="Desarrollo de Juegos" subtitle="De la idea al lanzamiento. Motores, arte y publicación." />
         <div className="mx-auto max-w-5xl glass rounded-2xl p-6 sm:p-8 neon-border relative overflow-hidden">
           <div className="absolute -top-20 -left-20 w-72 h-72 bg-neon-purple/30 rounded-full blur-3xl" />
           <div className="relative grid sm:grid-cols-[auto_1fr] gap-4 sm:gap-6 items-start">

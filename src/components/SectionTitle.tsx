@@ -2,10 +2,12 @@ export function SectionTitle({
   eyebrow,
   title,
   subtitle,
+  as: Heading = "h2",
 }: {
   eyebrow?: string;
   title: string;
   subtitle?: string;
+  as?: "h1" | "h2";
 }) {
   return (
     <div className="text-center max-w-3xl mx-auto mb-12">
@@ -14,9 +16,9 @@ export function SectionTitle({
           {eyebrow}
         </span>
       )}
-      <h2 className="mt-4 text-3xl sm:text-5xl font-bold">
+      <Heading className="mt-4 text-3xl sm:text-5xl font-bold">
         <span className="text-gradient-neon">{title}</span>
-      </h2>
+      </Heading>
       {subtitle && <p className="mt-4 text-muted-foreground">{subtitle}</p>}
     </div>
   );

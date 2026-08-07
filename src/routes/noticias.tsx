@@ -41,7 +41,7 @@ function NoticiasList() {
   return (
     <PageShell>
       <section className="py-14 px-4 sm:px-6">
-        <SectionTitle eyebrow="// noticias" title="Últimas noticias" subtitle="Actualidad, tecnología, IA y comunidad." />
+        <SectionTitle as="h1" eyebrow="// noticias" title="Últimas noticias" subtitle="Actualidad, tecnología, IA y comunidad." />
         <div className="mx-auto max-w-6xl">
           {loading && <p className="text-muted-foreground text-sm">Cargando...</p>}
           {!loading && rows.length === 0 && (
