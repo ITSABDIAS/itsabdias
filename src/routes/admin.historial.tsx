@@ -5,7 +5,10 @@ import { SectionTitle } from "@/components/SectionTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useMyRoles } from "@/hooks/useMyRoles";
-import { Shield, History } from "lucide-react";
+import { Shield, History, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+import { SANCTION_META } from "@/lib/sanctions";
+
 
 export const Route = createFileRoute("/admin/historial")({
   head: () => ({ meta: [{ title: "Admin · Historial — ItsaBDias" }] }),
