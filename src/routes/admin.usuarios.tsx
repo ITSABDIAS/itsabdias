@@ -128,11 +128,18 @@ function AdminUsuariosPage() {
     if (reason === null) return;
     if (await revokePremium(target, reason || undefined)) load();
   };
-  const actStatus = async (target: string, status: "active" | "muted" | "suspended" | "banned") => {
-    const reason = promptReason(`Cambiar estado a: ${status}`);
+  const actRestore = async (target: string) => {
+    const reason = promptReason("Restaurar cuenta");
     if (reason === null) return;
-    if (await setUserStatus(target, status, null, reason || undefined)) load();
+    if (await setUserStatus(target, "active", null, reason || undefined)) load();
   };
+  const applySanction = async (type: SanctionType, target: string, reason: string, until: string) => {
+    if (await setUserStatus(target, type, until, reason)) { setDialog(null); load(); }
+  };
+  const sendPermaBan = async (target: string, reason: string, evidence: string) => {
+    if (await requestPermanentBan(target, reason, evidence || undefined)) setDialog(null);
+  };
+
 
   if (authLoading || rolesLoading || (isModerator && loading)) {
     return <PageShell><section className="py-32 text-center text-muted-foreground">Cargando...</section></PageShell>;
