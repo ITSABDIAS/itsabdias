@@ -358,6 +358,48 @@ export type Database = {
         }
         Relationships: []
       }
+      ban_requests: {
+        Row: {
+          created_at: string
+          evidence: string | null
+          id: string
+          reason: string
+          requester_id: string
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          target_user_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          evidence?: string | null
+          id?: string
+          reason: string
+          requester_id: string
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          target_user_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          evidence?: string | null
+          id?: string
+          reason?: string
+          requester_id?: string
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          target_user_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       chat_messages: {
         Row: {
           content: string
@@ -859,6 +901,48 @@ export type Database = {
         }
         Relationships: []
       }
+      sanctions: {
+        Row: {
+          created_at: string
+          ends_at: string | null
+          id: string
+          is_permanent: boolean
+          reason: string | null
+          staff_id: string | null
+          starts_at: string
+          state: string
+          type: Database["public"]["Enums"]["user_status_type"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          ends_at?: string | null
+          id?: string
+          is_permanent?: boolean
+          reason?: string | null
+          staff_id?: string | null
+          starts_at?: string
+          state?: string
+          type: Database["public"]["Enums"]["user_status_type"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          ends_at?: string | null
+          id?: string
+          is_permanent?: boolean
+          reason?: string | null
+          staff_id?: string | null
+          starts_at?: string
+          state?: string
+          type?: Database["public"]["Enums"]["user_status_type"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       staff_actions: {
         Row: {
           action: Database["public"]["Enums"]["staff_action_type"]
@@ -1125,24 +1209,30 @@ export type Database = {
       }
       user_status: {
         Row: {
+          is_permanent: boolean
           reason: string | null
           set_by: string | null
+          started_at: string
           status: Database["public"]["Enums"]["user_status_type"]
           until: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          is_permanent?: boolean
           reason?: string | null
           set_by?: string | null
+          started_at?: string
           status?: Database["public"]["Enums"]["user_status_type"]
           until?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          is_permanent?: boolean
           reason?: string | null
           set_by?: string | null
+          started_at?: string
           status?: Database["public"]["Enums"]["user_status_type"]
           until?: string | null
           updated_at?: string
@@ -1174,6 +1264,11 @@ export type Database = {
         }
         Returns: string
       }
+      expire_user_sanction: { Args: { _uid: string }; Returns: undefined }
+      founder_review_ban_request: {
+        Args: { _approve: boolean; _id: string; _note?: string }
+        Returns: undefined
+      }
       get_or_create_conversation: { Args: { _other: string }; Returns: string }
       has_role: {
         Args: {
@@ -1188,6 +1283,18 @@ export type Database = {
       is_founder: { Args: { _uid: string }; Returns: boolean }
       is_moderator_or_higher: { Args: { _uid: string }; Returns: boolean }
       is_premium: { Args: { _user_id: string }; Returns: boolean }
+      is_user_muted: { Args: { _uid: string }; Returns: boolean }
+      my_sanction: {
+        Args: never
+        Returns: {
+          is_permanent: boolean
+          reason: string
+          staff_username: string
+          started_at: string
+          status: Database["public"]["Enums"]["user_status_type"]
+          until: string
+        }[]
+      }
       record_activity: { Args: { _seconds: number }; Returns: number }
       staff_assign_role: {
         Args: {
@@ -1237,6 +1344,10 @@ export type Database = {
         Args: { _reason?: string; _target: string }
         Returns: undefined
       }
+      staff_request_permanent_ban: {
+        Args: { _evidence?: string; _reason: string; _target: string }
+        Returns: string
+      }
       staff_revoke_premium: {
         Args: { _reason?: string; _target: string }
         Returns: undefined
@@ -1249,15 +1360,26 @@ export type Database = {
         }
         Returns: undefined
       }
-      staff_set_user_status: {
-        Args: {
-          _reason?: string
-          _status: Database["public"]["Enums"]["user_status_type"]
-          _target: string
-          _until?: string
-        }
-        Returns: undefined
-      }
+      staff_set_user_status:
+        | {
+            Args: {
+              _reason?: string
+              _status: Database["public"]["Enums"]["user_status_type"]
+              _target: string
+              _until?: string
+            }
+            Returns: undefined
+          }
+        | {
+            Args: {
+              _permanent?: boolean
+              _reason?: string
+              _status: Database["public"]["Enums"]["user_status_type"]
+              _target: string
+              _until?: string
+            }
+            Returns: undefined
+          }
       touch_last_seen: { Args: never; Returns: undefined }
       verify_certificate: {
         Args: { _code: string }
