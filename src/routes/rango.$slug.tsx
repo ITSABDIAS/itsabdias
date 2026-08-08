@@ -15,8 +15,9 @@ export const Route = createFileRoute("/rango/$slug")({
       { name: "description", content: `Miembros con el rango ${label} en ItsaBDias.` },
     ] };
   },
-  beforeLoad: ({ params }) => {
+  loader: ({ params }) => {
     if (!(RANK_PRIORITY as string[]).includes(params.slug) && params.slug !== "founder") throw notFound();
+    return null;
   },
   component: RankPage,
 });
