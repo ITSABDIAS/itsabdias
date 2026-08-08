@@ -1,0 +1,1 @@
+DROP FUNCTION IF EXISTS public.staff_set_user_status(uuid, public.user_status_type, timestamptz, text);

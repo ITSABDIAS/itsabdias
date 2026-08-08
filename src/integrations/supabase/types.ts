@@ -1360,26 +1360,16 @@ export type Database = {
         }
         Returns: undefined
       }
-      staff_set_user_status:
-        | {
-            Args: {
-              _reason?: string
-              _status: Database["public"]["Enums"]["user_status_type"]
-              _target: string
-              _until?: string
-            }
-            Returns: undefined
-          }
-        | {
-            Args: {
-              _permanent?: boolean
-              _reason?: string
-              _status: Database["public"]["Enums"]["user_status_type"]
-              _target: string
-              _until?: string
-            }
-            Returns: undefined
-          }
+      staff_set_user_status: {
+        Args: {
+          _permanent?: boolean
+          _reason?: string
+          _status: Database["public"]["Enums"]["user_status_type"]
+          _target: string
+          _until?: string
+        }
+        Returns: undefined
+      }
       touch_last_seen: { Args: never; Returns: undefined }
       verify_certificate: {
         Args: { _code: string }
