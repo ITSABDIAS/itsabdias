@@ -212,13 +212,39 @@ function AdminUsuariosPage() {
                           <RankBadge slug={top as RankSlug} size="xs" />
                           {isPremiumUser && top !== "premium" && <RankBadge slug="premium" size="xs" />}
                           {u.status !== "active" && (
-                            <span className="text-[9px] px-1.5 py-0.5 rounded border border-red-500/50 bg-red-950/50 text-red-300 uppercase font-mono">{u.status}</span>
+                            <span
+                              className="text-[9px] px-1.5 py-0.5 rounded uppercase font-mono"
+                              style={{
+                                color: SANCTION_META[u.status as SanctionType].color,
+                                borderColor: `${SANCTION_META[u.status as SanctionType].color}88`,
+                                background: `${SANCTION_META[u.status as SanctionType].color}1a`,
+                                borderWidth: 1,
+                              }}
+                            >
+                              {SANCTION_META[u.status as SanctionType].label}{u.is_permanent ? " · permanente" : ""}
+                            </span>
                           )}
                         </div>
                         <p className="text-[11px] text-muted-foreground font-mono truncate">
                           {u.last_seen_at ? `Últ. actividad ${new Date(u.last_seen_at).toLocaleDateString()}` : "Sin actividad"}
                           {u.joined_staff_at ? ` · Staff desde ${new Date(u.joined_staff_at).toLocaleDateString()}` : ""}
                         </p>
+                        {u.status !== "active" && (
+                          <p className="text-[11px] mt-0.5">
+                            <span className="text-muted-foreground">{u.reason ? `${u.reason} · ` : ""}</span>
+                            <SanctionCountdown
+                              compact
+                              sanction={{
+                                status: u.status as SanctionType,
+                                reason: u.reason,
+                                until: u.until,
+                                started_at: u.started_at,
+                                is_permanent: u.is_permanent,
+                                staff_username: null,
+                              }}
+                            />
+                          </p>
+                        )}
                       </div>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
@@ -243,18 +269,22 @@ function AdminUsuariosPage() {
                           : <BtnGold onClick={() => actGrantPrem(u.id)} icon={<Crown className="h-3 w-3" />}>Dar Premium</BtnGold>
                       )}
                       {isModerator && !targetIsFounder && u.status !== "muted" && (
-                        <BtnMuted onClick={() => actStatus(u.id, "muted")} icon={<VolumeX className="h-3 w-3" />}>Silenciar</BtnMuted>
+                        <BtnMuted onClick={() => setDialog({ kind: "sanction", type: "muted", target: u })} icon={<VolumeX className="h-3 w-3" />}>Silenciar</BtnMuted>
                       )}
                       {isAdmin && !targetIsFounder && u.status !== "suspended" && (
-                        <BtnMuted onClick={() => actStatus(u.id, "suspended")} icon={<PauseCircle className="h-3 w-3" />}>Suspender</BtnMuted>
+                        <BtnOrange onClick={() => setDialog({ kind: "sanction", type: "suspended", target: u })} icon={<PauseCircle className="h-3 w-3" />}>Suspender</BtnOrange>
                       )}
                       {isAdmin && !targetIsFounder && u.status !== "banned" && (
-                        <BtnDanger onClick={() => actStatus(u.id, "banned")} icon={<Ban className="h-3 w-3" />}>Banear</BtnDanger>
+                        <BtnDanger onClick={() => setDialog({ kind: "sanction", type: "banned", target: u })} icon={<Ban className="h-3 w-3" />}>Banear</BtnDanger>
+                      )}
+                      {isModerator && !targetIsFounder && !u.is_permanent && (
+                        <BtnDanger onClick={() => setDialog({ kind: "permaban", target: u })} icon={<Gavel className="h-3 w-3" />}>Ban Permanente</BtnDanger>
                       )}
                       {isModerator && u.status !== "active" && (
-                        <BtnPrimary onClick={() => actStatus(u.id, "active")} icon={<Volume2 className="h-3 w-3" />}>Restaurar</BtnPrimary>
+                        <BtnPrimary onClick={() => actRestore(u.id)} icon={<Volume2 className="h-3 w-3" />}>Restaurar</BtnPrimary>
                       )}
                     </div>
+
                   </div>
                   {isFounder && !targetIsFounder && (
                     <div className="mt-3 pt-3 border-t border-border/50">
