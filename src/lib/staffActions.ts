@@ -36,12 +36,42 @@ export async function setUserStatus(
   status: "active" | "muted" | "suspended" | "banned",
   until?: string | null,
   reason?: string,
+  permanent = false,
 ) {
-  const { error } = await supabase.rpc("staff_set_user_status" as any, { _target: target, _status: status, _until: until ?? null, _reason: reason ?? null });
+  const { error } = await supabase.rpc("staff_set_user_status" as any, {
+    _target: target,
+    _status: status,
+    _until: until ?? null,
+    _reason: reason ?? null,
+    _permanent: permanent,
+  });
   if (error) { toast.error(error.message); return false; }
   toast.success(`Estado: ${status}`);
   return true;
 }
+
+export async function requestPermanentBan(target: string, reason: string, evidence?: string) {
+  const { error } = await supabase.rpc("staff_request_permanent_ban" as any, {
+    _target: target,
+    _reason: reason,
+    _evidence: evidence ?? null,
+  });
+  if (error) { toast.error(error.message); return false; }
+  toast.success("Solicitud enviada al Founder");
+  return true;
+}
+
+export async function reviewBanRequest(id: string, approve: boolean, note?: string) {
+  const { error } = await supabase.rpc("founder_review_ban_request" as any, {
+    _id: id,
+    _approve: approve,
+    _note: note ?? null,
+  });
+  if (error) { toast.error(error.message); return false; }
+  toast.success(approve ? "Ban permanente aplicado" : "Solicitud rechazada");
+  return true;
+}
+
 
 export async function broadcastNotification(title: string, body: string, link: string, audience: "all" | "premium" | "staff" = "all") {
   const { data, error } = await supabase.rpc("staff_broadcast_notification" as any, { _title: title, _body: body, _link: link, _audience: audience });
