@@ -6,8 +6,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useMyRoles } from "@/hooks/useMyRoles";
 import { RankBadge, RANK_META, RANK_PRIORITY, topRank, type RankSlug } from "@/components/RankBadge";
-import { assignRole, revokeRole, grantPremium, revokePremium, setUserStatus, type Role } from "@/lib/staffActions";
-import { Search, Shield, Crown, Sparkles, Volume2, VolumeX, Ban, PauseCircle, UserCheck, UserX, Plus, Minus } from "lucide-react";
+import { assignRole, revokeRole, grantPremium, revokePremium, setUserStatus, requestPermanentBan, type Role } from "@/lib/staffActions";
+import { SanctionDialog, PermanentBanDialog } from "@/components/SanctionDialog";
+import { SanctionCountdown } from "@/components/SanctionScreen";
+import { SANCTION_META, type SanctionType } from "@/lib/sanctions";
+import { Search, Shield, Crown, Sparkles, Volume2, VolumeX, Ban, PauseCircle, UserCheck, UserX, Plus, Minus, Gavel } from "lucide-react";
+
 
 export const Route = createFileRoute("/admin/usuarios")({
   head: () => ({ meta: [{ title: "Admin · Usuarios — ItsaBDias" }] }),
@@ -22,7 +26,16 @@ type UserRow = {
   last_seen_at: string | null;
   roles: string[];
   status: string;
+  until: string | null;
+  started_at: string | null;
+  is_permanent: boolean;
+  reason: string | null;
 };
+
+type DialogState =
+  | { kind: "sanction"; type: SanctionType; target: UserRow }
+  | { kind: "permaban"; target: UserRow }
+  | null;
 
 function AdminUsuariosPage() {
   const { user, loading: authLoading } = useAuth();
@@ -32,12 +45,16 @@ function AdminUsuariosPage() {
   const [q, setQ] = useState("");
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "staff" | "premium" | "flagged">("all");
+  const [dialog, setDialog] = useState<DialogState>(null);
+  const [myName, setMyName] = useState("");
 
   useEffect(() => {
     if (authLoading || rolesLoading) return;
     if (!user) { nav({ to: "/auth" }); return; }
     if (!isModerator) return;
     load();
+    supabase.from("profiles").select("username").eq("id", user.id).maybeSingle()
+      .then(({ data }) => setMyName(data?.username ?? ""));
   }, [user, authLoading, rolesLoading, isModerator]);
 
   const load = async () => {
@@ -45,25 +62,34 @@ function AdminUsuariosPage() {
     const [{ data: profiles }, { data: roles }, { data: status }] = await Promise.all([
       supabase.from("profiles").select("id, username, avatar_url, joined_staff_at, last_seen_at").limit(500),
       supabase.from("user_roles").select("user_id, role"),
-      supabase.from("user_status").select("user_id, status"),
+      supabase.from("user_status").select("user_id, status, until, reason, is_permanent, started_at"),
     ]);
     const roleMap = new Map<string, string[]>();
     (roles ?? []).forEach((r: any) => {
       const arr = roleMap.get(r.user_id) ?? []; arr.push(r.role); roleMap.set(r.user_id, arr);
     });
-    const statusMap = new Map<string, string>();
-    (status ?? []).forEach((s: any) => statusMap.set(s.user_id, s.status));
-    setUsers((profiles ?? []).map((p: any) => ({
-      id: p.id,
-      username: p.username,
-      avatar_url: p.avatar_url,
-      joined_staff_at: p.joined_staff_at,
-      last_seen_at: p.last_seen_at,
-      roles: roleMap.get(p.id) ?? [],
-      status: statusMap.get(p.id) ?? "active",
-    })));
+    const statusMap = new Map<string, any>();
+    (status ?? []).forEach((s: any) => statusMap.set(s.user_id, s));
+    setUsers((profiles ?? []).map((p: any) => {
+      const st = statusMap.get(p.id);
+      const expired = st?.until && !st.is_permanent && new Date(st.until).getTime() <= Date.now();
+      return {
+        id: p.id,
+        username: p.username,
+        avatar_url: p.avatar_url,
+        joined_staff_at: p.joined_staff_at,
+        last_seen_at: p.last_seen_at,
+        roles: roleMap.get(p.id) ?? [],
+        status: !st || expired ? "active" : st.status,
+        until: st?.until ?? null,
+        started_at: st?.started_at ?? null,
+        is_permanent: !!st?.is_permanent,
+        reason: st?.reason ?? null,
+      };
+    }));
     setLoading(false);
   };
+
 
   const filtered = useMemo(() => {
     let x = users;
@@ -102,11 +128,18 @@ function AdminUsuariosPage() {
     if (reason === null) return;
     if (await revokePremium(target, reason || undefined)) load();
   };
-  const actStatus = async (target: string, status: "active" | "muted" | "suspended" | "banned") => {
-    const reason = promptReason(`Cambiar estado a: ${status}`);
+  const actRestore = async (target: string) => {
+    const reason = promptReason("Restaurar cuenta");
     if (reason === null) return;
-    if (await setUserStatus(target, status, null, reason || undefined)) load();
+    if (await setUserStatus(target, "active", null, reason || undefined)) load();
   };
+  const applySanction = async (type: SanctionType, target: string, reason: string, until: string) => {
+    if (await setUserStatus(target, type, until, reason)) { setDialog(null); load(); }
+  };
+  const sendPermaBan = async (target: string, reason: string, evidence: string) => {
+    if (await requestPermanentBan(target, reason, evidence || undefined)) setDialog(null);
+  };
+
 
   if (authLoading || rolesLoading || (isModerator && loading)) {
     return <PageShell><section className="py-32 text-center text-muted-foreground">Cargando...</section></PageShell>;
@@ -179,13 +212,39 @@ function AdminUsuariosPage() {
                           <RankBadge slug={top as RankSlug} size="xs" />
                           {isPremiumUser && top !== "premium" && <RankBadge slug="premium" size="xs" />}
                           {u.status !== "active" && (
-                            <span className="text-[9px] px-1.5 py-0.5 rounded border border-red-500/50 bg-red-950/50 text-red-300 uppercase font-mono">{u.status}</span>
+                            <span
+                              className="text-[9px] px-1.5 py-0.5 rounded uppercase font-mono"
+                              style={{
+                                color: SANCTION_META[u.status as SanctionType].color,
+                                borderColor: `${SANCTION_META[u.status as SanctionType].color}88`,
+                                background: `${SANCTION_META[u.status as SanctionType].color}1a`,
+                                borderWidth: 1,
+                              }}
+                            >
+                              {SANCTION_META[u.status as SanctionType].label}{u.is_permanent ? " · permanente" : ""}
+                            </span>
                           )}
                         </div>
                         <p className="text-[11px] text-muted-foreground font-mono truncate">
                           {u.last_seen_at ? `Últ. actividad ${new Date(u.last_seen_at).toLocaleDateString()}` : "Sin actividad"}
                           {u.joined_staff_at ? ` · Staff desde ${new Date(u.joined_staff_at).toLocaleDateString()}` : ""}
                         </p>
+                        {u.status !== "active" && (
+                          <p className="text-[11px] mt-0.5">
+                            <span className="text-muted-foreground">{u.reason ? `${u.reason} · ` : ""}</span>
+                            <SanctionCountdown
+                              compact
+                              sanction={{
+                                status: u.status as SanctionType,
+                                reason: u.reason,
+                                until: u.until,
+                                started_at: u.started_at,
+                                is_permanent: u.is_permanent,
+                                staff_username: null,
+                              }}
+                            />
+                          </p>
+                        )}
                       </div>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
@@ -210,18 +269,22 @@ function AdminUsuariosPage() {
                           : <BtnGold onClick={() => actGrantPrem(u.id)} icon={<Crown className="h-3 w-3" />}>Dar Premium</BtnGold>
                       )}
                       {isModerator && !targetIsFounder && u.status !== "muted" && (
-                        <BtnMuted onClick={() => actStatus(u.id, "muted")} icon={<VolumeX className="h-3 w-3" />}>Silenciar</BtnMuted>
+                        <BtnMuted onClick={() => setDialog({ kind: "sanction", type: "muted", target: u })} icon={<VolumeX className="h-3 w-3" />}>Silenciar</BtnMuted>
                       )}
                       {isAdmin && !targetIsFounder && u.status !== "suspended" && (
-                        <BtnMuted onClick={() => actStatus(u.id, "suspended")} icon={<PauseCircle className="h-3 w-3" />}>Suspender</BtnMuted>
+                        <BtnOrange onClick={() => setDialog({ kind: "sanction", type: "suspended", target: u })} icon={<PauseCircle className="h-3 w-3" />}>Suspender</BtnOrange>
                       )}
                       {isAdmin && !targetIsFounder && u.status !== "banned" && (
-                        <BtnDanger onClick={() => actStatus(u.id, "banned")} icon={<Ban className="h-3 w-3" />}>Banear</BtnDanger>
+                        <BtnDanger onClick={() => setDialog({ kind: "sanction", type: "banned", target: u })} icon={<Ban className="h-3 w-3" />}>Banear</BtnDanger>
+                      )}
+                      {isModerator && !targetIsFounder && !u.is_permanent && (
+                        <BtnDanger onClick={() => setDialog({ kind: "permaban", target: u })} icon={<Gavel className="h-3 w-3" />}>Ban Permanente</BtnDanger>
                       )}
                       {isModerator && u.status !== "active" && (
-                        <BtnPrimary onClick={() => actStatus(u.id, "active")} icon={<Volume2 className="h-3 w-3" />}>Restaurar</BtnPrimary>
+                        <BtnPrimary onClick={() => actRestore(u.id)} icon={<Volume2 className="h-3 w-3" />}>Restaurar</BtnPrimary>
                       )}
                     </div>
+
                   </div>
                   {isFounder && !targetIsFounder && (
                     <div className="mt-3 pt-3 border-t border-border/50">
@@ -257,6 +320,23 @@ function AdminUsuariosPage() {
           </div>
         </div>
       </section>
+
+      {dialog?.kind === "sanction" && (
+        <SanctionDialog
+          type={dialog.type}
+          username={dialog.target.username}
+          onCancel={() => setDialog(null)}
+          onConfirm={({ reason, until }) => applySanction(dialog.type, dialog.target.id, reason, until)}
+        />
+      )}
+      {dialog?.kind === "permaban" && (
+        <PermanentBanDialog
+          username={dialog.target.username}
+          staffName={myName || "staff"}
+          onCancel={() => setDialog(null)}
+          onConfirm={({ reason, evidence }) => sendPermaBan(dialog.target.id, reason, evidence)}
+        />
+      )}
     </PageShell>
   );
 }
@@ -264,6 +344,10 @@ function AdminUsuariosPage() {
 function BtnPrimary({ onClick, icon, children }: any) {
   return <button onClick={onClick} className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] border border-neon-cyan/40 text-neon-cyan hover:bg-neon-cyan/10">{icon}{children}</button>;
 }
+function BtnOrange({ onClick, icon, children }: any) {
+  return <button onClick={onClick} className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] border border-orange-500/50 text-orange-300 hover:bg-orange-500/10">{icon}{children}</button>;
+}
+
 function BtnDanger({ onClick, icon, children }: any) {
   return <button onClick={onClick} className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] border border-red-500/40 text-red-400 hover:bg-red-500/10">{icon}{children}</button>;
 }

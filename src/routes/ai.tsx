@@ -42,9 +42,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { TutorialsSection } from "@/components/TutorialsSection";
 
 export const Route = createFileRoute("/ai")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    q: typeof search.q === "string" ? search.q : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { q?: string } =>
+    typeof search.q === "string" ? { q: search.q } : {},
   head: () => ({
     meta: [
       { title: "Inteligencia Artificial — ItsaBDias" },

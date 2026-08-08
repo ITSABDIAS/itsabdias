@@ -55,6 +55,7 @@ import { Route as AdminNewsRouteImport } from './routes/admin.news'
 import { Route as AdminHistoryRouteImport } from './routes/admin.history'
 import { Route as AdminHistorialRouteImport } from './routes/admin.historial'
 import { Route as AdminConfiguracionRouteImport } from './routes/admin.configuracion'
+import { Route as AdminBansRouteImport } from './routes/admin.bans'
 import { Route as AdminAnunciosRouteImport } from './routes/admin.anuncios'
 import { Route as AdminAnnouncementsRouteImport } from './routes/admin.announcements'
 import { Route as AdminAcademiaRouteImport } from './routes/admin.academia'
@@ -292,6 +293,11 @@ const AdminConfiguracionRoute = AdminConfiguracionRouteImport.update({
   path: '/admin/configuracion',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminBansRoute = AdminBansRouteImport.update({
+  id: '/admin/bans',
+  path: '/admin/bans',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminAnunciosRoute = AdminAnunciosRouteImport.update({
   id: '/admin/anuncios',
   path: '/admin/anuncios',
@@ -350,6 +356,7 @@ export interface FileRoutesByFullPath {
   '/admin/academia': typeof AdminAcademiaRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/anuncios': typeof AdminAnunciosRoute
+  '/admin/bans': typeof AdminBansRoute
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
   '/admin/history': typeof AdminHistoryRoute
@@ -404,6 +411,7 @@ export interface FileRoutesByTo {
   '/admin/academia': typeof AdminAcademiaRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/anuncios': typeof AdminAnunciosRoute
+  '/admin/bans': typeof AdminBansRoute
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
   '/admin/history': typeof AdminHistoryRoute
@@ -459,6 +467,7 @@ export interface FileRoutesById {
   '/admin/academia': typeof AdminAcademiaRoute
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/anuncios': typeof AdminAnunciosRoute
+  '/admin/bans': typeof AdminBansRoute
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
   '/admin/history': typeof AdminHistoryRoute
@@ -515,6 +524,7 @@ export interface FileRouteTypes {
     | '/admin/academia'
     | '/admin/announcements'
     | '/admin/anuncios'
+    | '/admin/bans'
     | '/admin/configuracion'
     | '/admin/historial'
     | '/admin/history'
@@ -569,6 +579,7 @@ export interface FileRouteTypes {
     | '/admin/academia'
     | '/admin/announcements'
     | '/admin/anuncios'
+    | '/admin/bans'
     | '/admin/configuracion'
     | '/admin/historial'
     | '/admin/history'
@@ -623,6 +634,7 @@ export interface FileRouteTypes {
     | '/admin/academia'
     | '/admin/announcements'
     | '/admin/anuncios'
+    | '/admin/bans'
     | '/admin/configuracion'
     | '/admin/historial'
     | '/admin/history'
@@ -678,6 +690,7 @@ export interface RootRouteChildren {
   AdminAcademiaRoute: typeof AdminAcademiaRoute
   AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
   AdminAnunciosRoute: typeof AdminAnunciosRoute
+  AdminBansRoute: typeof AdminBansRoute
   AdminConfiguracionRoute: typeof AdminConfiguracionRoute
   AdminHistorialRoute: typeof AdminHistorialRoute
   AdminHistoryRoute: typeof AdminHistoryRoute
@@ -1030,6 +1043,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminConfiguracionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/bans': {
+      id: '/admin/bans'
+      path: '/admin/bans'
+      fullPath: '/admin/bans'
+      preLoaderRoute: typeof AdminBansRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/anuncios': {
       id: '/admin/anuncios'
       path: '/admin/anuncios'
@@ -1102,6 +1122,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminAcademiaRoute: AdminAcademiaRoute,
   AdminAnnouncementsRoute: AdminAnnouncementsRoute,
   AdminAnunciosRoute: AdminAnunciosRoute,
+  AdminBansRoute: AdminBansRoute,
   AdminConfiguracionRoute: AdminConfiguracionRoute,
   AdminHistorialRoute: AdminHistorialRoute,
   AdminHistoryRoute: AdminHistoryRoute,

@@ -11,10 +11,12 @@ import { useUserRoles } from "@/hooks/useUserRoles";
 import { PremiumName, PremiumAvatarRing } from "@/components/PremiumName";
 
 export const Route = createFileRoute("/messages")({
-  validateSearch: (s: Record<string, unknown>) => ({
-    to: typeof s.to === "string" ? s.to : undefined,
-    c: typeof s.c === "string" ? s.c : undefined,
-  }),
+  validateSearch: (s: Record<string, unknown>): { to?: string; c?: string } => {
+    const out: { to?: string; c?: string } = {};
+    if (typeof s.to === "string") out.to = s.to;
+    if (typeof s.c === "string") out.c = s.c;
+    return out;
+  },
   head: () => ({
     meta: [
       { title: "Mensajes — ItsaBDias" },
@@ -73,7 +75,7 @@ function MessagesPage() {
   useEffect(() => {
     if (!user || !search.to) return;
     (async () => {
-      const { data, error } = await supabase.rpc("get_or_create_conversation", { _other: search.to });
+      const { data, error } = await supabase.rpc("get_or_create_conversation", { _other: search.to! });
       if (error) return toast.error(error.message);
       if (data) {
         setActiveId(data as string);
