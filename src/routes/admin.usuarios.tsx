@@ -320,6 +320,23 @@ function AdminUsuariosPage() {
           </div>
         </div>
       </section>
+
+      {dialog?.kind === "sanction" && (
+        <SanctionDialog
+          type={dialog.type}
+          username={dialog.target.username}
+          onCancel={() => setDialog(null)}
+          onConfirm={({ reason, until }) => applySanction(dialog.type, dialog.target.id, reason, until)}
+        />
+      )}
+      {dialog?.kind === "permaban" && (
+        <PermanentBanDialog
+          username={dialog.target.username}
+          staffName={myName || "staff"}
+          onCancel={() => setDialog(null)}
+          onConfirm={({ reason, evidence }) => sendPermaBan(dialog.target.id, reason, evidence)}
+        />
+      )}
     </PageShell>
   );
 }
@@ -327,6 +344,10 @@ function AdminUsuariosPage() {
 function BtnPrimary({ onClick, icon, children }: any) {
   return <button onClick={onClick} className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] border border-neon-cyan/40 text-neon-cyan hover:bg-neon-cyan/10">{icon}{children}</button>;
 }
+function BtnOrange({ onClick, icon, children }: any) {
+  return <button onClick={onClick} className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] border border-orange-500/50 text-orange-300 hover:bg-orange-500/10">{icon}{children}</button>;
+}
+
 function BtnDanger({ onClick, icon, children }: any) {
   return <button onClick={onClick} className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] border border-red-500/40 text-red-400 hover:bg-red-500/10">{icon}{children}</button>;
 }
