@@ -26,7 +26,16 @@ type UserRow = {
   last_seen_at: string | null;
   roles: string[];
   status: string;
+  until: string | null;
+  started_at: string | null;
+  is_permanent: boolean;
+  reason: string | null;
 };
+
+type DialogState =
+  | { kind: "sanction"; type: SanctionType; target: UserRow }
+  | { kind: "permaban"; target: UserRow }
+  | null;
 
 function AdminUsuariosPage() {
   const { user, loading: authLoading } = useAuth();
@@ -36,12 +45,16 @@ function AdminUsuariosPage() {
   const [q, setQ] = useState("");
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "staff" | "premium" | "flagged">("all");
+  const [dialog, setDialog] = useState<DialogState>(null);
+  const [myName, setMyName] = useState("");
 
   useEffect(() => {
     if (authLoading || rolesLoading) return;
     if (!user) { nav({ to: "/auth" }); return; }
     if (!isModerator) return;
     load();
+    supabase.from("profiles").select("username").eq("id", user.id).maybeSingle()
+      .then(({ data }) => setMyName(data?.username ?? ""));
   }, [user, authLoading, rolesLoading, isModerator]);
 
   const load = async () => {
@@ -49,25 +62,34 @@ function AdminUsuariosPage() {
     const [{ data: profiles }, { data: roles }, { data: status }] = await Promise.all([
       supabase.from("profiles").select("id, username, avatar_url, joined_staff_at, last_seen_at").limit(500),
       supabase.from("user_roles").select("user_id, role"),
-      supabase.from("user_status").select("user_id, status"),
+      supabase.from("user_status").select("user_id, status, until, reason, is_permanent, started_at"),
     ]);
     const roleMap = new Map<string, string[]>();
     (roles ?? []).forEach((r: any) => {
       const arr = roleMap.get(r.user_id) ?? []; arr.push(r.role); roleMap.set(r.user_id, arr);
     });
-    const statusMap = new Map<string, string>();
-    (status ?? []).forEach((s: any) => statusMap.set(s.user_id, s.status));
-    setUsers((profiles ?? []).map((p: any) => ({
-      id: p.id,
-      username: p.username,
-      avatar_url: p.avatar_url,
-      joined_staff_at: p.joined_staff_at,
-      last_seen_at: p.last_seen_at,
-      roles: roleMap.get(p.id) ?? [],
-      status: statusMap.get(p.id) ?? "active",
-    })));
+    const statusMap = new Map<string, any>();
+    (status ?? []).forEach((s: any) => statusMap.set(s.user_id, s));
+    setUsers((profiles ?? []).map((p: any) => {
+      const st = statusMap.get(p.id);
+      const expired = st?.until && !st.is_permanent && new Date(st.until).getTime() <= Date.now();
+      return {
+        id: p.id,
+        username: p.username,
+        avatar_url: p.avatar_url,
+        joined_staff_at: p.joined_staff_at,
+        last_seen_at: p.last_seen_at,
+        roles: roleMap.get(p.id) ?? [],
+        status: !st || expired ? "active" : st.status,
+        until: st?.until ?? null,
+        started_at: st?.started_at ?? null,
+        is_permanent: !!st?.is_permanent,
+        reason: st?.reason ?? null,
+      };
+    }));
     setLoading(false);
   };
+
 
   const filtered = useMemo(() => {
     let x = users;
