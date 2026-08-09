@@ -268,6 +268,14 @@ function Community() {
                           <span>{c.profile?.username ?? "anónimo"}</span>
                           {(() => { const t = topRank(rolesMap.get(c.user_id)); return t ? <RankBadge slug={t} size="xs" /> : null; })()}
                           <span className="text-muted-foreground font-normal">· {timeAgo(c.created_at)}</span>
+                          <ReportMenu
+                            className="ml-auto"
+                            targetType="comment"
+                            targetUserId={c.user_id}
+                            targetContentId={c.id}
+                            targetLabel={c.content.slice(0, 80)}
+                            label="Reportar comentario"
+                          />
                         </div>
                         <div className="mt-0.5 text-foreground/90 whitespace-pre-wrap">{c.content}</div>
                       </div>
