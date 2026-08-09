@@ -157,7 +157,7 @@ function AdminReportsPage() {
       (r) => r.id !== current.id && current.target_user_id && r.target_user_id === current.target_user_id,
     );
     try {
-      const res = await askNexus({
+      const res = await aiChat({
         data: {
           messages: [
             {
