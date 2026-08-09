@@ -22,7 +22,7 @@ import { setUserStatus, requestPermanentBan } from "@/lib/staffActions";
 import type { SanctionType } from "@/lib/sanctions";
 import { Shield, ShieldAlert, Clock, Search, ArrowLeft, Sparkles, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { askNexus } from "@/lib/ai.functions";
+import { aiChat } from "@/lib/ai.functions";
 
 export const Route = createFileRoute("/admin/reportes")({
   head: () => ({ meta: [{ title: "Admin · Reportes — ItsaBDias" }] }),
