@@ -901,6 +901,121 @@ export type Database = {
         }
         Relationships: []
       }
+      report_actions: {
+        Row: {
+          action: string
+          created_at: string
+          id: string
+          reason: string | null
+          report_id: string
+          result: string | null
+          staff_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          report_id: string
+          result?: string | null
+          staff_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          report_id?: string
+          result?: string | null
+          staff_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_actions_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reports: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          description: string | null
+          duplicate_of: string | null
+          evidence: string | null
+          id: string
+          is_false_report: boolean
+          number: number
+          priority: Database["public"]["Enums"]["report_priority"]
+          reason: string
+          reporter_id: string
+          resolution: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          screenshot_url: string | null
+          status: Database["public"]["Enums"]["report_status"]
+          target_content_id: string | null
+          target_type: Database["public"]["Enums"]["report_target_type"]
+          target_user_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          description?: string | null
+          duplicate_of?: string | null
+          evidence?: string | null
+          id?: string
+          is_false_report?: boolean
+          number?: never
+          priority?: Database["public"]["Enums"]["report_priority"]
+          reason: string
+          reporter_id: string
+          resolution?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          screenshot_url?: string | null
+          status?: Database["public"]["Enums"]["report_status"]
+          target_content_id?: string | null
+          target_type: Database["public"]["Enums"]["report_target_type"]
+          target_user_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          description?: string | null
+          duplicate_of?: string | null
+          evidence?: string | null
+          id?: string
+          is_false_report?: boolean
+          number?: never
+          priority?: Database["public"]["Enums"]["report_priority"]
+          reason?: string
+          reporter_id?: string
+          resolution?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          screenshot_url?: string | null
+          status?: Database["public"]["Enums"]["report_status"]
+          target_content_id?: string | null
+          target_type?: Database["public"]["Enums"]["report_target_type"]
+          target_user_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_duplicate_of_fkey"
+            columns: ["duplicate_of"]
+            isOneToOne: false
+            referencedRelation: "reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sanctions: {
         Row: {
           created_at: string
@@ -1240,6 +1355,41 @@ export type Database = {
         }
         Relationships: []
       }
+      user_warnings: {
+        Row: {
+          created_at: string
+          id: string
+          reason: string
+          report_id: string | null
+          staff_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reason: string
+          report_id?: string | null
+          staff_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reason?: string
+          report_id?: string | null
+          staff_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_warnings_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -1264,7 +1414,23 @@ export type Database = {
         }
         Returns: string
       }
+      create_report: {
+        Args: {
+          _description?: string
+          _evidence?: string
+          _reason: string
+          _screenshot_url?: string
+          _target_content_id?: string
+          _target_type: Database["public"]["Enums"]["report_target_type"]
+          _target_user_id?: string
+        }
+        Returns: string
+      }
       expire_user_sanction: { Args: { _uid: string }; Returns: undefined }
+      founder_remove_permanent_ban: {
+        Args: { _reason?: string; _target: string }
+        Returns: undefined
+      }
       founder_review_ban_request: {
         Args: { _approve: boolean; _id: string; _note?: string }
         Returns: undefined
@@ -1370,6 +1536,22 @@ export type Database = {
         }
         Returns: undefined
       }
+      staff_update_report: {
+        Args: {
+          _assign_to?: string
+          _duplicate_of?: string
+          _false_report?: boolean
+          _id: string
+          _priority?: Database["public"]["Enums"]["report_priority"]
+          _resolution?: string
+          _status?: Database["public"]["Enums"]["report_status"]
+        }
+        Returns: undefined
+      }
+      staff_warn_user: {
+        Args: { _reason: string; _report_id?: string; _target: string }
+        Returns: undefined
+      }
       touch_last_seen: { Args: never; Returns: undefined }
       verify_certificate: {
         Args: { _code: string }
@@ -1392,6 +1574,15 @@ export type Database = {
         | "ai_expert"
         | "verified"
         | "member"
+      report_priority: "low" | "normal" | "high" | "critical"
+      report_status:
+        | "new"
+        | "reviewing"
+        | "action_required"
+        | "escalated"
+        | "resolved"
+        | "closed"
+      report_target_type: "user" | "post" | "comment" | "tutorial" | "project"
       staff_action_type:
         | "assign_admin"
         | "remove_admin"
@@ -1566,6 +1757,16 @@ export const Constants = {
         "verified",
         "member",
       ],
+      report_priority: ["low", "normal", "high", "critical"],
+      report_status: [
+        "new",
+        "reviewing",
+        "action_required",
+        "escalated",
+        "resolved",
+        "closed",
+      ],
+      report_target_type: ["user", "post", "comment", "tutorial", "project"],
       staff_action_type: [
         "assign_admin",
         "remove_admin",
