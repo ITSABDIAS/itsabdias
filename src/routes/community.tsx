@@ -231,6 +231,12 @@ function Community() {
                     <Trash2 className="h-4 w-4" />
                   </button>
                 )}
+                <ReportMenu
+                  targetType="post"
+                  targetUserId={p.user_id}
+                  targetContentId={p.id}
+                  targetLabel={p.content.slice(0, 80)}
+                />
               </div>
               <p className="mt-4 text-foreground/90 whitespace-pre-wrap">{p.content}</p>
               <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
