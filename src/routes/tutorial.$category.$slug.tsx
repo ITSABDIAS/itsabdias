@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { TutorialContent } from "@/components/TutorialContent";
 import { TutorialCard, type TutorialCardData } from "@/components/TutorialCard";
 import { levelMeta, categoryLabel } from "@/lib/tutorials";
+import { ReportMenu } from "@/components/ReportMenu";
 import { toast } from "sonner";
 import {
   Heart,
