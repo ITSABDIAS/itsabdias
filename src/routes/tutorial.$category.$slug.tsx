@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { TutorialContent } from "@/components/TutorialContent";
 import { TutorialCard, type TutorialCardData } from "@/components/TutorialCard";
 import { levelMeta, categoryLabel } from "@/lib/tutorials";
+import { ReportMenu } from "@/components/ReportMenu";
 import { toast } from "sonner";
 import {
   Heart,
@@ -239,6 +240,13 @@ function TutorialPage() {
             <Link to="/ai" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-gradient-neon text-primary-foreground text-xs font-bold">
               <Sparkles className="h-3.5 w-3.5"/> Preguntar a NEXUS
             </Link>
+            <ReportMenu
+              targetType="tutorial"
+              targetUserId={t.author_id}
+              targetContentId={t.id}
+              targetLabel={t.title}
+              label="Reportar tutorial"
+            />
           </div>
 
           {t.tags?.length > 0 && (

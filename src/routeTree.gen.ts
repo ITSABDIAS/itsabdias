@@ -15,6 +15,7 @@ import { Route as StaffRouteImport } from './routes/staff'
 import { Route as SoftwareRouteImport } from './routes/software'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RobloxRouteImport } from './routes/roblox'
+import { Route as ReportesRouteImport } from './routes/reportes'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ProgramacionRouteImport } from './routes/programacion'
 import { Route as ProfileRouteImport } from './routes/profile'
@@ -46,6 +47,7 @@ import { Route as AdminTutorialesRouteImport } from './routes/admin.tutoriales'
 import { Route as AdminTicketsRouteImport } from './routes/admin.tickets'
 import { Route as AdminStaffRouteImport } from './routes/admin.staff'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminReportesRouteImport } from './routes/admin.reportes'
 import { Route as AdminPublicacionesRouteImport } from './routes/admin.publicaciones'
 import { Route as AdminProyectosRouteImport } from './routes/admin.proyectos'
 import { Route as AdminProjectsRouteImport } from './routes/admin.projects'
@@ -91,6 +93,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const RobloxRoute = RobloxRouteImport.update({
   id: '/roblox',
   path: '/roblox',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportesRoute = ReportesRouteImport.update({
+  id: '/reportes',
+  path: '/reportes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectsRoute = ProjectsRouteImport.update({
@@ -248,6 +255,11 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
   path: '/admin/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminReportesRoute = AdminReportesRouteImport.update({
+  id: '/admin/reportes',
+  path: '/admin/reportes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminPublicacionesRoute = AdminPublicacionesRouteImport.update({
   id: '/admin/publicaciones',
   path: '/admin/publicaciones',
@@ -346,6 +358,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/programacion': typeof ProgramacionRoute
   '/projects': typeof ProjectsRoute
+  '/reportes': typeof ReportesRoute
   '/roblox': typeof RobloxRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/software': typeof SoftwareRoute
@@ -366,6 +379,7 @@ export interface FileRoutesByFullPath {
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/proyectos': typeof AdminProyectosRoute
   '/admin/publicaciones': typeof AdminPublicacionesRoute
+  '/admin/reportes': typeof AdminReportesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/staff': typeof AdminStaffRoute
   '/admin/tickets': typeof AdminTicketsRoute
@@ -401,6 +415,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/programacion': typeof ProgramacionRoute
   '/projects': typeof ProjectsRoute
+  '/reportes': typeof ReportesRoute
   '/roblox': typeof RobloxRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/software': typeof SoftwareRoute
@@ -421,6 +436,7 @@ export interface FileRoutesByTo {
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/proyectos': typeof AdminProyectosRoute
   '/admin/publicaciones': typeof AdminPublicacionesRoute
+  '/admin/reportes': typeof AdminReportesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/staff': typeof AdminStaffRoute
   '/admin/tickets': typeof AdminTicketsRoute
@@ -457,6 +473,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/programacion': typeof ProgramacionRoute
   '/projects': typeof ProjectsRoute
+  '/reportes': typeof ReportesRoute
   '/roblox': typeof RobloxRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/software': typeof SoftwareRoute
@@ -477,6 +494,7 @@ export interface FileRoutesById {
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/proyectos': typeof AdminProyectosRoute
   '/admin/publicaciones': typeof AdminPublicacionesRoute
+  '/admin/reportes': typeof AdminReportesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/staff': typeof AdminStaffRoute
   '/admin/tickets': typeof AdminTicketsRoute
@@ -514,6 +532,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/programacion'
     | '/projects'
+    | '/reportes'
     | '/roblox'
     | '/sitemap.xml'
     | '/software'
@@ -534,6 +553,7 @@ export interface FileRouteTypes {
     | '/admin/projects'
     | '/admin/proyectos'
     | '/admin/publicaciones'
+    | '/admin/reportes'
     | '/admin/settings'
     | '/admin/staff'
     | '/admin/tickets'
@@ -569,6 +589,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/programacion'
     | '/projects'
+    | '/reportes'
     | '/roblox'
     | '/sitemap.xml'
     | '/software'
@@ -589,6 +610,7 @@ export interface FileRouteTypes {
     | '/admin/projects'
     | '/admin/proyectos'
     | '/admin/publicaciones'
+    | '/admin/reportes'
     | '/admin/settings'
     | '/admin/staff'
     | '/admin/tickets'
@@ -624,6 +646,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/programacion'
     | '/projects'
+    | '/reportes'
     | '/roblox'
     | '/sitemap.xml'
     | '/software'
@@ -644,6 +667,7 @@ export interface FileRouteTypes {
     | '/admin/projects'
     | '/admin/proyectos'
     | '/admin/publicaciones'
+    | '/admin/reportes'
     | '/admin/settings'
     | '/admin/staff'
     | '/admin/tickets'
@@ -680,6 +704,7 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   ProgramacionRoute: typeof ProgramacionRoute
   ProjectsRoute: typeof ProjectsRoute
+  ReportesRoute: typeof ReportesRoute
   RobloxRoute: typeof RobloxRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SoftwareRoute: typeof SoftwareRoute
@@ -700,6 +725,7 @@ export interface RootRouteChildren {
   AdminProjectsRoute: typeof AdminProjectsRoute
   AdminProyectosRoute: typeof AdminProyectosRoute
   AdminPublicacionesRoute: typeof AdminPublicacionesRoute
+  AdminReportesRoute: typeof AdminReportesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminStaffRoute: typeof AdminStaffRoute
   AdminTicketsRoute: typeof AdminTicketsRoute
@@ -761,6 +787,13 @@ declare module '@tanstack/react-router' {
       path: '/roblox'
       fullPath: '/roblox'
       preLoaderRoute: typeof RobloxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reportes': {
+      id: '/reportes'
+      path: '/reportes'
+      fullPath: '/reportes'
+      preLoaderRoute: typeof ReportesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projects': {
@@ -980,6 +1013,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/reportes': {
+      id: '/admin/reportes'
+      path: '/admin/reportes'
+      fullPath: '/admin/reportes'
+      preLoaderRoute: typeof AdminReportesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/publicaciones': {
       id: '/admin/publicaciones'
       path: '/admin/publicaciones'
@@ -1112,6 +1152,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   ProgramacionRoute: ProgramacionRoute,
   ProjectsRoute: ProjectsRoute,
+  ReportesRoute: ReportesRoute,
   RobloxRoute: RobloxRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SoftwareRoute: SoftwareRoute,
@@ -1132,6 +1173,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminProjectsRoute: AdminProjectsRoute,
   AdminProyectosRoute: AdminProyectosRoute,
   AdminPublicacionesRoute: AdminPublicacionesRoute,
+  AdminReportesRoute: AdminReportesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminStaffRoute: AdminStaffRoute,
   AdminTicketsRoute: AdminTicketsRoute,

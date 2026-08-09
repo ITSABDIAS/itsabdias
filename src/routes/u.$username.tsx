@@ -8,6 +8,7 @@ import { User as UserIcon, UserPlus, UserCheck, MessageSquare, Loader2 } from "l
 import { RankBadge, RANK_PRIORITY, type RankSlug } from "@/components/RankBadge";
 import { FollowersDialog } from "@/components/FollowersDialog";
 import { PremiumName, PremiumAvatarRing } from "@/components/PremiumName";
+import { ReportMenu } from "@/components/ReportMenu";
 
 export const Route = createFileRoute("/u/$username")({
   head: ({ params }) => ({
@@ -247,6 +248,12 @@ function PublicProfilePage() {
                       <MessageSquare className="h-4 w-4" />
                       <span className="hidden sm:inline">Mensaje</span>
                     </Link>
+                    <ReportMenu
+                      targetType="user"
+                      targetUserId={profile.id}
+                      targetLabel={`@${profile.username}`}
+                      label="Reportar usuario"
+                    />
                   </>
                 )}
               </div>

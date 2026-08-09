@@ -84,6 +84,7 @@ function AdminDashboard() {
 
   const menu = useMemo(() => [
     { to: "/admin/users", label: "Usuarios", icon: Users, color: "text-neon-cyan" },
+    { to: "/admin/reportes", label: "Reportes", icon: Shield, color: "text-red-400" },
     { to: "/admin/staff", label: "Staff", icon: ShieldCheck, color: "text-neon-purple" },
     { to: "/admin/tutorials", label: "Tutoriales", icon: GraduationCap, color: "text-neon-blue" },
     { to: "/admin/academia", label: "Academia", icon: Sparkles, color: "text-neon-purple" },
@@ -174,6 +175,7 @@ function AdminDashboard() {
               <QuickAction to="/admin/noticias" icon={Newspaper} label="Publicar noticia" />
               <QuickAction to="/admin/announcements" icon={Megaphone} label="Crear anuncio" />
               <QuickAction to="/admin/posts" icon={MessageSquare} label="Moderar publicaciones" />
+              <QuickAction to="/admin/reportes" icon={Shield} label="Revisar reportes" />
 
               <QuickAction to="/admin/projects" icon={FolderKanban} label="Gestionar proyectos" />
               <QuickAction to="/admin/tickets" icon={Ticket} label="Ver tickets" />

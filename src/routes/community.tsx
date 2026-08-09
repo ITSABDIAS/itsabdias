@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { RankBadge, topRank } from "@/components/RankBadge";
 import { useUserRoles } from "@/hooks/useUserRoles";
 import { PremiumName, PremiumAvatarRing } from "@/components/PremiumName";
+import { ReportMenu } from "@/components/ReportMenu";
 
 export const Route = createFileRoute("/community")({
   head: () => ({
@@ -230,6 +231,12 @@ function Community() {
                     <Trash2 className="h-4 w-4" />
                   </button>
                 )}
+                <ReportMenu
+                  targetType="post"
+                  targetUserId={p.user_id}
+                  targetContentId={p.id}
+                  targetLabel={p.content.slice(0, 80)}
+                />
               </div>
               <p className="mt-4 text-foreground/90 whitespace-pre-wrap">{p.content}</p>
               <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
@@ -261,6 +268,14 @@ function Community() {
                           <span>{c.profile?.username ?? "anónimo"}</span>
                           {(() => { const t = topRank(rolesMap.get(c.user_id)); return t ? <RankBadge slug={t} size="xs" /> : null; })()}
                           <span className="text-muted-foreground font-normal">· {timeAgo(c.created_at)}</span>
+                          <ReportMenu
+                            className="ml-auto"
+                            targetType="comment"
+                            targetUserId={c.user_id}
+                            targetContentId={c.id}
+                            targetLabel={c.content.slice(0, 80)}
+                            label="Reportar comentario"
+                          />
                         </div>
                         <div className="mt-0.5 text-foreground/90 whitespace-pre-wrap">{c.content}</div>
                       </div>
