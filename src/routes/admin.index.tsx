@@ -84,6 +84,7 @@ function AdminDashboard() {
 
   const menu = useMemo(() => [
     { to: "/admin/users", label: "Usuarios", icon: Users, color: "text-neon-cyan" },
+    { to: "/admin/reportes", label: "Reportes", icon: Shield, color: "text-red-400" },
     { to: "/admin/staff", label: "Staff", icon: ShieldCheck, color: "text-neon-purple" },
     { to: "/admin/tutorials", label: "Tutoriales", icon: GraduationCap, color: "text-neon-blue" },
     { to: "/admin/academia", label: "Academia", icon: Sparkles, color: "text-neon-purple" },
