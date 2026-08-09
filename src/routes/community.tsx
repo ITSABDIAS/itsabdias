@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { RankBadge, topRank } from "@/components/RankBadge";
 import { useUserRoles } from "@/hooks/useUserRoles";
 import { PremiumName, PremiumAvatarRing } from "@/components/PremiumName";
+import { ReportMenu } from "@/components/ReportMenu";
 
 export const Route = createFileRoute("/community")({
   head: () => ({
