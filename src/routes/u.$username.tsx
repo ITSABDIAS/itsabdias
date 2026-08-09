@@ -247,6 +247,12 @@ function PublicProfilePage() {
                       <MessageSquare className="h-4 w-4" />
                       <span className="hidden sm:inline">Mensaje</span>
                     </Link>
+                    <ReportMenu
+                      targetType="user"
+                      targetUserId={profile.id}
+                      targetLabel={`@${profile.username}`}
+                      label="Reportar usuario"
+                    />
                   </>
                 )}
               </div>
