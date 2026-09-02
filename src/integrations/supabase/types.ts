@@ -1094,6 +1094,422 @@ export type Database = {
         }
         Relationships: []
       }
+      staff_applications: {
+        Row: {
+          accepted_rules: boolean
+          conflict_answer: string
+          contribution: string
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          experience: string
+          id: string
+          motivation: string
+          phase: string
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          tech_knowledge: string
+          trust_answer: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accepted_rules?: boolean
+          conflict_answer: string
+          contribution: string
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          experience: string
+          id?: string
+          motivation: string
+          phase?: string
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          tech_knowledge: string
+          trust_answer: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accepted_rules?: boolean
+          conflict_answer?: string
+          contribution?: string
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          experience?: string
+          id?: string
+          motivation?: string
+          phase?: string
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          tech_knowledge?: string
+          trust_answer?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      staff_evaluations: {
+        Row: {
+          application_id: string
+          communication: number
+          created_at: string
+          ethics: number
+          evaluator_id: string | null
+          id: string
+          knowledge: number
+          moderation: number
+          overall_note: string | null
+          recommendation: string
+          responsibility: number
+          security: number
+        }
+        Insert: {
+          application_id: string
+          communication: number
+          created_at?: string
+          ethics: number
+          evaluator_id?: string | null
+          id?: string
+          knowledge: number
+          moderation: number
+          overall_note?: string | null
+          recommendation: string
+          responsibility: number
+          security: number
+        }
+        Update: {
+          application_id?: string
+          communication?: number
+          created_at?: string
+          ethics?: number
+          evaluator_id?: string | null
+          id?: string
+          knowledge?: number
+          moderation?: number
+          overall_note?: string | null
+          recommendation?: string
+          responsibility?: number
+          security?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "staff_evaluations_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "staff_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      staff_exam_attempts: {
+        Row: {
+          answers: Json
+          attempt_number: number
+          created_at: string
+          detail: Json
+          exam_id: string
+          id: string
+          passed: boolean
+          score: number
+          user_id: string
+        }
+        Insert: {
+          answers?: Json
+          attempt_number: number
+          created_at?: string
+          detail?: Json
+          exam_id: string
+          id?: string
+          passed: boolean
+          score: number
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          attempt_number?: number
+          created_at?: string
+          detail?: Json
+          exam_id?: string
+          id?: string
+          passed?: boolean
+          score?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "staff_exam_attempts_exam_id_fkey"
+            columns: ["exam_id"]
+            isOneToOne: false
+            referencedRelation: "staff_exams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      staff_exam_questions: {
+        Row: {
+          correct_answer: string
+          created_at: string
+          exam_id: string
+          explanation: string | null
+          id: string
+          kind: string
+          options: Json
+          position: number
+          prompt: string
+        }
+        Insert: {
+          correct_answer: string
+          created_at?: string
+          exam_id: string
+          explanation?: string | null
+          id?: string
+          kind?: string
+          options?: Json
+          position: number
+          prompt: string
+        }
+        Update: {
+          correct_answer?: string
+          created_at?: string
+          exam_id?: string
+          explanation?: string | null
+          id?: string
+          kind?: string
+          options?: Json
+          position?: number
+          prompt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "staff_exam_questions_exam_id_fkey"
+            columns: ["exam_id"]
+            isOneToOne: false
+            referencedRelation: "staff_exams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      staff_exams: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          max_attempts: number
+          module_id: string
+          pass_score: number
+          position: number
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          max_attempts?: number
+          module_id: string
+          pass_score?: number
+          position?: number
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          max_attempts?: number
+          module_id?: string
+          pass_score?: number
+          position?: number
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "staff_exams_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "staff_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      staff_lesson_progress: {
+        Row: {
+          completed_at: string
+          id: string
+          lesson_id: string
+          seconds_spent: number
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string
+          id?: string
+          lesson_id: string
+          seconds_spent?: number
+          user_id: string
+        }
+        Update: {
+          completed_at?: string
+          id?: string
+          lesson_id?: string
+          seconds_spent?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "staff_lesson_progress_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "staff_lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      staff_lessons: {
+        Row: {
+          content: string
+          created_at: string
+          description: string
+          examples: string | null
+          id: string
+          is_required: boolean
+          key_points: string | null
+          min_seconds: number
+          module_id: string
+          position: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          description: string
+          examples?: string | null
+          id?: string
+          is_required?: boolean
+          key_points?: string | null
+          min_seconds?: number
+          module_id: string
+          position: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          description?: string
+          examples?: string | null
+          id?: string
+          is_required?: boolean
+          key_points?: string | null
+          min_seconds?: number
+          module_id?: string
+          position?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "staff_lessons_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "staff_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      staff_modules: {
+        Row: {
+          created_at: string
+          description: string
+          icon: string
+          id: string
+          is_published: boolean
+          position: number
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          icon?: string
+          id?: string
+          is_published?: boolean
+          position: number
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          icon?: string
+          id?: string
+          is_published?: boolean
+          position?: number
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      staff_program_history: {
+        Row: {
+          action: string
+          actor_id: string | null
+          actor_role: string | null
+          application_id: string | null
+          created_at: string
+          detail: string | null
+          id: string
+          result: string | null
+          user_id: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          actor_role?: string | null
+          application_id?: string | null
+          created_at?: string
+          detail?: string | null
+          id?: string
+          result?: string | null
+          user_id: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          actor_role?: string | null
+          application_id?: string | null
+          created_at?: string
+          detail?: string | null
+          id?: string
+          result?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "staff_program_history_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "staff_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscriptions: {
         Row: {
           created_at: string
@@ -1479,6 +1895,10 @@ export type Database = {
         }
         Returns: number
       }
+      staff_complete_lesson: {
+        Args: { _lesson_id: string; _seconds: number }
+        Returns: Json
+      }
       staff_create_announcement: {
         Args: {
           _audience?: string
@@ -1506,8 +1926,54 @@ export type Database = {
         }
         Returns: undefined
       }
+      staff_get_exam: { Args: { _exam_id: string }; Returns: Json }
       staff_grant_premium: {
         Args: { _reason?: string; _target: string }
+        Returns: undefined
+      }
+      staff_program_apply: {
+        Args: {
+          _conflict: string
+          _contribution: string
+          _experience: string
+          _motivation: string
+          _tech: string
+          _trust: string
+        }
+        Returns: string
+      }
+      staff_program_check_training: { Args: { _user: string }; Returns: Json }
+      staff_program_decide: {
+        Args: { _application_id: string; _decision: string; _note: string }
+        Returns: undefined
+      }
+      staff_program_evaluate: {
+        Args: {
+          _application_id: string
+          _communication: number
+          _ethics: number
+          _knowledge: number
+          _moderation: number
+          _note: string
+          _recommendation: string
+          _responsibility: number
+          _security: number
+        }
+        Returns: string
+      }
+      staff_program_log: {
+        Args: {
+          _action: string
+          _app: string
+          _detail: string
+          _result: string
+          _user: string
+        }
+        Returns: undefined
+      }
+      staff_program_progress: { Args: { _user: string }; Returns: Json }
+      staff_program_review: {
+        Args: { _id: string; _note: string; _status: string }
         Returns: undefined
       }
       staff_request_permanent_ban: {
@@ -1535,6 +2001,10 @@ export type Database = {
           _until?: string
         }
         Returns: undefined
+      }
+      staff_submit_exam: {
+        Args: { _answers: Json; _exam_id: string }
+        Returns: Json
       }
       staff_update_report: {
         Args: {
