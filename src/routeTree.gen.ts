@@ -18,6 +18,7 @@ import { Route as RobloxRouteImport } from './routes/roblox'
 import { Route as ReportesRouteImport } from './routes/reportes'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ProgramacionRouteImport } from './routes/programacion'
+import { Route as ProgramaStaffRouteImport } from './routes/programa-staff'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PremiumRouteImport } from './routes/premium'
 import { Route as NotificationsRouteImport } from './routes/notifications'
@@ -108,6 +109,11 @@ const ProjectsRoute = ProjectsRouteImport.update({
 const ProgramacionRoute = ProgramacionRouteImport.update({
   id: '/programacion',
   path: '/programacion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgramaStaffRoute = ProgramaStaffRouteImport.update({
+  id: '/programa-staff',
+  path: '/programa-staff',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -356,6 +362,7 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
   '/profile': typeof ProfileRoute
+  '/programa-staff': typeof ProgramaStaffRoute
   '/programacion': typeof ProgramacionRoute
   '/projects': typeof ProjectsRoute
   '/reportes': typeof ReportesRoute
@@ -413,6 +420,7 @@ export interface FileRoutesByTo {
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
   '/profile': typeof ProfileRoute
+  '/programa-staff': typeof ProgramaStaffRoute
   '/programacion': typeof ProgramacionRoute
   '/projects': typeof ProjectsRoute
   '/reportes': typeof ReportesRoute
@@ -471,6 +479,7 @@ export interface FileRoutesById {
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
   '/profile': typeof ProfileRoute
+  '/programa-staff': typeof ProgramaStaffRoute
   '/programacion': typeof ProgramacionRoute
   '/projects': typeof ProjectsRoute
   '/reportes': typeof ReportesRoute
@@ -530,6 +539,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/premium'
     | '/profile'
+    | '/programa-staff'
     | '/programacion'
     | '/projects'
     | '/reportes'
@@ -587,6 +597,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/premium'
     | '/profile'
+    | '/programa-staff'
     | '/programacion'
     | '/projects'
     | '/reportes'
@@ -644,6 +655,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/premium'
     | '/profile'
+    | '/programa-staff'
     | '/programacion'
     | '/projects'
     | '/reportes'
@@ -702,6 +714,7 @@ export interface RootRouteChildren {
   NotificationsRoute: typeof NotificationsRoute
   PremiumRoute: typeof PremiumRoute
   ProfileRoute: typeof ProfileRoute
+  ProgramaStaffRoute: typeof ProgramaStaffRoute
   ProgramacionRoute: typeof ProgramacionRoute
   ProjectsRoute: typeof ProjectsRoute
   ReportesRoute: typeof ReportesRoute
@@ -808,6 +821,13 @@ declare module '@tanstack/react-router' {
       path: '/programacion'
       fullPath: '/programacion'
       preLoaderRoute: typeof ProgramacionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programa-staff': {
+      id: '/programa-staff'
+      path: '/programa-staff'
+      fullPath: '/programa-staff'
+      preLoaderRoute: typeof ProgramaStaffRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -1150,6 +1170,7 @@ const rootRouteChildren: RootRouteChildren = {
   NotificationsRoute: NotificationsRoute,
   PremiumRoute: PremiumRoute,
   ProfileRoute: ProfileRoute,
+  ProgramaStaffRoute: ProgramaStaffRoute,
   ProgramacionRoute: ProgramacionRoute,
   ProjectsRoute: ProjectsRoute,
   ReportesRoute: ReportesRoute,
