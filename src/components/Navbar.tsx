@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   Menu, X, Youtube, LogOut, User as UserIcon, Github,
-  Home, Sparkles, Rocket, BookOpen, GraduationCap, MessageSquare, Users, Crown, Shield, HelpCircle, Mail, Newspaper
+  Home, Sparkles, Rocket, BookOpen, GraduationCap, MessageSquare, Users, Crown, Shield, HelpCircle, Mail, Newspaper, ChevronDown
 } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/hooks/useAuth";
@@ -42,10 +42,16 @@ const accountLinks: NavLink[] = [
   { to: "/help", label: "Ayuda", Icon: HelpCircle },
 ];
 
+const staffProgramLinks: NavLink[] = [
+  { to: "/programa-staff", label: "Programa de Moderadores", Icon: Shield },
+  { to: "/academia-staff", label: "Academia de Staff", Icon: GraduationCap },
+];
+
 const GITHUB_URL = "https://github.com/ITSABDIAS";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const { user, signOut } = useAuth();
   const [myUsername, setMyUsername] = useState<string | null>(null);
 
@@ -58,10 +64,7 @@ export function Navbar() {
     return () => { cancelled = true; };
   }, [user]);
 
-  const desktopLinks = [
-    ...primaryLinks,
-    { to: "/staff", label: "Staff", Icon: Shield },
-  ];
+  const desktopLinks = primaryLinks.slice(0, 5);
 
   return (
     <header className="fixed top-0 inset-x-0 z-50 glass">
@@ -71,7 +74,7 @@ export function Navbar() {
           <span className="font-display font-bold text-lg text-gradient-neon hidden xs:inline">ItsaBDias</span>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-1 flex-1 justify-center">
+        <nav className="hidden xl:flex items-center gap-1 flex-1 justify-center">
           {desktopLinks.map((l) => (
             <Link
               key={l.to}
@@ -82,6 +85,16 @@ export function Navbar() {
               <l.Icon className="h-3.5 w-3.5" /> {l.label}
             </Link>
           ))}
+          <div className="relative">
+            <button onClick={() => setMoreOpen((value) => !value)} className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-secondary/50 inline-flex items-center gap-1.5" aria-expanded={moreOpen}>
+              <Menu className="h-3.5 w-3.5" /> Más <ChevronDown className="h-3.5 w-3.5" />
+            </button>
+            {moreOpen && <div className="absolute top-full right-0 mt-2 w-64 rounded-lg border border-border bg-popover p-2 shadow-card">
+              {[primaryLinks[5], primaryLinks[6], { to: "/staff", label: "Staff público", Icon: Users }, ...staffProgramLinks].map((l) => (
+                <Link key={l.to} to={l.to} onClick={() => setMoreOpen(false)} className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground"><l.Icon className="h-4 w-4 text-neon-cyan" />{l.label}</Link>
+              ))}
+            </div>}
+          </div>
           <Link
             to="/premium"
             className="ml-1 px-3 py-2 text-sm font-bold rounded-md bg-gradient-to-r from-yellow-400 to-amber-500 text-black hover:shadow-[0_0_18px_rgba(251,191,36,0.6)] transition-shadow inline-flex items-center gap-1.5"
@@ -97,7 +110,7 @@ export function Navbar() {
             target="_blank"
             rel="noreferrer"
             aria-label="GitHub de ITSABDIAS"
-            className="hidden sm:inline-flex p-2 rounded-md border border-border hover:border-neon-cyan/60 hover:text-neon-cyan transition-colors"
+            className="hidden md:inline-flex p-2 rounded-md border border-border hover:border-neon-cyan/60 hover:text-neon-cyan transition-colors"
           >
             <Github className="h-4 w-4" />
           </a>
@@ -115,7 +128,7 @@ export function Navbar() {
               ) : null}
               <button
                 onClick={() => signOut()}
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-md border border-border hover:border-neon-purple/60 text-xs font-semibold"
+                className="hidden 2xl:inline-flex items-center gap-1.5 px-3 py-2 rounded-md border border-border hover:border-neon-purple/60 text-xs font-semibold"
               >
                 <LogOut className="h-3.5 w-3.5" /> Salir
               </button>
@@ -132,13 +145,13 @@ export function Navbar() {
             href="https://youtube.com/@ITSABDIAS"
             target="_blank"
             rel="noreferrer"
-            className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-md bg-gradient-neon text-primary-foreground font-semibold text-xs hover:shadow-neon-purple transition-shadow"
+            className="hidden 2xl:inline-flex items-center gap-1.5 px-3 py-2 rounded-md bg-gradient-neon text-primary-foreground font-semibold text-xs hover:shadow-neon-purple transition-shadow"
           >
             <Youtube className="h-4 w-4" /> Suscribirse
           </a>
           <button
             onClick={() => setOpen(!open)}
-            className="lg:hidden p-2 rounded-md hover:bg-secondary"
+            className="xl:hidden p-2 rounded-md hover:bg-secondary"
             aria-label="Menu"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -147,7 +160,7 @@ export function Navbar() {
       </div>
 
       {open && (
-        <nav className="lg:hidden border-t border-border glass max-h-[calc(100vh-4rem)] overflow-y-auto">
+        <nav className="xl:hidden border-t border-border glass max-h-[calc(100vh-4rem)] overflow-y-auto">
           <div className="px-4 py-3 flex flex-col gap-3">
             {/* Premium destacado arriba */}
             <Link
@@ -160,6 +173,7 @@ export function Navbar() {
             </Link>
 
             <MobileGroup title="Principal" links={primaryLinks} onClick={() => setOpen(false)} />
+            <MobileGroup title="Formación Staff" links={staffProgramLinks} onClick={() => setOpen(false)} />
             {secondaryGroups.map((g) => (
               <MobileGroup key={g.title} title={g.title} links={g.links} onClick={() => setOpen(false)} />
             ))}

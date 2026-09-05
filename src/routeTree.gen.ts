@@ -31,6 +31,7 @@ import { Route as ElectricidadRouteImport } from './routes/electricidad'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiRouteImport } from './routes/ai'
+import { Route as AcademiaStaffRouteImport } from './routes/academia-staff'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -58,6 +59,7 @@ import { Route as AdminNewsRouteImport } from './routes/admin.news'
 import { Route as AdminHistoryRouteImport } from './routes/admin.history'
 import { Route as AdminHistorialRouteImport } from './routes/admin.historial'
 import { Route as AdminConfiguracionRouteImport } from './routes/admin.configuracion'
+import { Route as AdminCandidatosRouteImport } from './routes/admin.candidatos'
 import { Route as AdminBansRouteImport } from './routes/admin.bans'
 import { Route as AdminAnunciosRouteImport } from './routes/admin.anuncios'
 import { Route as AdminAnnouncementsRouteImport } from './routes/admin.announcements'
@@ -174,6 +176,11 @@ const AuthRoute = AuthRouteImport.update({
 const AiRoute = AiRouteImport.update({
   id: '/ai',
   path: '/ai',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AcademiaStaffRoute = AcademiaStaffRouteImport.update({
+  id: '/academia-staff',
+  path: '/academia-staff',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -311,6 +318,11 @@ const AdminConfiguracionRoute = AdminConfiguracionRouteImport.update({
   path: '/admin/configuracion',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminCandidatosRoute = AdminCandidatosRouteImport.update({
+  id: '/admin/candidatos',
+  path: '/admin/candidatos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminBansRoute = AdminBansRouteImport.update({
   id: '/admin/bans',
   path: '/admin/bans',
@@ -350,6 +362,7 @@ const TemaCategorySlugRoute = TemaCategorySlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/academia-staff': typeof AcademiaStaffRoute
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
@@ -377,6 +390,7 @@ export interface FileRoutesByFullPath {
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/anuncios': typeof AdminAnunciosRoute
   '/admin/bans': typeof AdminBansRoute
+  '/admin/candidatos': typeof AdminCandidatosRoute
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
   '/admin/history': typeof AdminHistoryRoute
@@ -408,6 +422,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/academia-staff': typeof AcademiaStaffRoute
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
@@ -435,6 +450,7 @@ export interface FileRoutesByTo {
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/anuncios': typeof AdminAnunciosRoute
   '/admin/bans': typeof AdminBansRoute
+  '/admin/candidatos': typeof AdminCandidatosRoute
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
   '/admin/history': typeof AdminHistoryRoute
@@ -467,6 +483,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/academia-staff': typeof AcademiaStaffRoute
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
@@ -494,6 +511,7 @@ export interface FileRoutesById {
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/anuncios': typeof AdminAnunciosRoute
   '/admin/bans': typeof AdminBansRoute
+  '/admin/candidatos': typeof AdminCandidatosRoute
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
   '/admin/history': typeof AdminHistoryRoute
@@ -527,6 +545,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/academia-staff'
     | '/ai'
     | '/auth'
     | '/community'
@@ -554,6 +573,7 @@ export interface FileRouteTypes {
     | '/admin/announcements'
     | '/admin/anuncios'
     | '/admin/bans'
+    | '/admin/candidatos'
     | '/admin/configuracion'
     | '/admin/historial'
     | '/admin/history'
@@ -585,6 +605,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/academia-staff'
     | '/ai'
     | '/auth'
     | '/community'
@@ -612,6 +633,7 @@ export interface FileRouteTypes {
     | '/admin/announcements'
     | '/admin/anuncios'
     | '/admin/bans'
+    | '/admin/candidatos'
     | '/admin/configuracion'
     | '/admin/historial'
     | '/admin/history'
@@ -643,6 +665,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/academia-staff'
     | '/ai'
     | '/auth'
     | '/community'
@@ -670,6 +693,7 @@ export interface FileRouteTypes {
     | '/admin/announcements'
     | '/admin/anuncios'
     | '/admin/bans'
+    | '/admin/candidatos'
     | '/admin/configuracion'
     | '/admin/historial'
     | '/admin/history'
@@ -702,6 +726,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AcademiaStaffRoute: typeof AcademiaStaffRoute
   AiRoute: typeof AiRoute
   AuthRoute: typeof AuthRoute
   CommunityRoute: typeof CommunityRoute
@@ -729,6 +754,7 @@ export interface RootRouteChildren {
   AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
   AdminAnunciosRoute: typeof AdminAnunciosRoute
   AdminBansRoute: typeof AdminBansRoute
+  AdminCandidatosRoute: typeof AdminCandidatosRoute
   AdminConfiguracionRoute: typeof AdminConfiguracionRoute
   AdminHistorialRoute: typeof AdminHistorialRoute
   AdminHistoryRoute: typeof AdminHistoryRoute
@@ -912,6 +938,13 @@ declare module '@tanstack/react-router' {
       path: '/ai'
       fullPath: '/ai'
       preLoaderRoute: typeof AiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/academia-staff': {
+      id: '/academia-staff'
+      path: '/academia-staff'
+      fullPath: '/academia-staff'
+      preLoaderRoute: typeof AcademiaStaffRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -1103,6 +1136,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminConfiguracionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/candidatos': {
+      id: '/admin/candidatos'
+      path: '/admin/candidatos'
+      fullPath: '/admin/candidatos'
+      preLoaderRoute: typeof AdminCandidatosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/bans': {
       id: '/admin/bans'
       path: '/admin/bans'
@@ -1158,6 +1198,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AcademiaStaffRoute: AcademiaStaffRoute,
   AiRoute: AiRoute,
   AuthRoute: AuthRoute,
   CommunityRoute: CommunityRoute,
@@ -1185,6 +1226,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminAnnouncementsRoute: AdminAnnouncementsRoute,
   AdminAnunciosRoute: AdminAnunciosRoute,
   AdminBansRoute: AdminBansRoute,
+  AdminCandidatosRoute: AdminCandidatosRoute,
   AdminConfiguracionRoute: AdminConfiguracionRoute,
   AdminHistorialRoute: AdminHistorialRoute,
   AdminHistoryRoute: AdminHistoryRoute,

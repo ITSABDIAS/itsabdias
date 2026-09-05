@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import {
   Shield, Users, UserCheck, Crown, GraduationCap, FolderKanban,
   MessageSquare, Ticket, Megaphone, History, Newspaper,
-  Activity, Bot, TrendingUp, Zap, Settings, ShieldCheck, Star, PlusCircle, Sparkles,
+  Activity, Bot, TrendingUp, Zap, Settings, ShieldCheck, Star, PlusCircle, Sparkles, ClipboardCheck,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/")({
@@ -86,6 +86,7 @@ function AdminDashboard() {
     { to: "/admin/users", label: "Usuarios", icon: Users, color: "text-neon-cyan" },
     { to: "/admin/reportes", label: "Reportes", icon: Shield, color: "text-red-400" },
     { to: "/admin/staff", label: "Staff", icon: ShieldCheck, color: "text-neon-purple" },
+    { to: "/admin/candidatos", label: "Candidatos", icon: ClipboardCheck, color: "text-neon-cyan" },
     { to: "/admin/tutorials", label: "Tutoriales", icon: GraduationCap, color: "text-neon-blue" },
     { to: "/admin/academia", label: "Academia", icon: Sparkles, color: "text-neon-purple" },
     { to: "/admin/tickets", label: "Tickets", icon: Ticket, color: "text-yellow-400" },
@@ -176,6 +177,7 @@ function AdminDashboard() {
               <QuickAction to="/admin/announcements" icon={Megaphone} label="Crear anuncio" />
               <QuickAction to="/admin/posts" icon={MessageSquare} label="Moderar publicaciones" />
               <QuickAction to="/admin/reportes" icon={Shield} label="Revisar reportes" />
+              <QuickAction to="/admin/candidatos" icon={ClipboardCheck} label="Revisar candidatos" />
 
               <QuickAction to="/admin/projects" icon={FolderKanban} label="Gestionar proyectos" />
               <QuickAction to="/admin/tickets" icon={Ticket} label="Ver tickets" />
