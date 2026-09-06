@@ -68,7 +68,7 @@ export function Navbar() {
 
   return (
     <header className="fixed top-0 inset-x-0 z-50 glass">
-      <div className="mx-auto max-w-7xl px-3 sm:px-6 flex items-center justify-between h-16 gap-2">
+      <div className="mx-auto grid h-16 max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-3 sm:px-6 xl:flex xl:justify-between">
         <Link to="/" className="flex items-center gap-2 group shrink-0">
           <img src={logo} alt="ItsaBDias" className="h-9 w-9 object-contain animate-glow-pulse" />
           <span className="font-display font-bold text-lg text-gradient-neon hidden xs:inline">ItsaBDias</span>
@@ -86,7 +86,7 @@ export function Navbar() {
             </Link>
           ))}
           <div className="relative">
-            <button onClick={() => setMoreOpen((value) => !value)} className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-secondary/50 inline-flex items-center gap-1.5" aria-expanded={moreOpen}>
+            <button onClick={() => setMoreOpen((value) => !value)} className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-secondary/50 inline-flex items-center gap-1.5" aria-expanded={moreOpen} aria-label="Abrir más secciones">
               <Menu className="h-3.5 w-3.5" /> Más <ChevronDown className="h-3.5 w-3.5" />
             </button>
             {moreOpen && <div className="absolute top-full right-0 mt-2 w-64 rounded-lg border border-border bg-popover p-2 shadow-card">
@@ -103,7 +103,7 @@ export function Navbar() {
           </Link>
         </nav>
 
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           {user && <NotificationBell />}
           <a
             href={GITHUB_URL}
@@ -152,7 +152,7 @@ export function Navbar() {
           <button
             onClick={() => setOpen(!open)}
             className="xl:hidden p-2 rounded-md hover:bg-secondary"
-            aria-label="Menu"
+            aria-label={open ? "Cerrar menú" : "Abrir menú"}
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -214,14 +214,14 @@ function MobileGroup({ title, links, onClick }: { title: string; links: NavLink[
   return (
     <div>
       <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-1.5 px-1">{title}</p>
-      <div className="grid grid-cols-2 gap-1.5">
+       <div className="grid grid-cols-1 gap-1.5 min-[390px]:grid-cols-2">
         {links.map((l) => (
           <Link
             key={l.to}
             to={l.to}
             onClick={onClick}
-            className="px-3 py-2 rounded-md text-sm hover:bg-secondary/60 border border-border/40 inline-flex items-center gap-2"
-            activeProps={{ className: "px-3 py-2 rounded-md text-sm bg-secondary/60 border border-neon-blue/40 text-foreground inline-flex items-center gap-2" }}
+            className="min-w-0 px-3 py-2 rounded-md text-sm hover:bg-secondary/60 border border-border/40 inline-flex items-center gap-2"
+            activeProps={{ className: "min-w-0 px-3 py-2 rounded-md text-sm bg-secondary/60 border border-neon-blue/40 text-foreground inline-flex items-center gap-2" }}
           >
             <l.Icon className="h-3.5 w-3.5 text-neon-cyan" /> {l.label}
           </Link>
