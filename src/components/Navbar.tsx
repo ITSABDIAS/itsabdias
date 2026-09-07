@@ -160,7 +160,7 @@ export function Navbar() {
       </div>
 
       {open && (
-        <nav className="xl:hidden border-t border-border glass max-h-[calc(100vh-4rem)] overflow-y-auto">
+        <nav className="xl:hidden max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-border bg-popover shadow-card">
           <div className="px-4 py-3 flex flex-col gap-3">
             {/* Premium destacado arriba */}
             <Link
