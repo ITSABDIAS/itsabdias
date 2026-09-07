@@ -91,7 +91,7 @@ function StaffProgramPage() {
     return (
       <PageShell>
         <section className="py-24 px-6 mx-auto max-w-3xl text-center">
-          <SectionTitle eyebrow="// staff program" title="Programa de Moderadores" subtitle="Inicia sesión para solicitar entrar al programa." />
+          <SectionTitle as="h1" eyebrow="// staff program" title="Programa de Moderadores" subtitle="Inicia sesión para solicitar entrar al programa." />
           <Link to="/auth" className="mt-6 inline-flex px-6 py-3 rounded-md bg-gradient-neon text-primary-foreground font-semibold">Iniciar sesión</Link>
         </section>
       </PageShell>
@@ -105,6 +105,7 @@ function StaffProgramPage() {
     <PageShell>
       <section className="py-12 sm:py-16 px-4 sm:px-6 mx-auto max-w-5xl">
         <SectionTitle
+          as="h1"
           eyebrow="// staff program"
           title="Programa oficial de Moderadores"
           subtitle="Formación real, exámenes evaluados en el servidor y promoción protegida. Ninguna barra de progreso otorga el rango por sí sola."

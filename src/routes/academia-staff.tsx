@@ -119,7 +119,7 @@ function StaffAcademyPage() {
   return (
     <PageShell>
       <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
-        <SectionTitle eyebrow="// formación privada" title="Academia de Staff" subtitle="Completa cada clase con su tiempo real y aprueba los exámenes. NEXUS puede explicar conceptos, pero no revela respuestas." />
+        <SectionTitle as="h1" eyebrow="// formación privada" title="Academia de Staff" subtitle="Completa cada clase con su tiempo real y aprueba los exámenes. NEXUS puede explicar conceptos, pero no revela respuestas." />
 
         <div className="mb-6 grid gap-3 sm:grid-cols-3">
           <Metric label="Progreso total" value={`${percent}%`} />
@@ -172,8 +172,8 @@ function StaffAcademyPage() {
 
             {lesson && (
               <article className="glass rounded-lg border border-border p-5 sm:p-8">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div><p className="font-mono text-xs uppercase text-neon-cyan">Clase de formación</p><h1 className="mt-2 text-2xl font-bold sm:text-3xl">{lesson.title}</h1></div>
+                <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 sm:flex sm:flex-wrap sm:justify-between">
+                  <div className="min-w-0"><p className="font-mono text-xs uppercase text-neon-cyan">Clase de formación</p><h2 className="mt-2 text-2xl font-bold sm:text-3xl">{lesson.title}</h2></div>
                   <span className="inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-xs text-muted-foreground"><Clock3 /> {Math.max(0, lesson.min_seconds - elapsed)}s restantes</span>
                 </div>
                 <p className="mt-4 text-lg text-muted-foreground">{lesson.description}</p>
@@ -194,7 +194,7 @@ function StaffAcademyPage() {
             {exam && (
               <section className="glass rounded-lg border border-border p-5 sm:p-8">
                 <p className="font-mono text-xs uppercase text-neon-purple">Evaluación protegida</p>
-                <h1 className="mt-2 text-2xl font-bold sm:text-3xl">{exam.exam.title}</h1>
+                <h2 className="mt-2 text-2xl font-bold sm:text-3xl">{exam.exam.title}</h2>
                 <p className="mt-2 text-muted-foreground">Necesitas {exam.exam.pass_score}%. Intentos usados: {result?.attempts_used ?? exam.attempts_used}/{exam.exam.max_attempts}.</p>
                 {result ? (
                   <div className="mt-7 rounded-lg border border-border p-6 text-center">
