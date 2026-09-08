@@ -176,19 +176,20 @@ function AdminDashboard() {
           <div>
             <h3 className="font-display text-lg font-bold mb-3 flex items-center gap-2"><Zap className="h-5 w-5 text-yellow-400" /> Acciones rápidas</h3>
             <div className="flex flex-wrap gap-2">
-              <QuickAction to="/admin/tutorials" icon={Sparkles} label="Generar tutorial NEXUS" />
-              <QuickAction to="/admin/academia" icon={GraduationCap} label="Generar curso NEXUS" />
-              <QuickAction to="/admin/tutorials" icon={PlusCircle} label="Crear tutorial" />
-              <QuickAction to="/admin/noticias" icon={Newspaper} label="Publicar noticia" />
-              <QuickAction to="/admin/announcements" icon={Megaphone} label="Crear anuncio" />
-              <QuickAction to="/admin/posts" icon={MessageSquare} label="Moderar publicaciones" />
               <QuickAction to="/admin/reportes" icon={Shield} label="Revisar reportes" />
-              <QuickAction to="/admin/candidatos" icon={ClipboardCheck} label="Revisar candidatos" />
-
+              <QuickAction to="/admin/posts" icon={MessageSquare} label="Moderar publicaciones" />
               <QuickAction to="/admin/projects" icon={FolderKanban} label="Gestionar proyectos" />
               <QuickAction to="/admin/tickets" icon={Ticket} label="Ver tickets" />
+              <QuickAction to="/admin/bans" icon={Gavel} label="Sanciones activas" />
+              {isAdmin && <QuickAction to="/admin/tutorials" icon={Sparkles} label="Generar tutorial NEXUS" />}
+              {isAdmin && <QuickAction to="/admin/academia" icon={GraduationCap} label="Generar curso NEXUS" />}
+              {isAdmin && <QuickAction to="/admin/tutorials" icon={PlusCircle} label="Crear tutorial" />}
+              {isAdmin && <QuickAction to="/admin/noticias" icon={Newspaper} label="Publicar noticia" />}
+              {isAdmin && <QuickAction to="/admin/announcements" icon={Megaphone} label="Crear anuncio" />}
+              {isAdmin && <QuickAction to="/admin/candidatos" icon={ClipboardCheck} label="Revisar candidatos" />}
               {isFounder && <QuickAction to="/admin/users" icon={Crown} label="Otorgar Premium" />}
               {isFounder && <QuickAction to="/admin/users" icon={ShieldCheck} label="Invitar Admin/Mod" />}
+
             </div>
           </div>
 
