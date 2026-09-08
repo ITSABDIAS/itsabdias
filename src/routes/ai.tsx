@@ -173,6 +173,19 @@ function AI() {
   const [pendingImage, setPendingImage] = useState<{ dataUrl: string; file: File } | null>(null);
   const [imageMode, setImageMode] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const [tourOpen, setTourOpen] = useState(false);
+
+  // First visit to NEXUS: launch the guided tour automatically.
+  useEffect(() => {
+    try {
+      if (!localStorage.getItem(NEXUS_TOUR_KEY)) {
+        const t = window.setTimeout(() => setTourOpen(true), 900);
+        return () => window.clearTimeout(t);
+      }
+    } catch {
+      /* ignore */
+    }
+  }, []);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
