@@ -125,10 +125,11 @@ function AdminDashboard() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             <StatCard icon={Users} label="Usuarios" value={stats?.users ?? 0} color="text-neon-cyan" />
             <StatCard icon={Activity} label="Activos ahora" value={stats?.active ?? 0} color="text-green-400" />
-            <StatCard icon={Crown} label="Premium" value={stats?.premium ?? 0} color="text-yellow-400" />
-            <StatCard icon={UserCheck} label="Verificados" value={stats?.verified ?? 0} color="text-neon-blue" />
-            <StatCard icon={ShieldCheck} label="Mods" value={stats?.moderators ?? 0} color="text-neon-purple" />
-            <StatCard icon={Shield} label="Admins" value={stats?.admins ?? 0} color="text-pink-400" />
+            {isAdmin && <StatCard icon={Crown} label="Premium" value={stats?.premium ?? 0} color="text-yellow-400" />}
+            {isAdmin && <StatCard icon={UserCheck} label="Verificados" value={stats?.verified ?? 0} color="text-neon-blue" />}
+            {isAdmin && <StatCard icon={ShieldCheck} label="Mods" value={stats?.moderators ?? 0} color="text-neon-purple" />}
+            {isAdmin && <StatCard icon={Shield} label="Admins" value={stats?.admins ?? 0} color="text-pink-400" />}
+
             <StatCard icon={GraduationCap} label="Tutoriales" value={stats?.tutorials ?? 0} color="text-neon-blue" />
             <StatCard icon={Bot} label="Por NEXUS" value={stats?.aiTutorials ?? 0} color="text-neon-purple" />
             <StatCard icon={MessageSquare} label="Publicaciones" value={stats?.posts ?? 0} color="text-green-400" />
