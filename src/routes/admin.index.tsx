@@ -4,16 +4,18 @@ import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useMyRoles } from "@/hooks/useMyRoles";
 import {
   Shield, Users, UserCheck, Crown, GraduationCap, FolderKanban,
   MessageSquare, Ticket, Megaphone, History, Newspaper,
-  Activity, Bot, TrendingUp, Zap, Settings, ShieldCheck, Star, PlusCircle, Sparkles, ClipboardCheck,
+  Activity, Bot, TrendingUp, Zap, Settings, ShieldCheck, Star, PlusCircle, Sparkles, ClipboardCheck, Gavel,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({ meta: [{ title: "Panel Admin — ItsaBDias" }] }),
   component: AdminDashboard,
 });
+
 
 type Stats = {
   users: number; active: number; premium: number; verified: number; moderators: number; admins: number;
