@@ -40,6 +40,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useMyRoles } from "@/hooks/useMyRoles";
 import { supabase } from "@/integrations/supabase/client";
 import { TutorialsSection } from "@/components/TutorialsSection";
+import { NexusOnboarding, NEXUS_TOUR_KEY } from "@/components/NexusOnboarding";
 
 export const Route = createFileRoute("/ai")({
   validateSearch: (search: Record<string, unknown>): { q?: string } =>
@@ -425,6 +426,17 @@ function AI() {
 
   return (
     <PageShell>
+      <NexusOnboarding
+        open={tourOpen}
+        onClose={() => {
+          setTourOpen(false);
+          try {
+            localStorage.setItem(NEXUS_TOUR_KEY, "done");
+          } catch {
+            /* ignore */
+          }
+        }}
+      />
       <section className="py-12 sm:py-20 px-4 sm:px-6">
         <SectionTitle as="h1"
           eyebrow="// ai.core"
@@ -443,12 +455,21 @@ function AI() {
                 <span className="text-neon-gold font-semibold">Premium</span>, analiza tus fotos y
                 genera imágenes por ti.
               </p>
-              <a
-                href="#chat"
-                className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gradient-neon text-primary-foreground text-sm font-bold shadow-neon-purple"
-              >
-                <Bot className="h-4 w-4" /> Hablar con NEXUS
-              </a>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <a
+                  href="#chat"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gradient-neon text-primary-foreground text-sm font-bold shadow-neon-purple"
+                >
+                  <Bot className="h-4 w-4" /> Hablar con NEXUS
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setTourOpen(true)}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-md glass border border-neon-cyan/40 hover:border-neon-cyan text-sm font-bold transition-colors"
+                >
+                  <Sparkles className="h-4 w-4 text-neon-cyan" /> Ver guía
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -459,6 +480,7 @@ function AI() {
         <div className="mx-auto max-w-6xl grid lg:grid-cols-[16rem_1fr] gap-4">
           {/* Conversation history */}
           <aside
+            data-tour="history"
             className={`glass rounded-2xl p-3 neon-border h-fit lg:block ${showHistory ? "block" : "hidden"}`}
           >
             <div className="flex items-center gap-2 mb-3">
@@ -524,7 +546,7 @@ function AI() {
           </aside>
 
           {/* Chat panel */}
-          <div className="glass rounded-2xl p-4 sm:p-6 neon-border min-w-0">
+          <div data-tour="chat" className="glass rounded-2xl p-4 sm:p-6 neon-border min-w-0">
             <div className="flex items-center gap-2 mb-4 flex-wrap">
               <Bot className="h-5 w-5 text-neon-cyan animate-glow-pulse" />
               <h3 className="font-display font-bold text-lg sm:text-xl">NEXUS · Chat IA</h3>
@@ -569,7 +591,7 @@ function AI() {
             </div>
 
             {/* Suggestions */}
-            <div className="flex flex-wrap gap-2 mb-3">
+            <div data-tour="suggestions" className="flex flex-wrap gap-2 mb-3">
               {suggestions.map((s) => (
                 <button
                   key={s.label}
@@ -585,7 +607,7 @@ function AI() {
             </div>
 
             {/* Premium controls */}
-            <div className="flex flex-wrap items-center gap-2 mb-3">
+            <div data-tour="premium" className="flex flex-wrap items-center gap-2 mb-3">
               <button
                 type="button"
                 onClick={pickImage}
@@ -662,7 +684,7 @@ function AI() {
               </div>
             )}
 
-            <form onSubmit={send} className="flex gap-2">
+            <form onSubmit={send} data-tour="input" className="flex gap-2">
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
