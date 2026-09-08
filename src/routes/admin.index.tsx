@@ -27,26 +27,20 @@ type Stats = {
 
 function AdminDashboard() {
   const { user, loading: authLoading } = useAuth();
+  const { isAdmin, isFounder, isModerator, loading: rolesLoading } = useMyRoles();
   const nav = useNavigate();
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isFounder, setIsFounder] = useState(false);
-  const [checking, setChecking] = useState(true);
   const [stats, setStats] = useState<Stats | null>(null);
   const [activity, setActivity] = useState<any[]>([]);
+  const checking = authLoading || rolesLoading;
 
   useEffect(() => {
     if (authLoading) return;
     if (!user) { nav({ to: "/auth" }); return; }
-    (async () => {
-      const { data } = await supabase.from("user_roles").select("role").eq("user_id", user.id);
-      const roles = (data ?? []).map((r) => r.role);
-      const admin = roles.includes("admin") || roles.includes("founder");
-      setIsAdmin(admin);
-      setIsFounder(roles.includes("founder"));
-      setChecking(false);
-      if (admin) { loadStats(); loadActivity(); }
-    })();
-  }, [user, authLoading, nav]);
+    if (rolesLoading) return;
+    if (isModerator) { loadStats(); loadActivity(); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, authLoading, rolesLoading, isModerator]);
+
 
   const loadStats = async () => {
     const since = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
