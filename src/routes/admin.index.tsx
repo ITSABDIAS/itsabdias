@@ -78,29 +78,33 @@ function AdminDashboard() {
   };
 
 
-  const menu = useMemo(() => [
-    { to: "/admin/users", label: "Usuarios", icon: Users, color: "text-neon-cyan" },
-    { to: "/admin/reportes", label: "Reportes", icon: Shield, color: "text-red-400" },
-    { to: "/admin/staff", label: "Staff", icon: ShieldCheck, color: "text-neon-purple" },
-    { to: "/admin/candidatos", label: "Candidatos", icon: ClipboardCheck, color: "text-neon-cyan" },
-    { to: "/admin/tutorials", label: "Tutoriales", icon: GraduationCap, color: "text-neon-blue" },
-    { to: "/admin/academia", label: "Academia", icon: Sparkles, color: "text-neon-purple" },
-    { to: "/admin/tickets", label: "Tickets", icon: Ticket, color: "text-yellow-400" },
-    { to: "/admin/noticias", label: "Noticias", icon: Newspaper, color: "text-red-400" },
-    { to: "/admin/announcements", label: "Anuncios", icon: Megaphone, color: "text-pink-400" },
-    { to: "/admin/posts", label: "Publicaciones", icon: MessageSquare, color: "text-green-400" },
-    { to: "/admin/projects", label: "Proyectos", icon: FolderKanban, color: "text-orange-400" },
-    { to: "/admin/history", label: "Historial", icon: History, color: "text-muted-foreground" },
-    { to: "/admin/settings", label: "Configuración", icon: Settings, color: "text-neon-cyan" },
-  ], []);
+  const menu = useMemo(() => {
+    const all = [
+      { to: "/admin/users", label: "Usuarios", icon: Users, color: "text-neon-cyan", mod: true },
+      { to: "/admin/reportes", label: "Reportes", icon: Shield, color: "text-red-400", mod: true },
+      { to: "/admin/bans", label: "Sanciones y bans", icon: Gavel, color: "text-red-400", mod: true },
+      { to: "/admin/posts", label: "Publicaciones", icon: MessageSquare, color: "text-green-400", mod: true },
+      { to: "/admin/projects", label: "Proyectos", icon: FolderKanban, color: "text-orange-400", mod: true },
+      { to: "/admin/tickets", label: "Tickets", icon: Ticket, color: "text-yellow-400", mod: true },
+      { to: "/admin/history", label: "Historial", icon: History, color: "text-muted-foreground", mod: true },
+      { to: "/admin/staff", label: "Staff", icon: ShieldCheck, color: "text-neon-purple", mod: false },
+      { to: "/admin/candidatos", label: "Candidatos", icon: ClipboardCheck, color: "text-neon-cyan", mod: false },
+      { to: "/admin/tutorials", label: "Tutoriales", icon: GraduationCap, color: "text-neon-blue", mod: false },
+      { to: "/admin/academia", label: "Academia", icon: Sparkles, color: "text-neon-purple", mod: false },
+      { to: "/admin/noticias", label: "Noticias", icon: Newspaper, color: "text-red-400", mod: false },
+      { to: "/admin/announcements", label: "Anuncios", icon: Megaphone, color: "text-pink-400", mod: false },
+      { to: "/admin/settings", label: "Configuración", icon: Settings, color: "text-neon-cyan", mod: false },
+    ];
+    return isAdmin ? all : all.filter((m) => m.mod);
+  }, [isAdmin]);
 
   if (checking) return <PageShell><section className="py-32 text-center text-muted-foreground">Verificando acceso...</section></PageShell>;
-  if (!isAdmin) return (
+  if (!isModerator) return (
     <PageShell>
       <section className="py-32 px-6 text-center">
         <Shield className="h-16 w-16 mx-auto text-neon-purple mb-4" />
         <h2 className="font-display text-2xl font-bold mb-2">Acceso restringido</h2>
-        <p className="text-muted-foreground">Solo administradores.</p>
+        <p className="text-muted-foreground">Solo Moderadores, Administradores y Founder.</p>
       </section>
     </PageShell>
   );
@@ -108,7 +112,12 @@ function AdminDashboard() {
   return (
     <PageShell>
       <section className="py-10 px-4 sm:px-6">
-        <SectionTitle eyebrow="// admin.panel" title="Panel de administración" subtitle="Control total de ITSABDIAS." />
+        <SectionTitle
+          eyebrow={isAdmin ? "// admin.panel" : "// mod.panel"}
+          title={isAdmin ? "Panel de administración" : "Panel de moderación"}
+          subtitle={isAdmin ? "Control total de ITSABDIAS." : "Herramientas de moderación: reportes, sanciones, contenido y tickets."}
+        />
+
 
         <div className="mx-auto max-w-6xl space-y-8">
 
