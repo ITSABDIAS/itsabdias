@@ -4,16 +4,18 @@ import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useMyRoles } from "@/hooks/useMyRoles";
 import {
   Shield, Users, UserCheck, Crown, GraduationCap, FolderKanban,
   MessageSquare, Ticket, Megaphone, History, Newspaper,
-  Activity, Bot, TrendingUp, Zap, Settings, ShieldCheck, Star, PlusCircle, Sparkles, ClipboardCheck,
+  Activity, Bot, TrendingUp, Zap, Settings, ShieldCheck, Star, PlusCircle, Sparkles, ClipboardCheck, Gavel,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({ meta: [{ title: "Panel Admin — ItsaBDias" }] }),
   component: AdminDashboard,
 });
+
 
 type Stats = {
   users: number; active: number; premium: number; verified: number; moderators: number; admins: number;
@@ -25,26 +27,20 @@ type Stats = {
 
 function AdminDashboard() {
   const { user, loading: authLoading } = useAuth();
+  const { isAdmin, isFounder, isModerator, loading: rolesLoading } = useMyRoles();
   const nav = useNavigate();
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isFounder, setIsFounder] = useState(false);
-  const [checking, setChecking] = useState(true);
   const [stats, setStats] = useState<Stats | null>(null);
   const [activity, setActivity] = useState<any[]>([]);
+  const checking = authLoading || rolesLoading;
 
   useEffect(() => {
     if (authLoading) return;
     if (!user) { nav({ to: "/auth" }); return; }
-    (async () => {
-      const { data } = await supabase.from("user_roles").select("role").eq("user_id", user.id);
-      const roles = (data ?? []).map((r) => r.role);
-      const admin = roles.includes("admin") || roles.includes("founder");
-      setIsAdmin(admin);
-      setIsFounder(roles.includes("founder"));
-      setChecking(false);
-      if (admin) { loadStats(); loadActivity(); }
-    })();
-  }, [user, authLoading, nav]);
+    if (rolesLoading) return;
+    if (isModerator) { loadStats(); loadActivity(); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, authLoading, rolesLoading, isModerator]);
+
 
   const loadStats = async () => {
     const since = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
@@ -82,29 +78,33 @@ function AdminDashboard() {
   };
 
 
-  const menu = useMemo(() => [
-    { to: "/admin/users", label: "Usuarios", icon: Users, color: "text-neon-cyan" },
-    { to: "/admin/reportes", label: "Reportes", icon: Shield, color: "text-red-400" },
-    { to: "/admin/staff", label: "Staff", icon: ShieldCheck, color: "text-neon-purple" },
-    { to: "/admin/candidatos", label: "Candidatos", icon: ClipboardCheck, color: "text-neon-cyan" },
-    { to: "/admin/tutorials", label: "Tutoriales", icon: GraduationCap, color: "text-neon-blue" },
-    { to: "/admin/academia", label: "Academia", icon: Sparkles, color: "text-neon-purple" },
-    { to: "/admin/tickets", label: "Tickets", icon: Ticket, color: "text-yellow-400" },
-    { to: "/admin/noticias", label: "Noticias", icon: Newspaper, color: "text-red-400" },
-    { to: "/admin/announcements", label: "Anuncios", icon: Megaphone, color: "text-pink-400" },
-    { to: "/admin/posts", label: "Publicaciones", icon: MessageSquare, color: "text-green-400" },
-    { to: "/admin/projects", label: "Proyectos", icon: FolderKanban, color: "text-orange-400" },
-    { to: "/admin/history", label: "Historial", icon: History, color: "text-muted-foreground" },
-    { to: "/admin/settings", label: "Configuración", icon: Settings, color: "text-neon-cyan" },
-  ], []);
+  const menu = useMemo(() => {
+    const all = [
+      { to: "/admin/users", label: "Usuarios", icon: Users, color: "text-neon-cyan", mod: true },
+      { to: "/admin/reportes", label: "Reportes", icon: Shield, color: "text-red-400", mod: true },
+      { to: "/admin/bans", label: "Sanciones y bans", icon: Gavel, color: "text-red-400", mod: true },
+      { to: "/admin/posts", label: "Publicaciones", icon: MessageSquare, color: "text-green-400", mod: true },
+      { to: "/admin/projects", label: "Proyectos", icon: FolderKanban, color: "text-orange-400", mod: true },
+      { to: "/admin/tickets", label: "Tickets", icon: Ticket, color: "text-yellow-400", mod: true },
+      { to: "/admin/history", label: "Historial", icon: History, color: "text-muted-foreground", mod: true },
+      { to: "/admin/staff", label: "Staff", icon: ShieldCheck, color: "text-neon-purple", mod: false },
+      { to: "/admin/candidatos", label: "Candidatos", icon: ClipboardCheck, color: "text-neon-cyan", mod: false },
+      { to: "/admin/tutorials", label: "Tutoriales", icon: GraduationCap, color: "text-neon-blue", mod: false },
+      { to: "/admin/academia", label: "Academia", icon: Sparkles, color: "text-neon-purple", mod: false },
+      { to: "/admin/noticias", label: "Noticias", icon: Newspaper, color: "text-red-400", mod: false },
+      { to: "/admin/announcements", label: "Anuncios", icon: Megaphone, color: "text-pink-400", mod: false },
+      { to: "/admin/settings", label: "Configuración", icon: Settings, color: "text-neon-cyan", mod: false },
+    ];
+    return isAdmin ? all : all.filter((m) => m.mod);
+  }, [isAdmin]);
 
   if (checking) return <PageShell><section className="py-32 text-center text-muted-foreground">Verificando acceso...</section></PageShell>;
-  if (!isAdmin) return (
+  if (!isModerator) return (
     <PageShell>
       <section className="py-32 px-6 text-center">
         <Shield className="h-16 w-16 mx-auto text-neon-purple mb-4" />
         <h2 className="font-display text-2xl font-bold mb-2">Acceso restringido</h2>
-        <p className="text-muted-foreground">Solo administradores.</p>
+        <p className="text-muted-foreground">Solo Moderadores, Administradores y Founder.</p>
       </section>
     </PageShell>
   );
@@ -112,7 +112,12 @@ function AdminDashboard() {
   return (
     <PageShell>
       <section className="py-10 px-4 sm:px-6">
-        <SectionTitle eyebrow="// admin.panel" title="Panel de administración" subtitle="Control total de ITSABDIAS." />
+        <SectionTitle
+          eyebrow={isAdmin ? "// admin.panel" : "// mod.panel"}
+          title={isAdmin ? "Panel de administración" : "Panel de moderación"}
+          subtitle={isAdmin ? "Control total de ITSABDIAS." : "Herramientas de moderación: reportes, sanciones, contenido y tickets."}
+        />
+
 
         <div className="mx-auto max-w-6xl space-y-8">
 
@@ -120,10 +125,11 @@ function AdminDashboard() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             <StatCard icon={Users} label="Usuarios" value={stats?.users ?? 0} color="text-neon-cyan" />
             <StatCard icon={Activity} label="Activos ahora" value={stats?.active ?? 0} color="text-green-400" />
-            <StatCard icon={Crown} label="Premium" value={stats?.premium ?? 0} color="text-yellow-400" />
-            <StatCard icon={UserCheck} label="Verificados" value={stats?.verified ?? 0} color="text-neon-blue" />
-            <StatCard icon={ShieldCheck} label="Mods" value={stats?.moderators ?? 0} color="text-neon-purple" />
-            <StatCard icon={Shield} label="Admins" value={stats?.admins ?? 0} color="text-pink-400" />
+            {isAdmin && <StatCard icon={Crown} label="Premium" value={stats?.premium ?? 0} color="text-yellow-400" />}
+            {isAdmin && <StatCard icon={UserCheck} label="Verificados" value={stats?.verified ?? 0} color="text-neon-blue" />}
+            {isAdmin && <StatCard icon={ShieldCheck} label="Mods" value={stats?.moderators ?? 0} color="text-neon-purple" />}
+            {isAdmin && <StatCard icon={Shield} label="Admins" value={stats?.admins ?? 0} color="text-pink-400" />}
+
             <StatCard icon={GraduationCap} label="Tutoriales" value={stats?.tutorials ?? 0} color="text-neon-blue" />
             <StatCard icon={Bot} label="Por NEXUS" value={stats?.aiTutorials ?? 0} color="text-neon-purple" />
             <StatCard icon={MessageSquare} label="Publicaciones" value={stats?.posts ?? 0} color="text-green-400" />
@@ -170,19 +176,20 @@ function AdminDashboard() {
           <div>
             <h3 className="font-display text-lg font-bold mb-3 flex items-center gap-2"><Zap className="h-5 w-5 text-yellow-400" /> Acciones rápidas</h3>
             <div className="flex flex-wrap gap-2">
-              <QuickAction to="/admin/tutorials" icon={Sparkles} label="Generar tutorial NEXUS" />
-              <QuickAction to="/admin/academia" icon={GraduationCap} label="Generar curso NEXUS" />
-              <QuickAction to="/admin/tutorials" icon={PlusCircle} label="Crear tutorial" />
-              <QuickAction to="/admin/noticias" icon={Newspaper} label="Publicar noticia" />
-              <QuickAction to="/admin/announcements" icon={Megaphone} label="Crear anuncio" />
-              <QuickAction to="/admin/posts" icon={MessageSquare} label="Moderar publicaciones" />
               <QuickAction to="/admin/reportes" icon={Shield} label="Revisar reportes" />
-              <QuickAction to="/admin/candidatos" icon={ClipboardCheck} label="Revisar candidatos" />
-
+              <QuickAction to="/admin/posts" icon={MessageSquare} label="Moderar publicaciones" />
               <QuickAction to="/admin/projects" icon={FolderKanban} label="Gestionar proyectos" />
               <QuickAction to="/admin/tickets" icon={Ticket} label="Ver tickets" />
+              <QuickAction to="/admin/bans" icon={Gavel} label="Sanciones activas" />
+              {isAdmin && <QuickAction to="/admin/tutorials" icon={Sparkles} label="Generar tutorial NEXUS" />}
+              {isAdmin && <QuickAction to="/admin/academia" icon={GraduationCap} label="Generar curso NEXUS" />}
+              {isAdmin && <QuickAction to="/admin/tutorials" icon={PlusCircle} label="Crear tutorial" />}
+              {isAdmin && <QuickAction to="/admin/noticias" icon={Newspaper} label="Publicar noticia" />}
+              {isAdmin && <QuickAction to="/admin/announcements" icon={Megaphone} label="Crear anuncio" />}
+              {isAdmin && <QuickAction to="/admin/candidatos" icon={ClipboardCheck} label="Revisar candidatos" />}
               {isFounder && <QuickAction to="/admin/users" icon={Crown} label="Otorgar Premium" />}
               {isFounder && <QuickAction to="/admin/users" icon={ShieldCheck} label="Invitar Admin/Mod" />}
+
             </div>
           </div>
 
