@@ -36,7 +36,7 @@ export const Route = createFileRoute("/tema/$category/$slug")({
     <PageShell>
       <section className="py-20 px-6 text-center">
         <h1 className="text-2xl font-bold">Ups, algo falló</h1>
-        <p className="mt-3 text-muted-foreground">{error.message}</p>
+        <p className="mt-3 text-muted-foreground">{error instanceof Error ? error.message : "Error desconocido"}</p>
       </section>
     </PageShell>
   ),

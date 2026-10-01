@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/hooks/useAuth";
+import { useMyRoles } from "@/hooks/useMyRoles";
 import { NotificationBell } from "@/components/NotificationBell";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -53,6 +54,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const { user, signOut } = useAuth();
+  const { isModerator } = useMyRoles();
   const [myUsername, setMyUsername] = useState<string | null>(null);
 
   useEffect(() => {
@@ -105,6 +107,11 @@ export function Navbar() {
 
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           {user && <NotificationBell />}
+          {isModerator && (
+            <Link to="/admin" className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-md border border-neon-purple/50 text-xs font-semibold hover:shadow-neon-purple transition-shadow">
+              <Shield className="h-3.5 w-3.5 text-neon-cyan" /> Panel
+            </Link>
+          )}
           <a
             href={GITHUB_URL}
             target="_blank"
@@ -172,6 +179,11 @@ export function Navbar() {
               <span className="text-xs opacity-80">$3.99/mes →</span>
             </Link>
 
+            {isModerator && (
+              <Link to="/admin" onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-3 rounded-lg border border-neon-purple/50 font-semibold text-sm">
+                <Shield className="h-4 w-4 text-neon-cyan" /> Panel de Staff
+              </Link>
+            )}
             <MobileGroup title="Principal" links={primaryLinks} onClick={() => setOpen(false)} />
             <MobileGroup title="Formación Staff" links={staffProgramLinks} onClick={() => setOpen(false)} />
             {secondaryGroups.map((g) => (
