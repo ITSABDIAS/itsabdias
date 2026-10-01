@@ -3,6 +3,7 @@ import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
 import { Zap, CircuitBoard, Activity, Cpu, Sparkles, ArrowRight, Lightbulb, Plug } from "lucide-react";
 import { TutorialsSection } from "@/components/TutorialsSection";
+import { ElectricLab } from "@/components/ElectricLab";
 
 export const Route = createFileRoute("/electricidad")({
   head: () => ({
@@ -69,6 +70,7 @@ function Electricidad() {
         </div>
       </section>
 
+      <ElectricLab />
       <section className="py-8 sm:py-12 px-4 sm:px-6">
         <div className="mx-auto max-w-6xl">
           <h3 className="font-display text-xl sm:text-2xl font-bold mb-6 flex items-center gap-2">
