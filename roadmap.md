@@ -6,3 +6,5 @@
 - [x] Agregar Candidatos al panel administrativo.
 - [x] Verificar compilación, rutas y diseño en computadora y móvil.
 - [x] Corregir cualquier error encontrado durante la verificación.
+
+- [ ] Activar cobros de Premium con Stripe (pendiente: plan de pago de Lovable o claves propias de Stripe).
