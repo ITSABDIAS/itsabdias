@@ -43,18 +43,6 @@
   --animate-scan: scan 4s linear infinite;
 }
 
-@font-face {
-  font-family: "Orbitron";
-  src: url("https://fonts.gstatic.com/s/orbitron/v34/yMJMMIlzdpvBhQQL_SC3X9yhF25-T1nyGy6BoWg1.woff2") format("woff2");
-  font-weight: 400 900;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Rajdhani";
-  src: url("https://fonts.gstatic.com/s/rajdhani/v15/LDIxapCSOBg7S-QT7p4GM-aMjQA.woff2") format("woff2");
-  font-weight: 400 700;
-  font-display: swap;
-}
 
 :root {
   --radius: 0.75rem;
