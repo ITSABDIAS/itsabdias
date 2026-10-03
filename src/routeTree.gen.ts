@@ -24,6 +24,7 @@ import { Route as PremiumRouteImport } from './routes/premium'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as NoticiasRouteImport } from './routes/noticias'
 import { Route as MessagesRouteImport } from './routes/messages'
+import { Route as JuegoRouteImport } from './routes/juego'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as HardwareRouteImport } from './routes/hardware'
 import { Route as GamedevRouteImport } from './routes/gamedev'
@@ -141,6 +142,11 @@ const NoticiasRoute = NoticiasRouteImport.update({
 const MessagesRoute = MessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JuegoRoute = JuegoRouteImport.update({
+  id: '/juego',
+  path: '/juego',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HelpRoute = HelpRouteImport.update({
@@ -370,6 +376,7 @@ export interface FileRoutesByFullPath {
   '/gamedev': typeof GamedevRoute
   '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
+  '/juego': typeof JuegoRoute
   '/messages': typeof MessagesRoute
   '/noticias': typeof NoticiasRoute
   '/notifications': typeof NotificationsRoute
@@ -430,6 +437,7 @@ export interface FileRoutesByTo {
   '/gamedev': typeof GamedevRoute
   '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
+  '/juego': typeof JuegoRoute
   '/messages': typeof MessagesRoute
   '/noticias': typeof NoticiasRoute
   '/notifications': typeof NotificationsRoute
@@ -491,6 +499,7 @@ export interface FileRoutesById {
   '/gamedev': typeof GamedevRoute
   '/hardware': typeof HardwareRoute
   '/help': typeof HelpRoute
+  '/juego': typeof JuegoRoute
   '/messages': typeof MessagesRoute
   '/noticias': typeof NoticiasRoute
   '/notifications': typeof NotificationsRoute
@@ -553,6 +562,7 @@ export interface FileRouteTypes {
     | '/gamedev'
     | '/hardware'
     | '/help'
+    | '/juego'
     | '/messages'
     | '/noticias'
     | '/notifications'
@@ -613,6 +623,7 @@ export interface FileRouteTypes {
     | '/gamedev'
     | '/hardware'
     | '/help'
+    | '/juego'
     | '/messages'
     | '/noticias'
     | '/notifications'
@@ -673,6 +684,7 @@ export interface FileRouteTypes {
     | '/gamedev'
     | '/hardware'
     | '/help'
+    | '/juego'
     | '/messages'
     | '/noticias'
     | '/notifications'
@@ -734,6 +746,7 @@ export interface RootRouteChildren {
   GamedevRoute: typeof GamedevRoute
   HardwareRoute: typeof HardwareRoute
   HelpRoute: typeof HelpRoute
+  JuegoRoute: typeof JuegoRoute
   MessagesRoute: typeof MessagesRoute
   NoticiasRoute: typeof NoticiasRoute
   NotificationsRoute: typeof NotificationsRoute
@@ -889,6 +902,13 @@ declare module '@tanstack/react-router' {
       path: '/messages'
       fullPath: '/messages'
       preLoaderRoute: typeof MessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/juego': {
+      id: '/juego'
+      path: '/juego'
+      fullPath: '/juego'
+      preLoaderRoute: typeof JuegoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/help': {
@@ -1206,6 +1226,7 @@ const rootRouteChildren: RootRouteChildren = {
   GamedevRoute: GamedevRoute,
   HardwareRoute: HardwareRoute,
   HelpRoute: HelpRoute,
+  JuegoRoute: JuegoRoute,
   MessagesRoute: MessagesRoute,
   NoticiasRoute: NoticiasRoute,
   NotificationsRoute: NotificationsRoute,
