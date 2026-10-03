@@ -79,15 +79,31 @@ function NotificationsPage() {
   }, [user]);
 
   const markRead = async (id: string) => {
-    await supabase.from("notifications").update({ read: true }).eq("id", id);
+    setItems((p) => p.map((i) => (i.id === id ? { ...i, read: true } : i)));
+    const { error } = await supabase.from("notifications").update({ read: true }).eq("id", id);
+    if (error) toast.error("No se pudo marcar");
   };
   const markAllRead = async () => {
     if (!user) return;
-    await supabase.from("notifications").update({ read: true }).eq("user_id", user.id).eq("read", false);
-    toast.success("Marcadas como leídas");
+    setItems((p) => p.map((i) => ({ ...i, read: true })));
+    const { error } = await supabase.from("notifications").update({ read: true }).eq("user_id", user.id).eq("read", false);
+    if (error) toast.error("No se pudo marcar");
+    else toast.success("Marcadas como leídas");
   };
   const remove = async (id: string) => {
-    await supabase.from("notifications").delete().eq("id", id);
+    const prev = items;
+    setItems((p) => p.filter((i) => i.id !== id));
+    const { error } = await supabase.from("notifications").delete().eq("id", id);
+    if (error) { setItems(prev); toast.error("No se pudo borrar"); }
+    else toast.success("Notificación borrada");
+  };
+  const removeAll = async () => {
+    if (!user || !confirm("¿Borrar todas las notificaciones?")) return;
+    const prev = items;
+    setItems([]);
+    const { error } = await supabase.from("notifications").delete().eq("user_id", user.id);
+    if (error) { setItems(prev); toast.error("No se pudo borrar"); }
+    else toast.success("Notificaciones borradas");
   };
 
   if (authLoading) {
@@ -126,6 +142,12 @@ function NotificationsPage() {
                 {unread} sin leer · {items.length} total
               </span>
             </div>
+            <div className="flex gap-2">
+            {items.length > 0 && (
+              <button onClick={removeAll} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-destructive/40 hover:border-destructive text-destructive transition-all">
+                <Trash2 className="h-3.5 w-3.5" /> Borrar todas
+              </button>
+            )}
             {unread > 0 && (
               <button
                 onClick={markAllRead}
@@ -134,6 +156,7 @@ function NotificationsPage() {
                 <CheckCheck className="h-3.5 w-3.5" /> Marcar todas
               </button>
             )}
+            </div>
           </div>
 
           {loading ? (
@@ -165,7 +188,7 @@ function NotificationsPage() {
                     <div className="flex flex-col gap-1">
                       {!n.read && (
                         <button
-                          onClick={(e) => { e.preventDefault(); markRead(n.id); }}
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); markRead(n.id); }}
                           className="p-1.5 rounded-md hover:bg-secondary/60 text-neon-cyan"
                           aria-label="Marcar como leída"
                         >
@@ -173,7 +196,7 @@ function NotificationsPage() {
                         </button>
                       )}
                       <button
-                        onClick={(e) => { e.preventDefault(); remove(n.id); }}
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); remove(n.id); }}
                         className="p-1.5 rounded-md hover:bg-secondary/60 text-muted-foreground hover:text-destructive"
                         aria-label="Eliminar"
                       >
