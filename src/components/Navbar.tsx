@@ -186,6 +186,7 @@ export function Navbar() {
             )}
             <MobileGroup title="Principal" links={primaryLinks} onClick={() => setOpen(false)} />
             <MobileGroup title="Formación Staff" links={staffProgramLinks} onClick={() => setOpen(false)} />
+            <MobileGroup title="Juegos" links={[{ to: "/juego", label: "NEXUS Protocol", Icon: Gamepad2 }]} onClick={() => setOpen(false)} />
             {secondaryGroups.map((g) => (
               <MobileGroup key={g.title} title={g.title} links={g.links} onClick={() => setOpen(false)} />
             ))}
