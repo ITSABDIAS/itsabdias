@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   Menu, X, Youtube, LogOut, User as UserIcon, Github,
-  Home, Sparkles, Rocket, BookOpen, GraduationCap, MessageSquare, Users, Crown, Shield, HelpCircle, Mail, Newspaper, ChevronDown
+  Home, Sparkles, Rocket, BookOpen, GraduationCap, MessageSquare, Users, Crown, Shield, HelpCircle, Mail, Newspaper, ChevronDown, Gamepad2
 } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/hooks/useAuth";
@@ -92,7 +92,7 @@ export function Navbar() {
               <Menu className="h-3.5 w-3.5" /> Más <ChevronDown className="h-3.5 w-3.5" />
             </button>
             {moreOpen && <div className="absolute top-full right-0 mt-2 w-64 rounded-lg border border-border bg-popover p-2 shadow-card">
-              {[primaryLinks[5], primaryLinks[6], { to: "/staff", label: "Staff público", Icon: Users }, ...staffProgramLinks].map((l) => (
+              {[primaryLinks[5], primaryLinks[6], { to: "/juego", label: "NEXUS Protocol", Icon: Gamepad2 }, { to: "/staff", label: "Staff público", Icon: Users }, ...staffProgramLinks].map((l) => (
                 <Link key={l.to} to={l.to} onClick={() => setMoreOpen(false)} className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground"><l.Icon className="h-4 w-4 text-neon-cyan" />{l.label}</Link>
               ))}
             </div>}
