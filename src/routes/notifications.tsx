@@ -142,6 +142,12 @@ function NotificationsPage() {
                 {unread} sin leer · {items.length} total
               </span>
             </div>
+            <div className="flex gap-2">
+            {items.length > 0 && (
+              <button onClick={removeAll} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md border border-destructive/40 hover:border-destructive text-destructive transition-all">
+                <Trash2 className="h-3.5 w-3.5" /> Borrar todas
+              </button>
+            )}
             {unread > 0 && (
               <button
                 onClick={markAllRead}
@@ -150,6 +156,7 @@ function NotificationsPage() {
                 <CheckCheck className="h-3.5 w-3.5" /> Marcar todas
               </button>
             )}
+            </div>
           </div>
 
           {loading ? (
@@ -181,7 +188,7 @@ function NotificationsPage() {
                     <div className="flex flex-col gap-1">
                       {!n.read && (
                         <button
-                          onClick={(e) => { e.preventDefault(); markRead(n.id); }}
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); markRead(n.id); }}
                           className="p-1.5 rounded-md hover:bg-secondary/60 text-neon-cyan"
                           aria-label="Marcar como leída"
                         >
@@ -189,7 +196,7 @@ function NotificationsPage() {
                         </button>
                       )}
                       <button
-                        onClick={(e) => { e.preventDefault(); remove(n.id); }}
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); remove(n.id); }}
                         className="p-1.5 rounded-md hover:bg-secondary/60 text-muted-foreground hover:text-destructive"
                         aria-label="Eliminar"
                       >
