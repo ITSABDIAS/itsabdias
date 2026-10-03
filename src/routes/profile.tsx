@@ -352,6 +352,18 @@ function ProfilePage() {
         </div>
       </section>
 
+        <div className="mx-auto max-w-3xl mt-6 glass rounded-2xl p-6 neon-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <h3 className="font-bold">Cerrar sesión</h3>
+            <p className="text-sm text-muted-foreground">¿Terminaste por hoy? Sal de tu cuenta de forma segura.</p>
+          </div>
+          <button
+            onClick={async () => { await supabase.auth.signOut(); toast.success("Sesión cerrada"); window.location.href = "/"; }}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md border border-destructive/50 text-destructive hover:bg-destructive/10 font-semibold transition-all"
+          >
+            <LogOut className="h-4 w-4" /> Cerrar sesión
+          </button>
+        </div>
       {user && (
         <FollowersDialog
           open={dialog !== null}
@@ -400,16 +412,4 @@ function Bar({ label, badge, unlocked, value, pct }: { label: string; badge: Ran
       </div>
     </div>
   );
-}        <div className="mx-auto max-w-3xl mt-6 glass rounded-2xl p-6 neon-border flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            <h3 className="font-bold">Cerrar sesión</h3>
-            <p className="text-sm text-muted-foreground">¿Terminaste por hoy? Sal de tu cuenta de forma segura.</p>
-          </div>
-          <button
-            onClick={async () => { await supabase.auth.signOut(); toast.success("Sesión cerrada"); window.location.href = "/"; }}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md border border-destructive/50 text-destructive hover:bg-destructive/10 font-semibold transition-all"
-          >
-            <LogOut className="h-4 w-4" /> Cerrar sesión
-          </button>
-        </div>
-
+}
