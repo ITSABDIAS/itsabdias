@@ -79,15 +79,31 @@ function NotificationsPage() {
   }, [user]);
 
   const markRead = async (id: string) => {
-    await supabase.from("notifications").update({ read: true }).eq("id", id);
+    setItems((p) => p.map((i) => (i.id === id ? { ...i, read: true } : i)));
+    const { error } = await supabase.from("notifications").update({ read: true }).eq("id", id);
+    if (error) toast.error("No se pudo marcar");
   };
   const markAllRead = async () => {
     if (!user) return;
-    await supabase.from("notifications").update({ read: true }).eq("user_id", user.id).eq("read", false);
-    toast.success("Marcadas como leídas");
+    setItems((p) => p.map((i) => ({ ...i, read: true })));
+    const { error } = await supabase.from("notifications").update({ read: true }).eq("user_id", user.id).eq("read", false);
+    if (error) toast.error("No se pudo marcar");
+    else toast.success("Marcadas como leídas");
   };
   const remove = async (id: string) => {
-    await supabase.from("notifications").delete().eq("id", id);
+    const prev = items;
+    setItems((p) => p.filter((i) => i.id !== id));
+    const { error } = await supabase.from("notifications").delete().eq("id", id);
+    if (error) { setItems(prev); toast.error("No se pudo borrar"); }
+    else toast.success("Notificación borrada");
+  };
+  const removeAll = async () => {
+    if (!user || !confirm("¿Borrar todas las notificaciones?")) return;
+    const prev = items;
+    setItems([]);
+    const { error } = await supabase.from("notifications").delete().eq("user_id", user.id);
+    if (error) { setItems(prev); toast.error("No se pudo borrar"); }
+    else toast.success("Notificaciones borradas");
   };
 
   if (authLoading) {
