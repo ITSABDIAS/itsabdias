@@ -30,7 +30,7 @@ function AdminBugs() {
   useEffect(() => { if (isModerator) load(); }, [isModerator, filter]);
 
   async function review(b: Bug, status: string) {
-    const { error } = await supabase.rpc("staff_review_bug", { _id: b.id, _status: status, _points: pts[b.id] ?? DEFAULT_PTS[b.severity] ?? 60, _note: notes[b.id] || null });
+    const { error } = await supabase.rpc("staff_review_bug", { _id: b.id, _status: status, _points: pts[b.id] ?? DEFAULT_PTS[b.severity] ?? 60, _note: notes[b.id] || "" });
     if (error) return toast.error(error.message);
     toast.success("Reporte revisado");
     load();
