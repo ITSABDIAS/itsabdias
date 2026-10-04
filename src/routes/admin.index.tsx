@@ -89,6 +89,7 @@ function AdminDashboard() {
       { to: "/admin/history", label: "Historial", icon: History, color: "text-muted-foreground", mod: true },
       { to: "/admin/staff", label: "Staff", icon: ShieldCheck, color: "text-neon-purple", mod: false },
       { to: "/admin/candidatos", label: "Candidatos", icon: ClipboardCheck, color: "text-neon-cyan", mod: false },
+      { to: "/admin/bugs", label: "Reportes de errores", icon: ClipboardCheck, color: "text-neon-cyan", mod: true },
       { to: "/admin/tutorials", label: "Tutoriales", icon: GraduationCap, color: "text-neon-blue", mod: false },
       { to: "/admin/academia", label: "Academia", icon: Sparkles, color: "text-neon-purple", mod: false },
       { to: "/admin/noticias", label: "Noticias", icon: Newspaper, color: "text-red-400", mod: false },
