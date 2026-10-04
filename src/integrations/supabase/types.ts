@@ -400,6 +400,51 @@ export type Database = {
         }
         Relationships: []
       }
+      bug_reports: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          page: string | null
+          points_awarded: number
+          review_note: string | null
+          reviewed_by: string | null
+          severity: string
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          page?: string | null
+          points_awarded?: number
+          review_note?: string | null
+          reviewed_by?: string | null
+          severity?: string
+          status?: string
+          title: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          page?: string | null
+          points_awarded?: number
+          review_note?: string | null
+          reviewed_by?: string | null
+          severity?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       chat_messages: {
         Row: {
           content: string
@@ -589,6 +634,24 @@ export type Database = {
         }
         Relationships: []
       }
+      hunter_xp: {
+        Row: {
+          updated_at: string
+          user_id: string
+          xp: number
+        }
+        Insert: {
+          updated_at?: string
+          user_id: string
+          xp?: number
+        }
+        Update: {
+          updated_at?: string
+          user_id?: string
+          xp?: number
+        }
+        Relationships: []
+      }
       likes: {
         Row: {
           created_at: string
@@ -617,6 +680,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      mission_claims: {
+        Row: {
+          claimed_at: string
+          id: string
+          mission_key: string
+          user_id: string
+          xp: number
+        }
+        Insert: {
+          claimed_at?: string
+          id?: string
+          mission_key: string
+          user_id: string
+          xp: number
+        }
+        Update: {
+          claimed_at?: string
+          id?: string
+          mission_key?: string
+          user_id?: string
+          xp?: number
+        }
+        Relationships: []
       }
       news: {
         Row: {
@@ -1859,6 +1946,9 @@ export type Database = {
         }
         Returns: boolean
       }
+      hunter_add_xp: { Args: { _uid: string; _xp: number }; Returns: undefined }
+      hunter_claim_mission: { Args: { _key: string }; Returns: number }
+      hunter_mission_stats: { Args: never; Returns: Json }
       increment_news_view: { Args: { _id: string }; Returns: undefined }
       increment_tutorial_view: { Args: { _id: string }; Returns: undefined }
       is_admin_or_higher: { Args: { _uid: string }; Returns: boolean }
@@ -1979,6 +2069,10 @@ export type Database = {
       staff_request_permanent_ban: {
         Args: { _evidence?: string; _reason: string; _target: string }
         Returns: string
+      }
+      staff_review_bug: {
+        Args: { _id: string; _note: string; _points: number; _status: string }
+        Returns: undefined
       }
       staff_revoke_premium: {
         Args: { _reason?: string; _target: string }

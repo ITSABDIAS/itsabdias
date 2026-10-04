@@ -30,6 +30,7 @@ import { Route as HardwareRouteImport } from './routes/hardware'
 import { Route as GamedevRouteImport } from './routes/gamedev'
 import { Route as ElectricidadRouteImport } from './routes/electricidad'
 import { Route as CommunityRouteImport } from './routes/community'
+import { Route as BugHunterRouteImport } from './routes/bug-hunter'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiRouteImport } from './routes/ai'
 import { Route as AcademiaStaffRouteImport } from './routes/academia-staff'
@@ -61,6 +62,7 @@ import { Route as AdminHistoryRouteImport } from './routes/admin.history'
 import { Route as AdminHistorialRouteImport } from './routes/admin.historial'
 import { Route as AdminConfiguracionRouteImport } from './routes/admin.configuracion'
 import { Route as AdminCandidatosRouteImport } from './routes/admin.candidatos'
+import { Route as AdminBugsRouteImport } from './routes/admin.bugs'
 import { Route as AdminBansRouteImport } from './routes/admin.bans'
 import { Route as AdminAnunciosRouteImport } from './routes/admin.anuncios'
 import { Route as AdminAnnouncementsRouteImport } from './routes/admin.announcements'
@@ -172,6 +174,11 @@ const ElectricidadRoute = ElectricidadRouteImport.update({
 const CommunityRoute = CommunityRouteImport.update({
   id: '/community',
   path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BugHunterRoute = BugHunterRouteImport.update({
+  id: '/bug-hunter',
+  path: '/bug-hunter',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -329,6 +336,11 @@ const AdminCandidatosRoute = AdminCandidatosRouteImport.update({
   path: '/admin/candidatos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminBugsRoute = AdminBugsRouteImport.update({
+  id: '/admin/bugs',
+  path: '/admin/bugs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminBansRoute = AdminBansRouteImport.update({
   id: '/admin/bans',
   path: '/admin/bans',
@@ -371,6 +383,7 @@ export interface FileRoutesByFullPath {
   '/academia-staff': typeof AcademiaStaffRoute
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
+  '/bug-hunter': typeof BugHunterRoute
   '/community': typeof CommunityRoute
   '/electricidad': typeof ElectricidadRoute
   '/gamedev': typeof GamedevRoute
@@ -397,6 +410,7 @@ export interface FileRoutesByFullPath {
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/anuncios': typeof AdminAnunciosRoute
   '/admin/bans': typeof AdminBansRoute
+  '/admin/bugs': typeof AdminBugsRoute
   '/admin/candidatos': typeof AdminCandidatosRoute
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
@@ -432,6 +446,7 @@ export interface FileRoutesByTo {
   '/academia-staff': typeof AcademiaStaffRoute
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
+  '/bug-hunter': typeof BugHunterRoute
   '/community': typeof CommunityRoute
   '/electricidad': typeof ElectricidadRoute
   '/gamedev': typeof GamedevRoute
@@ -458,6 +473,7 @@ export interface FileRoutesByTo {
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/anuncios': typeof AdminAnunciosRoute
   '/admin/bans': typeof AdminBansRoute
+  '/admin/bugs': typeof AdminBugsRoute
   '/admin/candidatos': typeof AdminCandidatosRoute
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
@@ -494,6 +510,7 @@ export interface FileRoutesById {
   '/academia-staff': typeof AcademiaStaffRoute
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
+  '/bug-hunter': typeof BugHunterRoute
   '/community': typeof CommunityRoute
   '/electricidad': typeof ElectricidadRoute
   '/gamedev': typeof GamedevRoute
@@ -520,6 +537,7 @@ export interface FileRoutesById {
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/anuncios': typeof AdminAnunciosRoute
   '/admin/bans': typeof AdminBansRoute
+  '/admin/bugs': typeof AdminBugsRoute
   '/admin/candidatos': typeof AdminCandidatosRoute
   '/admin/configuracion': typeof AdminConfiguracionRoute
   '/admin/historial': typeof AdminHistorialRoute
@@ -557,6 +575,7 @@ export interface FileRouteTypes {
     | '/academia-staff'
     | '/ai'
     | '/auth'
+    | '/bug-hunter'
     | '/community'
     | '/electricidad'
     | '/gamedev'
@@ -583,6 +602,7 @@ export interface FileRouteTypes {
     | '/admin/announcements'
     | '/admin/anuncios'
     | '/admin/bans'
+    | '/admin/bugs'
     | '/admin/candidatos'
     | '/admin/configuracion'
     | '/admin/historial'
@@ -618,6 +638,7 @@ export interface FileRouteTypes {
     | '/academia-staff'
     | '/ai'
     | '/auth'
+    | '/bug-hunter'
     | '/community'
     | '/electricidad'
     | '/gamedev'
@@ -644,6 +665,7 @@ export interface FileRouteTypes {
     | '/admin/announcements'
     | '/admin/anuncios'
     | '/admin/bans'
+    | '/admin/bugs'
     | '/admin/candidatos'
     | '/admin/configuracion'
     | '/admin/historial'
@@ -679,6 +701,7 @@ export interface FileRouteTypes {
     | '/academia-staff'
     | '/ai'
     | '/auth'
+    | '/bug-hunter'
     | '/community'
     | '/electricidad'
     | '/gamedev'
@@ -705,6 +728,7 @@ export interface FileRouteTypes {
     | '/admin/announcements'
     | '/admin/anuncios'
     | '/admin/bans'
+    | '/admin/bugs'
     | '/admin/candidatos'
     | '/admin/configuracion'
     | '/admin/historial'
@@ -741,6 +765,7 @@ export interface RootRouteChildren {
   AcademiaStaffRoute: typeof AcademiaStaffRoute
   AiRoute: typeof AiRoute
   AuthRoute: typeof AuthRoute
+  BugHunterRoute: typeof BugHunterRoute
   CommunityRoute: typeof CommunityRoute
   ElectricidadRoute: typeof ElectricidadRoute
   GamedevRoute: typeof GamedevRoute
@@ -767,6 +792,7 @@ export interface RootRouteChildren {
   AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
   AdminAnunciosRoute: typeof AdminAnunciosRoute
   AdminBansRoute: typeof AdminBansRoute
+  AdminBugsRoute: typeof AdminBugsRoute
   AdminCandidatosRoute: typeof AdminCandidatosRoute
   AdminConfiguracionRoute: typeof AdminConfiguracionRoute
   AdminHistorialRoute: typeof AdminHistorialRoute
@@ -944,6 +970,13 @@ declare module '@tanstack/react-router' {
       path: '/community'
       fullPath: '/community'
       preLoaderRoute: typeof CommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bug-hunter': {
+      id: '/bug-hunter'
+      path: '/bug-hunter'
+      fullPath: '/bug-hunter'
+      preLoaderRoute: typeof BugHunterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -1163,6 +1196,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCandidatosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/bugs': {
+      id: '/admin/bugs'
+      path: '/admin/bugs'
+      fullPath: '/admin/bugs'
+      preLoaderRoute: typeof AdminBugsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/bans': {
       id: '/admin/bans'
       path: '/admin/bans'
@@ -1221,6 +1261,7 @@ const rootRouteChildren: RootRouteChildren = {
   AcademiaStaffRoute: AcademiaStaffRoute,
   AiRoute: AiRoute,
   AuthRoute: AuthRoute,
+  BugHunterRoute: BugHunterRoute,
   CommunityRoute: CommunityRoute,
   ElectricidadRoute: ElectricidadRoute,
   GamedevRoute: GamedevRoute,
@@ -1247,6 +1288,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminAnnouncementsRoute: AdminAnnouncementsRoute,
   AdminAnunciosRoute: AdminAnunciosRoute,
   AdminBansRoute: AdminBansRoute,
+  AdminBugsRoute: AdminBugsRoute,
   AdminCandidatosRoute: AdminCandidatosRoute,
   AdminConfiguracionRoute: AdminConfiguracionRoute,
   AdminHistorialRoute: AdminHistorialRoute,
