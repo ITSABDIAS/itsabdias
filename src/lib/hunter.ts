@@ -58,3 +58,16 @@ export const MISSIONS = (Object.keys(METRIC_INFO) as Metric[]).flatMap((m) =>
     reward: Math.min(20 + t * METRIC_INFO[m].mult, 3000),
   })),
 );
+
+const REWARD_NAMES: Record<number, string> = {
+  5: "Insignia exclusiva", 10: "Marco para el perfil", 15: "Fondo exclusivo", 20: "Más personalización",
+  25: "Título especial", 30: "Recompensa sorpresa", 35: "Aura neón", 40: "Marco animado", 45: "Insignia holográfica",
+  50: "Título Leyenda", 55: "Fondo cuántico", 60: "Marco dorado", 65: "Efecto de nombre", 70: "Insignia Élite",
+  75: "Título Maestro", 80: "Aura de rayos", 85: "Marco diamante", 90: "Insignia Mítica", 95: "Título Inmortal", 100: "Corona Abdias Prime",
+};
+export const LEVEL_REWARDS = Object.entries(REWARD_NAMES).map(([l, name]) => ({ level: Number(l), name }));
+
+const STAFF_TITLES = ["Guardián Novato", "Vigilante", "Centinela", "Protector", "Defensor Neón", "Escudo de la Red", "Comandante", "Guardián Élite", "Mariscal", "Leyenda del Staff"];
+export function staffTitle(level: number) {
+  return STAFF_TITLES[Math.min(9, Math.floor((level - 1) / 10))];
+}

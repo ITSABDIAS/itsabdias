@@ -636,16 +636,25 @@ export type Database = {
       }
       hunter_xp: {
         Row: {
+          last_daily: string | null
+          staff_xp: number
+          streak: number
           updated_at: string
           user_id: string
           xp: number
         }
         Insert: {
+          last_daily?: string | null
+          staff_xp?: number
+          streak?: number
           updated_at?: string
           user_id: string
           xp?: number
         }
         Update: {
+          last_daily?: string | null
+          staff_xp?: number
+          streak?: number
           updated_at?: string
           user_id?: string
           xp?: number
@@ -1907,6 +1916,7 @@ export type Database = {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"][]
       }
+      claim_daily_xp: { Args: never; Returns: Json }
       create_notification: {
         Args: {
           _body?: string
@@ -1968,6 +1978,7 @@ export type Database = {
         }[]
       }
       record_activity: { Args: { _seconds: number }; Returns: number }
+      staff_add_xp: { Args: { _uid: string; _xp: number }; Returns: undefined }
       staff_assign_role: {
         Args: {
           _reason?: string
