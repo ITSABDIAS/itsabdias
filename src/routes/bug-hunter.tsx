@@ -42,7 +42,7 @@ function BugHunterPage() {
   const [sending, setSending] = useState(false);
 
   async function load() {
-    const { data: top } = await supabase.from("hunter_xp").select("user_id,xp").order("xp", { ascending: false }).limit(20);
+    const { data: top } = await supabase.from("hunter_xp").select("user_id,xp").order("xp", { ascending: false }).limit(100);
     const ids = (top ?? []).map((t) => t.user_id);
     const { data: profs } = ids.length ? await supabase.from("profiles").select("id,username").in("id", ids) : { data: [] };
     setLeaders((top ?? []).map((t) => ({ ...t, username: profs?.find((p) => p.id === t.user_id)?.username })));
@@ -114,7 +114,7 @@ function BugHunterPage() {
             </div>
 
             <div className="flex flex-wrap gap-2 mb-6">
-              {([["report", "Reportar", Bug], ["missions", "Misiones", Target], ["ranks", "Rangos", Crown], ["top", "Top cazadores", Trophy]] as const).map(([k, l, I]) => (
+              {([["report", "Reportar", Bug], ["missions", "Misiones", Target], ["ranks", "Rangos", Crown], ["top", "Top 100", Trophy]] as const).map(([k, l, I]) => (
                 <button key={k} onClick={() => setTab(k)} className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm ${tab === k ? "bg-primary text-primary-foreground border-primary" : "border-border hover:border-primary/60"}`}>
                   <I className="h-4 w-4" /> {l}
                 </button>
