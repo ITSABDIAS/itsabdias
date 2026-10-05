@@ -9,6 +9,7 @@ import { RankBadge, RANK_PRIORITY, type RankSlug } from "@/components/RankBadge"
 import { FollowersDialog } from "@/components/FollowersDialog";
 import { PremiumName, PremiumAvatarRing } from "@/components/PremiumName";
 import { ReportMenu } from "@/components/ReportMenu";
+import { LevelCard } from "@/components/LevelCard";
 
 export const Route = createFileRoute("/u/$username")({
   head: ({ params }) => ({
@@ -268,6 +269,9 @@ function PublicProfilePage() {
             </div>
           </div>
           ); })()}
+        </div>
+        <div className="mx-auto max-w-3xl mt-6">
+          <LevelCard userId={profile.id} own={isOwn} isStaff={roles.some((r) => ["moderator", "admin", "founder"].includes(r))} />
         </div>
 
         <FollowersDialog

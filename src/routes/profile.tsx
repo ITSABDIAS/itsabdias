@@ -9,6 +9,7 @@ import { User as UserIcon, Save, Shield, Pencil, X, ExternalLink, Upload, Loader
 import { RankBadge, RANK_PRIORITY, type RankSlug } from "@/components/RankBadge";
 import { RankGuide } from "@/components/RankGuide";
 import { FollowersDialog } from "@/components/FollowersDialog";
+import { LevelCard } from "@/components/LevelCard";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -312,6 +313,12 @@ function ProfilePage() {
             )}
           </div>
         </div>
+
+        {user && (
+          <div className="mx-auto max-w-3xl mt-8">
+            <LevelCard userId={user.id} own isStaff={roles.some((r) => ["moderator", "admin", "founder"].includes(r))} />
+          </div>
+        )}
 
         {/* Rank progression */}
         <div className="mx-auto max-w-3xl mt-8 glass rounded-2xl p-6 border border-neon-cyan/30 shadow-neon-blue">
