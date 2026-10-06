@@ -5,8 +5,8 @@ import { SectionTitle } from "@/components/SectionTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
-import { Bug, Trophy, Target, Bot, Send, Crown, CheckCircle2 } from "lucide-react";
-import { levelFromXp, rankFromLevel, MISSIONS, ALL_RANKS, MAX_LEVEL } from "@/lib/hunter";
+import { Bug, Trophy, Bot, Send } from "lucide-react";
+import { levelFromXp, rankFromLevel, MAX_LEVEL } from "@/lib/hunter";
 
 export const Route = createFileRoute("/bug-hunter")({
   head: () => ({
@@ -23,7 +23,6 @@ export const Route = createFileRoute("/bug-hunter")({
 });
 
 type Report = { id: string; title: string; status: string; points_awarded: number; review_note: string | null; created_at: string };
-type Stats = Record<string, number>;
 type Leader = { user_id: string; xp: number; username?: string };
 
 const STATUS: Record<string, string> = {
@@ -32,11 +31,9 @@ const STATUS: Record<string, string> = {
 
 function BugHunterPage() {
   const { user, loading } = useAuth();
-  const [tab, setTab] = useState<"report" | "missions" | "ranks" | "top">("report");
+  const [tab, setTab] = useState<"report" | "top">("report");
   const [xp, setXp] = useState(0);
   const [reports, setReports] = useState<Report[]>([]);
-  const [stats, setStats] = useState<Stats>({});
-  const [claimed, setClaimed] = useState<Set<string>>(new Set());
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [form, setForm] = useState({ title: "", description: "", page: "", severity: "normal" });
   const [sending, setSending] = useState(false);
@@ -47,16 +44,12 @@ function BugHunterPage() {
     const { data: profs } = ids.length ? await supabase.from("profiles").select("id,username").in("id", ids) : { data: [] };
     setLeaders((top ?? []).map((t) => ({ ...t, username: profs?.find((p) => p.id === t.user_id)?.username })));
     if (!user) return;
-    const [x, r, s, c] = await Promise.all([
+    const [x, r] = await Promise.all([
       supabase.from("hunter_xp").select("xp").eq("user_id", user.id).maybeSingle(),
       supabase.from("bug_reports").select("id,title,status,points_awarded,review_note,created_at").eq("user_id", user.id).order("created_at", { ascending: false }),
-      supabase.rpc("hunter_mission_stats"),
-      supabase.from("mission_claims").select("mission_key").eq("user_id", user.id),
     ]);
     setXp(x.data?.xp ?? 0);
     setReports((r.data as Report[]) ?? []);
-    setStats((s.data as Stats) ?? {});
-    setClaimed(new Set((c.data ?? []).map((m) => m.mission_key)));
   }
   useEffect(() => { if (!loading) load(); }, [user, loading]);
 
@@ -73,13 +66,6 @@ function BugHunterPage() {
     load();
   }
 
-  async function claim(key: string) {
-    const { data, error } = await supabase.rpc("hunter_claim_mission", { _key: key });
-    if (error) return toast.error(error.message);
-    toast.success(`+${data} XP ⚡`);
-    load();
-  }
-
   const lv = levelFromXp(xp);
   const rank = rankFromLevel(lv.level);
   const nexusQ = `Ayúdame a escribir un buen reporte de error para ItsaBDias. Esto es lo que pasa: ${form.description || "(describe el problema)"}`;
@@ -87,7 +73,7 @@ function BugHunterPage() {
   return (
     <PageShell>
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-        <SectionTitle as="h1" eyebrow="Bug Hunter" title="Caza errores, sube de rango" subtitle="Reporta fallos reales de la página. Si el staff lo confirma, ganas XP. 100 niveles · 50 rangos · misiones." />
+        <SectionTitle as="h1" eyebrow="Bug Hunter" title="Caza errores, gana EXP" subtitle="Reporta fallos reales de la página. Si el Staff los confirma, avanzas en el sistema de niveles." />
 
         {!user && !loading ? (
           <div className="glass rounded-2xl p-8 text-center">
@@ -114,7 +100,7 @@ function BugHunterPage() {
             </div>
 
             <div className="flex flex-wrap gap-2 mb-6">
-              {([["report", "Reportar", Bug], ["missions", "Misiones", Target], ["ranks", "Rangos", Crown], ["top", "Top 100", Trophy]] as const).map(([k, l, I]) => (
+              {([["report", "Reportar", Bug], ["top", "Top 100", Trophy]] as const).map(([k, l, I]) => (
                 <button key={k} onClick={() => setTab(k)} className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm ${tab === k ? "bg-primary text-primary-foreground border-primary" : "border-border hover:border-primary/60"}`}>
                   <I className="h-4 w-4" /> {l}
                 </button>
@@ -151,38 +137,6 @@ function BugHunterPage() {
                     </ul>
                   )}
                 </div>
-              </div>
-            )}
-
-            {tab === "missions" && (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {MISSIONS.map((m) => {
-                  const have = stats[m.metric] ?? 0;
-                  const done = have >= m.target;
-                  const got = claimed.has(m.key);
-                  return (
-                    <div key={m.key} className={`glass rounded-xl p-4 border ${got ? "border-primary/50" : "border-border"}`}>
-                      <p className="font-medium text-sm">{m.label}</p>
-                      <div className="mt-2 h-2 rounded-full bg-muted overflow-hidden"><div className="h-full bg-primary" style={{ width: `${Math.min(100, (have / m.target) * 100)}%` }} /></div>
-                      <div className="mt-2 flex items-center justify-between text-xs">
-                        <span className="font-mono text-muted-foreground">{Math.min(have, m.target)}/{m.target} · +{m.reward} XP</span>
-                        {got ? <span className="flex items-center gap-1 text-primary"><CheckCircle2 className="h-4 w-4" /> Reclamada</span>
-                          : <button disabled={!done} onClick={() => claim(m.key)} className="px-3 py-1 rounded-md bg-primary text-primary-foreground disabled:opacity-40">Reclamar</button>}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-
-            {tab === "ranks" && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
-                {ALL_RANKS.map((r) => (
-                  <div key={r.index} className={`rounded-lg p-3 border text-center ${r.index <= rank.index ? "glass" : "opacity-40"}`} style={{ borderColor: r.color + "66" }}>
-                    <p className="text-[10px] font-mono text-muted-foreground">#{r.index} · Nv {r.minLevel}</p>
-                    <p className="text-sm font-bold" style={{ color: r.color }}>{r.name}</p>
-                  </div>
-                ))}
               </div>
             )}
 
