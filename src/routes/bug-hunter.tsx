@@ -42,7 +42,7 @@ function BugHunterPage() {
   const [sending, setSending] = useState(false);
 
   async function load() {
-    const { data: top } = await supabase.from("hunter_xp").select("user_id,xp").order("xp", { ascending: false }).limit(100);
+    const { data: top } = await supabase.rpc("get_hunter_leaderboard", { _limit: 100 });
     const ids = (top ?? []).map((t) => t.user_id);
     const { data: profs } = ids.length ? await supabase.from("profiles").select("id,username").in("id", ids) : { data: [] };
     setLeaders((top ?? []).map((t) => ({ ...t, username: profs?.find((p) => p.id === t.user_id)?.username })));
