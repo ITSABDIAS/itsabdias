@@ -15,6 +15,13 @@
       "when": 1791163864470,
       "tag": "0001_member_staff_levels",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791254827306,
+      "tag": "0002_restrict_hunter_xp_read",
+      "breakpoints": true
     }
   ]
 }

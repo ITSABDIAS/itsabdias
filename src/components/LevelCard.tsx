@@ -9,8 +9,14 @@ export function LevelCard({ userId, isStaff, own }: { userId: string; isStaff: b
   const [d, setD] = useState<{ xp: number; staff_xp: number; streak: number; last_daily: string | null } | null>(null);
 
   async function load() {
-    const { data } = await supabase.from("hunter_xp").select("xp,staff_xp,streak,last_daily").eq("user_id", userId).maybeSingle();
-    setD(data ?? { xp: 0, staff_xp: 0, streak: 0, last_daily: null });
+    if (own) {
+      const { data } = await supabase.from("hunter_xp").select("xp,staff_xp,streak,last_daily").eq("user_id", userId).maybeSingle();
+      setD(data ?? { xp: 0, staff_xp: 0, streak: 0, last_daily: null });
+      return;
+    }
+    const { data } = await supabase.rpc("get_user_level", { _user_id: userId });
+    const row = (data as any[] | null)?.[0];
+    setD(row ? { ...row, last_daily: null } : { xp: 0, staff_xp: 0, streak: 0, last_daily: null });
   }
   useEffect(() => { load(); }, [userId]);
 

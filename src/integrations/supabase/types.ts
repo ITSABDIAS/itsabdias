@@ -1948,7 +1948,22 @@ export type Database = {
         Args: { _approve: boolean; _id: string; _note?: string }
         Returns: undefined
       }
+      get_hunter_leaderboard: {
+        Args: { _limit?: number }
+        Returns: {
+          user_id: string
+          xp: number
+        }[]
+      }
       get_or_create_conversation: { Args: { _other: string }; Returns: string }
+      get_user_level: {
+        Args: { _user_id: string }
+        Returns: {
+          staff_xp: number
+          streak: number
+          xp: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
