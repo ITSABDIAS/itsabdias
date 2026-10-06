@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   Menu, X, Youtube, LogOut, User as UserIcon, Github,
-  Home, Sparkles, Rocket, BookOpen, GraduationCap, MessageSquare, Users, Crown, Shield, HelpCircle, Mail, Newspaper, ChevronDown, Gamepad2
+  Home, Sparkles, Rocket, BookOpen, GraduationCap, MessageSquare, Users, Crown, Shield, HelpCircle, Mail, Newspaper, ChevronDown, Gamepad2, Trophy
 } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/hooks/useAuth";
@@ -15,6 +15,7 @@ type NavLink = { to: string; label: string; Icon: any };
 const primaryLinks: NavLink[] = [
   { to: "/", label: "Inicio", Icon: Home },
   { to: "/ai", label: "NEXUS IA", Icon: Sparkles },
+  { to: "/niveles", label: "Niveles", Icon: Trophy },
   { to: "/projects", label: "Proyectos", Icon: Rocket },
   { to: "/tutoriales", label: "Tutoriales", Icon: BookOpen },
   { to: "/academy", label: "Academy", Icon: GraduationCap },
@@ -66,7 +67,7 @@ export function Navbar() {
     return () => { cancelled = true; };
   }, [user]);
 
-  const desktopLinks = primaryLinks.slice(0, 5);
+  const desktopLinks = primaryLinks.slice(0, 6);
 
   return (
     <header className="fixed top-0 inset-x-0 z-50 glass">
@@ -92,7 +93,7 @@ export function Navbar() {
               <Menu className="h-3.5 w-3.5" /> Más <ChevronDown className="h-3.5 w-3.5" />
             </button>
             {moreOpen && <div className="absolute top-full right-0 mt-2 w-64 rounded-lg border border-border bg-popover p-2 shadow-card">
-              {[primaryLinks[5], primaryLinks[6], { to: "/juego", label: "NEXUS Protocol", Icon: Gamepad2 }, { to: "/bug-hunter", label: "Bug Hunter", Icon: Gamepad2 }, { to: "/staff", label: "Staff público", Icon: Users }, ...staffProgramLinks].map((l) => (
+              {[primaryLinks[6], primaryLinks[7], { to: "/juego", label: "NEXUS Protocol", Icon: Gamepad2 }, { to: "/bug-hunter", label: "Bug Hunter", Icon: Gamepad2 }, { to: "/staff", label: "Staff público", Icon: Users }, ...staffProgramLinks].map((l) => (
                 <Link key={l.to} to={l.to} onClick={() => setMoreOpen(false)} className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground"><l.Icon className="h-4 w-4 text-neon-cyan" />{l.label}</Link>
               ))}
             </div>}

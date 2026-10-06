@@ -39,7 +39,7 @@ export function LevelCard({ userId, isStaff, own }: { userId: string; isStaff: b
     <div className="glass rounded-2xl p-6 border border-neon-purple/40 space-y-5">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <h3 className="font-display text-lg font-bold"><span className="text-neon-cyan">//</span> nivel de miembro</h3>
-        <Link to="/bug-hunter" className="text-xs text-neon-cyan hover:underline">Ranking Top 100 →</Link>
+        <Link to="/niveles" className="text-xs text-neon-cyan hover:underline">Ver niveles y misiones →</Link>
       </div>
       <Progress icon={<Star className="h-5 w-5" />} level={m.level} pct={m.pct} xp={d.xp} next={m.next} title={rank.name} color={rank.color} />
 
