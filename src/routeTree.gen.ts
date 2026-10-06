@@ -22,6 +22,7 @@ import { Route as HardwareRouteImport } from './routes/hardware'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as JuegoRouteImport } from './routes/juego'
 import { Route as MessagesRouteImport } from './routes/messages'
+import { Route as NivelesRouteImport } from './routes/niveles'
 import { Route as NoticiasRouteImport } from './routes/noticias'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as PremiumRouteImport } from './routes/premium'
@@ -134,6 +135,11 @@ const JuegoRoute = JuegoRouteImport.update({
 const MessagesRoute = MessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NivelesRoute = NivelesRouteImport.update({
+  id: '/niveles',
+  path: '/niveles',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NoticiasRoute = NoticiasRouteImport.update({
@@ -391,6 +397,7 @@ export interface FileRoutesByFullPath {
   '/help': typeof HelpRoute
   '/juego': typeof JuegoRoute
   '/messages': typeof MessagesRoute
+  '/niveles': typeof NivelesRoute
   '/noticias': typeof NoticiasRoute
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
@@ -454,6 +461,7 @@ export interface FileRoutesByTo {
   '/help': typeof HelpRoute
   '/juego': typeof JuegoRoute
   '/messages': typeof MessagesRoute
+  '/niveles': typeof NivelesRoute
   '/noticias': typeof NoticiasRoute
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
@@ -518,6 +526,7 @@ export interface FileRoutesById {
   '/help': typeof HelpRoute
   '/juego': typeof JuegoRoute
   '/messages': typeof MessagesRoute
+  '/niveles': typeof NivelesRoute
   '/noticias': typeof NoticiasRoute
   '/notifications': typeof NotificationsRoute
   '/premium': typeof PremiumRoute
@@ -583,6 +592,7 @@ export interface FileRouteTypes {
     | '/help'
     | '/juego'
     | '/messages'
+    | '/niveles'
     | '/noticias'
     | '/notifications'
     | '/premium'
@@ -646,6 +656,7 @@ export interface FileRouteTypes {
     | '/help'
     | '/juego'
     | '/messages'
+    | '/niveles'
     | '/noticias'
     | '/notifications'
     | '/premium'
@@ -709,6 +720,7 @@ export interface FileRouteTypes {
     | '/help'
     | '/juego'
     | '/messages'
+    | '/niveles'
     | '/noticias'
     | '/notifications'
     | '/premium'
@@ -773,6 +785,7 @@ export interface RootRouteChildren {
   HelpRoute: typeof HelpRoute
   JuegoRoute: typeof JuegoRoute
   MessagesRoute: typeof MessagesRoute
+  NivelesRoute: typeof NivelesRoute
   NoticiasRoute: typeof NoticiasRoute
   NotificationsRoute: typeof NotificationsRoute
   PremiumRoute: typeof PremiumRoute
@@ -914,6 +927,13 @@ declare module '@tanstack/react-router' {
       path: '/messages'
       fullPath: '/messages'
       preLoaderRoute: typeof MessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/niveles': {
+      id: '/niveles'
+      path: '/niveles'
+      fullPath: '/niveles'
+      preLoaderRoute: typeof NivelesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/noticias': {
@@ -1269,6 +1289,7 @@ const rootRouteChildren: RootRouteChildren = {
   HelpRoute: HelpRoute,
   JuegoRoute: JuegoRoute,
   MessagesRoute: MessagesRoute,
+  NivelesRoute: NivelesRoute,
   NoticiasRoute: NoticiasRoute,
   NotificationsRoute: NotificationsRoute,
   PremiumRoute: PremiumRoute,
