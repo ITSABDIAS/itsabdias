@@ -14,6 +14,7 @@ import {
   rankFromLevel, staffTitle, type Metric,
 } from "@/lib/hunter";
 import { toast } from "sonner";
+import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/niveles")({
   head: () => ({
@@ -60,6 +61,8 @@ function LevelsPage() {
       supabase.rpc("hunter_mission_stats"),
       supabase.from("mission_claims").select("mission_key").eq("user_id", user.id),
     ]);
+    const error = xpResult.error ?? statsResult.error ?? claimsResult.error;
+    if (error) { toast.error("No se pudo cargar tu progreso. Intenta recargar la página."); return; }
     setProgress(xpResult.data ?? { xp: 0, staff_xp: 0, streak: 0, last_daily: null });
     setStats((statsResult.data as Record<string, number>) ?? {});
     setClaimed(new Set((claimsResult.data ?? []).map((item) => item.mission_key)));
@@ -102,7 +105,7 @@ function LevelsPage() {
 
   return (
     <PageShell>
-      <main className="relative overflow-hidden">
+      <div className="relative overflow-hidden">
         <div aria-hidden className="grid-bg pointer-events-none absolute inset-0 opacity-40" />
         <section className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-16">
           <header className="mb-7 border-b border-border pb-7">
@@ -119,7 +122,7 @@ function LevelsPage() {
                   <span className="font-mono text-xs uppercase text-muted-foreground">Estado de jugador</span>
                   <span className="inline-flex items-center gap-1 text-xs text-neon-cyan"><span className="h-2 w-2 rounded-full bg-neon-cyan" /> En línea</span>
                 </div>
-                <p className="mt-3 text-2xl font-bold">{user ? rank.name : "Recluta NEXUS"}</p>
+                <div className="mt-3 flex items-center gap-3"><img src={logo} alt="Emblema ItsaBDias" className="h-12 w-12 object-contain" /><p className="text-2xl font-bold">{user ? rank.name : "Recluta NEXUS"}</p></div>
                 <p className="text-sm text-muted-foreground">{user ? `Rango ${rank.index} de 50` : "Inicia sesión para guardar tu avance"}</p>
               </div>
             </div>
@@ -159,7 +162,7 @@ function LevelsPage() {
             </>
           )}
         </section>
-      </main>
+      </div>
     </PageShell>
   );
 }
