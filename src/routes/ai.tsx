@@ -582,7 +582,7 @@ function AI() {
               {msgs.map((m, i) => (
                 <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                   <div
-                    className={`max-w-[90%] sm:max-w-[85%] px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-sm prose prose-sm prose-invert prose-pre:bg-black/60 prose-pre:border prose-pre:border-neon-cyan/20 prose-code:text-neon-cyan break-words ${
+                    className={`min-w-0 max-w-[90%] sm:max-w-[85%] px-3 sm:px-4 py-3 sm:py-4 rounded-2xl text-base leading-7 break-words [&_p]:my-3 [&_h1]:mb-3 [&_h1]:mt-5 [&_h1]:text-xl [&_h2]:mb-3 [&_h2]:mt-5 [&_h2]:text-lg [&_h3]:mb-2 [&_h3]:mt-4 [&_h3]:text-base [&_ul]:my-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:my-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:my-1 [&_pre]:my-4 [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_pre]:rounded-md [&_pre]:border [&_pre]:border-border [&_pre]:bg-background [&_pre]:p-4 [&_pre]:text-sm [&_code]:font-mono [&_code]:text-neon-cyan [&_blockquote]:border-l-2 [&_blockquote]:border-neon-cyan [&_blockquote]:pl-4 ${
                       m.role === "user"
                         ? "bg-gradient-neon text-primary-foreground rounded-br-sm"
                         : "glass border border-neon-cyan/30 rounded-bl-sm"

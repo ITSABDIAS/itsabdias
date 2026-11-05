@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Mejorar la redacción, profundidad y contexto de NEXUS y comprobar respuestas reales.
+- [ ] Mejorar la redacción y profundidad de NEXUS, admitir respuestas extensas y comprobar respuestas reales.
 
 - [x] Crear Academia de Staff con clases, tiempo mínimo y exámenes reales.
 - [x] Crear panel de candidatos para revisión, evaluación y decisión protegida.

@@ -5,7 +5,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 const MessageSchema = z.object({
   conversationId: z.string().uuid(),
   role: z.enum(["user", "assistant"]),
-  content: z.string().min(1).max(12000),
+  content: z.string().min(1).max(60000),
   imageUrl: z.string().max(500).optional().nullable(),
 });
 
