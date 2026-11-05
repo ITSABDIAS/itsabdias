@@ -46,7 +46,7 @@ const STAFF_SOURCES = [
 
 function LevelsPage() {
   const { user, loading: authLoading } = useAuth();
-  const { isStaff, loading: rolesLoading } = useMyRoles();
+  const { isStaff } = useMyRoles();
   const [tab, setTab] = useState<Tab>("overview");
   const [progress, setProgress] = useState<ProgressData>({ xp: 0, staff_xp: 0, streak: 0, last_daily: null });
   const [stats, setStats] = useState<Record<string, number>>({});
@@ -84,11 +84,11 @@ function LevelsPage() {
     await load();
   };
 
-  const claimMission = async (key: string) => {
+  const claimMission = async (key: string): Promise<void> => {
     setBusy(key);
     const { data, error } = await supabase.rpc("hunter_claim_mission", { _key: key });
     setBusy(null);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(`+${data} EXP obtenida`);
     await load();
   };
