@@ -100,6 +100,7 @@ function BugHunterPage() {
             </div>
 
             <div className="flex flex-wrap gap-2 mb-6">
+              <Link to="/niveles" className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border text-sm text-neon-cyan">Niveles y misiones →</Link>
               {([["report", "Reportar", Bug], ["top", "Top 100", Trophy]] as const).map(([k, l, I]) => (
                 <button key={k} onClick={() => setTab(k)} className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm ${tab === k ? "bg-primary text-primary-foreground border-primary" : "border-border hover:border-primary/60"}`}>
                   <I className="h-4 w-4" /> {l}
