@@ -33,6 +33,8 @@
   --color-neon-blue: var(--neon-blue);
   --color-neon-purple: var(--neon-purple);
   --color-neon-cyan: var(--neon-cyan);
+  --color-premium: var(--premium);
+  --color-plus: var(--plus);
 
   --font-display: "Orbitron", system-ui, sans-serif;
   --font-sans: "Rajdhani", system-ui, sans-serif;
@@ -78,6 +80,10 @@
   --neon-blue: oklch(0.75 0.22 240);
   --neon-purple: oklch(0.65 0.28 295);
   --neon-cyan: oklch(0.85 0.18 200);
+  --premium: #fbbf24;
+  --plus: #38e8c6;
+  --gradient-plus: linear-gradient(120deg, var(--plus), var(--neon-cyan), var(--foreground));
+  --shadow-plus: 0 0 24px color-mix(in srgb, var(--plus) 22%, transparent);
 
   --gradient-neon: linear-gradient(135deg, oklch(0.75 0.22 240), oklch(0.65 0.28 295));
   --gradient-hero: radial-gradient(ellipse at top, oklch(0.25 0.15 280 / 0.6), transparent 70%);
@@ -123,6 +129,10 @@
 }
 
 @layer utilities {
+  .plus-name { background: var(--gradient-plus); background-clip: text; color: transparent; font-weight: 700; }
+  .plus-frame { border: 1px solid var(--plus); box-shadow: var(--shadow-plus); }
+  .plus-avatar { background: var(--gradient-plus); box-shadow: var(--shadow-plus); }
+  .plus-badge { color: var(--plus); background: color-mix(in srgb, var(--plus) 8%, transparent); border-color: color-mix(in srgb, var(--plus) 45%, transparent); box-shadow: var(--shadow-plus); }
   .text-gradient-neon {
     background: var(--gradient-neon);
     -webkit-background-clip: text;
