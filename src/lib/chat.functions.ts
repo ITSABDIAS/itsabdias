@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { MEMBERSHIPS } from "@/lib/membership";
 
 const MessageSchema = z.object({
   conversationId: z.string().uuid(),
@@ -16,12 +17,14 @@ export const listConversations = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
+    const { data: plus, error: membershipError } = await supabase.rpc("is_plus", { _user_id: userId });
+    if (membershipError) throw new Error("No se pudo verificar tu membresía");
     const { data, error } = await supabase
       .from("ai_conversations")
       .select("id, title, created_at, updated_at")
       .eq("user_id", userId)
       .order("updated_at", { ascending: false })
-      .limit(60);
+      .limit(plus ? MEMBERSHIPS.plus.historyLimit : MEMBERSHIPS.premium.historyLimit);
 
     if (error) {
       console.error("listConversations error", error);

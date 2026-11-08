@@ -24,6 +24,13 @@ export async function grantPremium(target: string, reason?: string) {
   return true;
 }
 
+export async function setPlus(target: string, enabled: boolean, reason?: string) {
+  const { error } = await supabase.rpc("founder_set_plus", { _target: target, _enabled: enabled, _reason: reason ?? null });
+  if (error) { toast.error(error.message); return false; }
+  toast.success(enabled ? "Plus concedido sin cobro" : "Plus retirado; Premium conservado");
+  return true;
+}
+
 export async function revokePremium(target: string, reason?: string) {
   const { error } = await supabase.rpc("staff_revoke_premium" as any, { _target: target, _reason: reason ?? null });
   if (error) { toast.error(error.message); return false; }

@@ -22,6 +22,20 @@
       "when": 1791254827306,
       "tag": "0002_restrict_hunter_xp_read",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794159703858,
+      "tag": "0003_add_plus_role",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794159732309,
+      "tag": "0004_plus_entitlements_and_founder_controls",
+      "breakpoints": true
     }
   ]
 }

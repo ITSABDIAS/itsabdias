@@ -7,10 +7,12 @@ export type RankSlug =
   | "developer"
   | "ai_expert"
   | "premium"
+  | "plus"
   | "verified"
   | "member";
 
 export const RANK_META: Record<RankSlug, { label: string; color: string; Icon: any; gradient: string }> = {
+  plus: { label: "Plus", color: "var(--plus)", Icon: Sparkles, gradient: "from-plus to-neon-cyan" },
   founder:   { label: "Founder",       color: "#ff00aa", Icon: Crown,      gradient: "from-[#ff00aa] via-[#a855f7] to-[#22d3ee]" },
   admin:     { label: "Administrador", color: "#a855f7", Icon: Shield,     gradient: "from-[#a855f7] to-[#7c3aed]" },
   moderator: { label: "Moderador",     color: "#3b82f6", Icon: Gavel,      gradient: "from-[#3b82f6] to-[#0ea5e9]" },
@@ -22,7 +24,7 @@ export const RANK_META: Record<RankSlug, { label: string; color: string; Icon: a
 };
 
 export const RANK_PRIORITY: RankSlug[] = [
-  "founder", "admin", "moderator", "developer", "ai_expert", "premium", "verified", "member",
+  "founder", "admin", "moderator", "developer", "ai_expert", "plus", "premium", "verified", "member",
 ];
 
 export function topRank(roles: string[] | undefined | null): RankSlug | undefined {
@@ -52,6 +54,8 @@ export function RankBadge({
   if (!meta) return null;
   const s = sizes[size];
   const Icon = meta.Icon;
+
+  if (slug === "plus") return <span className={`plus-badge inline-flex items-center font-mono uppercase font-semibold rounded-md border ${s.wrap}`} title="ItsaBDias Plus"><Icon className={s.icon} />{showLabel && "Plus"}</span>;
 
   if (slug === "founder") {
     // Special animated holographic badge for founder
