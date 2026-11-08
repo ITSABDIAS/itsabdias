@@ -1,5 +1,9 @@
 # Roadmap
 
+- [ ] Añadir Plus a US$9.99/mes con comparativa honesta y diseño cuidado.
+- [ ] Permitir al Founder conceder y retirar Plus con controles protegidos y notificaciones.
+- [ ] Activar ventajas de Plus en NEXUS y perfiles; verificar permisos, precios y el flujo real.
+
 - [ ] Mejorar la redacción y profundidad de NEXUS, admitir respuestas extensas y comprobar respuestas reales.
 
 - [x] Crear Academia de Staff con clases, tiempo mínimo y exámenes reales.
