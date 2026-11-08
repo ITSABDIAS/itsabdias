@@ -771,6 +771,32 @@ export type Database = {
         }
         Relationships: []
       }
+      nexus_preferences: {
+        Row: {
+          instructions: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          instructions?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          instructions?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nexus_preferences_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           body: string | null
@@ -1948,6 +1974,10 @@ export type Database = {
         Args: { _approve: boolean; _id: string; _note?: string }
         Returns: undefined
       }
+      founder_set_plus: {
+        Args: { _enabled: boolean; _reason?: string; _target: string }
+        Returns: undefined
+      }
       get_hunter_leaderboard: {
         Args: { _limit?: number }
         Returns: {
@@ -1979,6 +2009,7 @@ export type Database = {
       is_admin_or_higher: { Args: { _uid: string }; Returns: boolean }
       is_founder: { Args: { _uid: string }; Returns: boolean }
       is_moderator_or_higher: { Args: { _uid: string }; Returns: boolean }
+      is_plus: { Args: { _user_id: string }; Returns: boolean }
       is_premium: { Args: { _user_id: string }; Returns: boolean }
       is_user_muted: { Args: { _uid: string }; Returns: boolean }
       my_sanction: {
