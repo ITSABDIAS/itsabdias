@@ -2164,6 +2164,7 @@ export type Database = {
         | "ai_expert"
         | "verified"
         | "member"
+        | "plus"
       report_priority: "low" | "normal" | "high" | "critical"
       report_status:
         | "new"
@@ -2346,6 +2347,7 @@ export const Constants = {
         "ai_expert",
         "verified",
         "member",
+        "plus",
       ],
       report_priority: ["low", "normal", "high", "critical"],
       report_status: [
