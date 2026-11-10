@@ -8,6 +8,7 @@ type Unlock =
   | { kind: "subscription"; label: string };
 
 export const RANK_INFO: Record<RankSlug, { description: string; unlock: Unlock }> = {
+  plus: { description: "Todo Premium, identidad Plus y herramientas avanzadas de NEXUS.", unlock: { kind: "subscription", label: "Plus US$9.99/mes · o concedido por Founder" } },
   founder: {
     description: "Creador original de ITSABDIAS. Rango máximo absoluto del sistema.",
     unlock: { kind: "exclusive", label: "Exclusivo — no asignable" },

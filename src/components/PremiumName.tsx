@@ -4,12 +4,15 @@ import type { ReactNode } from "react";
 export function PremiumName({
   children,
   premium,
+  plus,
   className = "",
 }: {
   children: ReactNode;
   premium?: boolean;
+  plus?: boolean;
   className?: string;
 }) {
+  if (plus) return <span className={`plus-name ${className}`}>{children}</span>;
   if (!premium) return <span className={className}>{children}</span>;
   return (
     <span
@@ -24,13 +27,16 @@ export function PremiumName({
 /** Wraps an avatar with a gold premium ring when premium=true. */
 export function PremiumAvatarRing({
   premium,
+  plus,
   children,
   className = "",
 }: {
   premium?: boolean;
+  plus?: boolean;
   children: ReactNode;
   className?: string;
 }) {
+  if (plus) return <div className={`relative rounded-full p-[2px] plus-avatar ${className}`}>{children}</div>;
   if (!premium) return <div className={className}>{children}</div>;
   return (
     <div

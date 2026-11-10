@@ -13,6 +13,10 @@ export const Route = createFileRoute("/rango/$slug")({
     return { meta: [
       { title: `${label} — ItsaBDias` },
       { name: "description", content: `Miembros con el rango ${label} en ItsaBDias.` },
+      { property: "og:title", content: `${label} — ItsaBDias` },
+      { property: "og:description", content: `Miembros con el rango ${label} en ItsaBDias.` },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ] };
   },
   loader: ({ params }) => {
@@ -131,6 +135,7 @@ function describe(r: RankSlug): string {
     case "developer": return "Miembros con al menos 5 proyectos publicados.";
     case "ai_expert": return "Miembros con proyectos destacados de IA.";
     case "premium": return "Suscriptores Premium de la plataforma.";
+    case "plus": return "Miembros Plus con herramientas avanzadas de NEXUS.";
     case "verified": return "Cuentas verificadas oficialmente.";
     case "member": return "Miembros activos de la comunidad.";
   }
