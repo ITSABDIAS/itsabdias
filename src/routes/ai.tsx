@@ -41,6 +41,8 @@ import { useMyRoles } from "@/hooks/useMyRoles";
 import { supabase } from "@/integrations/supabase/client";
 import { TutorialsSection } from "@/components/TutorialsSection";
 import { NexusOnboarding, NEXUS_TOUR_KEY } from "@/components/NexusOnboarding";
+import { NexusPlusTools } from "@/components/NexusPlusTools";
+import { MEMBERSHIPS } from "@/lib/membership";
 
 export const Route = createFileRoute("/ai")({
   validateSearch: (search: Record<string, unknown>): { q?: string } =>
@@ -152,7 +154,7 @@ function ChatImage({ path }: { path: string }) {
 
 function AI() {
   const { user } = useAuth();
-  const { isPremium } = useMyRoles();
+  const { isPremium, isPlus } = useMyRoles();
   const { q } = Route.useSearch();
 
   const callAi = useServerFn(aiChat);
@@ -174,6 +176,7 @@ function AI() {
   const [imageMode, setImageMode] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [tourOpen, setTourOpen] = useState(false);
+  const [historySearch, setHistorySearch] = useState("");
 
   // First visit to NEXUS: launch the guided tour automatically.
   useEffect(() => {
@@ -333,7 +336,7 @@ function AI() {
         data: { conversationId, role: "user", content: prompt, imageUrl: storedPath },
       }).catch(() => undefined);
 
-      const payload = next.slice(-40).map((m, i, arr) => ({
+      const payload = next.slice(-(isPlus ? MEMBERSHIPS.plus.contextMessages : MEMBERSHIPS.premium.contextMessages)).map((m, i, arr) => ({
         role: m.role,
         content: m.content,
         // only send the raw image bytes for the message just sent
@@ -521,6 +524,7 @@ function AI() {
               <MessageSquarePlus className="h-4 w-4" /> Nueva conversación
             </button>
 
+            {isPlus && <input aria-label="Buscar conversaciones" placeholder="Buscar conversaciones…" value={historySearch} onChange={(e) => setHistorySearch(e.target.value)} className="mb-3 w-full rounded-md border border-input bg-background p-2 text-sm" />}
             <div className="space-y-1 max-h-[22rem] overflow-y-auto pr-1">
               {booting && <p className="text-xs text-muted-foreground px-2">Cargando...</p>}
               {!booting && convos.length === 0 && (
@@ -528,7 +532,7 @@ function AI() {
                   Aún no tienes conversaciones guardadas.
                 </p>
               )}
-              {convos.map((c) => (
+              {convos.filter((c) => !isPlus || c.title.toLowerCase().includes(historySearch.toLowerCase())).map((c) => (
                 <div
                   key={c.id}
                   className={`group flex items-center gap-1 rounded-md px-2 py-1.5 text-xs cursor-pointer transition-colors ${
@@ -603,6 +607,7 @@ function AI() {
               )}
             </div>
 
+            {isPlus && user && <NexusPlusTools userId={user.id} messages={msgs} onPrompt={(prompt) => setInput(prompt)} disabled={loading} />}
             {/* Suggestions */}
             <div data-tour="suggestions" className="flex flex-wrap gap-2 mb-3">
               {suggestions.map((s) => (

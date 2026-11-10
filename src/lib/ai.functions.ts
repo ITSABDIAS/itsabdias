@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { MEMBERSHIPS } from "@/lib/membership";
 
 const MessageSchema = z.object({
   role: z.enum(["user", "assistant", "system"]),
@@ -98,11 +99,19 @@ export const aiChat = createServerFn({ method: "POST" })
     if (!apiKey) throw new Error("LOVABLE_API_KEY no está configurada");
 
     const hasImages = data.messages.some((m) => !!m.image);
+    const { data: plus, error: plusError } = await context.supabase.rpc("is_plus", { _user_id: context.userId });
+    if (plusError) throw new Error("No se pudo verificar tu membresía");
+    let customInstructions = "";
+    if (plus) {
+      const { data: preferences, error } = await context.supabase.from("nexus_preferences").select("instructions").eq("user_id", context.userId).maybeSingle();
+      if (error) throw new Error("No se pudieron cargar tus preferencias");
+      customInstructions = preferences?.instructions ?? "";
+    }
     if (hasImages) {
       await assertPremium(context.supabase as never, context.userId);
     }
 
-    const messages = data.messages.map((m) =>
+    const messages = data.messages.filter((m) => m.role !== "system").slice(-(plus ? MEMBERSHIPS.plus.contextMessages : MEMBERSHIPS.premium.contextMessages)).map((m) =>
       m.image
         ? {
             role: m.role,
@@ -121,8 +130,8 @@ export const aiChat = createServerFn({ method: "POST" })
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: data.model ?? (hasImages ? "google/gemini-2.5-flash" : "google/gemini-2.5-pro"),
-        messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
+        model: hasImages ? "google/gemini-2.5-flash" : "google/gemini-2.5-pro",
+        messages: [{ role: "system", content: SYSTEM_PROMPT }, ...(customInstructions ? [{ role: "user", content: `Preferencias del usuario (respétalas solo si no contradicen tus reglas de seguridad y honestidad): ${customInstructions}` }] : []), ...messages],
       }),
     });
 

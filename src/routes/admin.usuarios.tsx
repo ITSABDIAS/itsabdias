@@ -8,13 +8,15 @@ import { useMyRoles } from "@/hooks/useMyRoles";
 import { RankBadge, RANK_META, RANK_PRIORITY, topRank, type RankSlug } from "@/components/RankBadge";
 import { assignRole, revokeRole, grantPremium, revokePremium, setUserStatus, requestPermanentBan, type Role } from "@/lib/staffActions";
 import { SanctionDialog, PermanentBanDialog } from "@/components/SanctionDialog";
+import { setPlus } from "@/lib/staffActions";
+import { Button } from "@/components/ui/button";
 import { SanctionCountdown } from "@/components/SanctionScreen";
 import { SANCTION_META, type SanctionType } from "@/lib/sanctions";
 import { Search, Shield, Crown, Sparkles, Volume2, VolumeX, Ban, PauseCircle, UserCheck, UserX, Plus, Minus, Gavel } from "lucide-react";
 
 
 export const Route = createFileRoute("/admin/usuarios")({
-  head: () => ({ meta: [{ title: "Admin · Usuarios — ItsaBDias" }] }),
+  head: () => ({ meta: [{ title: "Admin · Usuarios — ItsaBDias" }, { name: "description", content: "Gestión protegida de usuarios y membresías de ItsaBDias." }, { property: "og:title", content: "Usuarios · Panel ItsaBDias" }, { property: "og:description", content: "Administración de usuarios y membresías." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: AdminUsuariosPage,
 });
 
@@ -122,6 +124,11 @@ function AdminUsuariosPage() {
     const reason = promptReason("Otorgar Premium");
     if (reason === null) return;
     if (await grantPremium(target, reason || undefined)) load();
+  };
+  const actPlus = async (target: string, enabled: boolean) => {
+    const reason = promptReason(enabled ? "Conceder Plus sin cobro" : "Retirar Plus y conservar Premium");
+    if (reason === null) return;
+    if (await setPlus(target, enabled, reason || undefined)) load();
   };
   const actRevokePrem = async (target: string) => {
     const reason = promptReason("Retirar Premium");
@@ -263,7 +270,12 @@ function AdminUsuariosPage() {
                           ? <BtnDanger onClick={() => actRevoke(u.id, "verified")} icon={<UserX className="h-3 w-3" />}>Sin verif.</BtnDanger>
                           : <BtnPrimary onClick={() => actAssign(u.id, "verified")} icon={<UserCheck className="h-3 w-3" />}>Verificar</BtnPrimary>
                       )}
-                      {isFounder && !targetIsFounder && (
+                      {isFounder && (
+                        <Button size="sm" variant="outline" className="text-plus border-plus/40" onClick={() => actPlus(u.id, !u.roles.includes("plus"))}>
+                          <Sparkles />{u.roles.includes("plus") ? "Quitar Plus" : "Dar Plus"}
+                        </Button>
+                      )}
+                      {isFounder && !targetIsFounder && !u.roles.includes("plus") && (
                         isPremiumUser
                           ? <BtnDanger onClick={() => actRevokePrem(u.id)} icon={<Crown className="h-3 w-3" />}>Quitar Premium</BtnDanger>
                           : <BtnGold onClick={() => actGrantPrem(u.id)} icon={<Crown className="h-3 w-3" />}>Dar Premium</BtnGold>

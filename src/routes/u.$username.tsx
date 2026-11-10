@@ -16,6 +16,10 @@ export const Route = createFileRoute("/u/$username")({
     meta: [
       { title: `@${params.username} — ItsaBDias` },
       { name: "description", content: `Perfil público de ${params.username} en ItsaBDias.` },
+      { property: "og:title", content: `@${params.username} — ItsaBDias` },
+      { property: "og:description", content: `Perfil público de ${params.username} en ItsaBDias.` },
+      { property: "og:type", content: "profile" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: PublicProfilePage,
@@ -186,11 +190,11 @@ function PublicProfilePage() {
         </div>
 
         <div className="mx-auto max-w-4xl px-6 -mt-16 relative z-10">
-          {(() => { const isPrem = roles.includes("premium") || roles.includes("founder"); return (
+          {(() => { const isPlus = roles.includes("plus"); const isPrem = isPlus || roles.includes("premium") || roles.includes("founder"); return (
           <div className={`glass rounded-2xl p-6 sm:p-8 ${isPrem ? "border-2 border-[#fbbf24]/60 shadow-[0_0_28px_rgba(251,191,36,0.25)]" : "neon-border"}`}>
             <div className="flex flex-col sm:flex-row items-start gap-6">
               <div className="-mt-20 shrink-0">
-                <PremiumAvatarRing premium={isPrem}>
+                <PremiumAvatarRing premium={isPrem} plus={isPlus}>
                   <div className="h-28 w-28 rounded-full bg-gradient-neon flex items-center justify-center overflow-hidden shadow-neon-purple ring-4 ring-background">
                     {profile.avatar_url ? (
                       <img src={profile.avatar_url} alt={profile.username} className="h-full w-full object-cover" />
@@ -205,7 +209,7 @@ function PublicProfilePage() {
                 <div className="flex flex-wrap items-center gap-3">
                   <h1 className="font-display text-2xl sm:text-3xl font-bold">
                     {isPrem ? (
-                      <PremiumName premium>{profile.username}</PremiumName>
+                      <PremiumName premium plus={isPlus}>{profile.username}</PremiumName>
                     ) : (
                       <span className="text-gradient-neon">{profile.username}</span>
                     )}
