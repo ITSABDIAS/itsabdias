@@ -270,7 +270,7 @@ function AdminUsuariosPage() {
                           ? <BtnDanger onClick={() => actRevoke(u.id, "verified")} icon={<UserX className="h-3 w-3" />}>Sin verif.</BtnDanger>
                           : <BtnPrimary onClick={() => actAssign(u.id, "verified")} icon={<UserCheck className="h-3 w-3" />}>Verificar</BtnPrimary>
                       )}
-                      {isFounder && !targetIsFounder && (
+                      {isFounder && (
                         <Button size="sm" variant="outline" className="text-plus border-plus/40" onClick={() => actPlus(u.id, !u.roles.includes("plus"))}>
                           <Sparkles />{u.roles.includes("plus") ? "Quitar Plus" : "Dar Plus"}
                         </Button>
