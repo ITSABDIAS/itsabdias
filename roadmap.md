@@ -1,8 +1,8 @@
 # Roadmap
 
-- [ ] Añadir Plus a US$9.99/mes con comparativa honesta y diseño cuidado.
-- [ ] Permitir al Founder conceder y retirar Plus con controles protegidos y notificaciones.
-- [ ] Activar ventajas de Plus en NEXUS y perfiles; verificar permisos, precios y el flujo real.
+- [x] Añadir Plus a US$9.99/mes con comparativa honesta y diseño cuidado.
+- [x] Permitir al Founder conceder y retirar Plus con controles protegidos y notificaciones.
+- [x] Activar ventajas de Plus en NEXUS y perfiles; comprobar precios, concesión, preferencias persistentes y regreso a Premium.
 
 - [ ] Mejorar la redacción y profundidad de NEXUS, admitir respuestas extensas y comprobar respuestas reales.
 
@@ -16,4 +16,4 @@
 - [x] Añadir la página de niveles al menú y conectarla desde los perfiles.
 - [x] Verificar la nueva página de niveles en computadora y celular, con sesión y reclamo real de misión.
 
-- [ ] Activar cobros de Premium con Stripe (pendiente: plan de pago de Lovable o claves propias de Stripe).
+- [ ] Activar cobros de Premium y Plus (pendiente: conectar y configurar el proveedor de pagos).
