@@ -41,9 +41,9 @@ function StaffAcademyPage() {
   const [openModule, setOpenModule] = useState<string | null>(null);
   const [lesson, setLesson] = useState<StaffLesson | null>(null);
   const [elapsed, setElapsed] = useState(0);
-  const [exam, setExam] = useState<{ exam: StaffExam; questions: ExamQuestion[]; attempts_used: number } | null>(null);
+  const [exam, setExam] = useState<{ exam: StaffExam; questions: ExamQuestion[]; attempts_used: number; policy?: ExamPolicy } | null>(null);
   const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [result, setResult] = useState<{ score: number; passed: boolean; attempts_used: number } | null>(null);
+  const [result, setResult] = useState<{ score: number; passed: boolean; attempts_used: number; policy?: ExamPolicy } | null>(null);
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(true);
   const startedAt = useRef<number>(0);
@@ -200,8 +200,11 @@ function StaffAcademyPage() {
                   <div className="mt-7 rounded-lg border border-border p-6 text-center">
                     <div className={`text-4xl font-bold ${result.passed ? "text-neon-cyan" : "text-destructive"}`}>{result.score}%</div>
                     <p className="mt-2 font-semibold">{result.passed ? "Examen aprobado" : "Aún no aprobado"}</p>
-                    {!result.passed && result.attempts_used < exam.exam.max_attempts && <Button className="mt-4" variant="outline" onClick={() => { setResult(null); setAnswers({}); }}><RotateCcw /> Reintentar</Button>}
+                    {!result.passed && <PolicyNotice policy={result.policy} />}
+                    {!result.passed && result.policy?.can_attempt && <Button className="mt-4" variant="outline" onClick={() => { setResult(null); setAnswers({}); }}><RotateCcw /> Reintentar</Button>}
                   </div>
+                ) : exam.policy && !exam.policy.can_attempt ? (
+                  <div className="mt-7 rounded-lg border border-destructive/40 p-6 text-center"><PolicyNotice policy={exam.policy} /></div>
                 ) : (
                   <div className="mt-7 space-y-6">
                     {exam.questions.map((question, index) => <Question key={question.id} question={question} index={index} value={answers[question.id] ?? ""} onChange={(value) => setAnswers((current) => ({ ...current, [question.id]: value }))} />)}
@@ -224,3 +227,23 @@ function Question({ question, index, value, onChange }: { question: ExamQuestion
 function InfoBlock({ title, text }: { title: string; text: string }) { return <div className="rounded-md border-l-2 border-neon-purple bg-secondary/30 p-4"><h2 className="font-bold text-neon-cyan">{title}</h2><p className="mt-2 whitespace-pre-line text-sm text-muted-foreground">{text}</p></div>; }
 function Metric({ label, value }: { label: string; value: string }) { return <div className="glass rounded-md border border-border p-4"><p className="text-2xl font-bold text-gradient-neon">{value}</p><p className="text-xs uppercase text-muted-foreground">{label}</p></div>; }
 function AccessState({ icon: Icon, title, text, action }: { icon: typeof LockKeyhole; title: string; text: string; action: React.ReactNode }) { return <PageShell><section className="mx-auto max-w-xl px-6 py-28 text-center"><Icon className="mx-auto h-14 w-14 text-neon-cyan" /><h1 className="mt-5 text-3xl font-bold">{title}</h1><p className="my-4 text-muted-foreground">{text}</p>{action}</section></PageShell>; }
+type ExamPolicy = { plan: "free" | "premium" | "plus"; max_attempts: number; attempts_used: number; next_attempt_at: string | null; can_attempt: boolean };
+
+function PolicyNotice({ policy }: { policy?: ExamPolicy }) {
+  if (!policy) return null;
+  const left = policy.max_attempts - policy.attempts_used;
+  if (left <= 0) return (
+    <div className="mt-3 text-sm text-muted-foreground">
+      <p className="font-semibold text-destructive">Ya no te quedan intentos para este examen.</p>
+      {policy.plan === "free" && <p className="mt-1">Con <Link to="/premium" className="text-primary underline">Premium</Link> tienes 2 intentos sin espera, y con Plus hasta 10.</p>}
+      {policy.plan === "premium" && <p className="mt-1">Con <Link to="/premium" className="text-primary underline">Plus</Link> tienes hasta 10 intentos.</p>}
+    </div>
+  );
+  if (policy.next_attempt_at && !policy.can_attempt) return (
+    <div className="mt-3 text-sm text-muted-foreground">
+      <p className="font-semibold">Podrás intentarlo de nuevo el {new Date(policy.next_attempt_at).toLocaleDateString("es")}.</p>
+      <p className="mt-1">Será tu último intento. Con <Link to="/premium" className="text-primary underline">Premium o Plus</Link> no tienes que esperar.</p>
+    </div>
+  );
+  return <p className="mt-3 text-sm text-muted-foreground">Te quedan {left} intento(s).</p>;
+}

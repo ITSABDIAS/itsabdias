@@ -857,6 +857,8 @@ export type Database = {
           banner_url: string | null
           bio: string | null
           created_at: string
+          equipped_background: string | null
+          equipped_frame: string | null
           id: string
           joined_staff_at: string | null
           last_seen_at: string | null
@@ -867,6 +869,8 @@ export type Database = {
           banner_url?: string | null
           bio?: string | null
           created_at?: string
+          equipped_background?: string | null
+          equipped_frame?: string | null
           id: string
           joined_staff_at?: string | null
           last_seen_at?: string | null
@@ -877,6 +881,8 @@ export type Database = {
           banner_url?: string | null
           bio?: string | null
           created_at?: string
+          equipped_background?: string | null
+          equipped_frame?: string | null
           id?: string
           joined_staff_at?: string | null
           last_seen_at?: string | null
@@ -2012,6 +2018,7 @@ export type Database = {
       is_plus: { Args: { _user_id: string }; Returns: boolean }
       is_premium: { Args: { _user_id: string }; Returns: boolean }
       is_user_muted: { Args: { _uid: string }; Returns: boolean }
+      member_level: { Args: { _uid: string }; Returns: number }
       my_sanction: {
         Args: never
         Returns: {
@@ -2063,6 +2070,10 @@ export type Database = {
       staff_delete_content: {
         Args: { _id: string; _reason?: string; _type: string }
         Returns: undefined
+      }
+      staff_exam_policy: {
+        Args: { _exam_id: string; _uid: string }
+        Returns: Json
       }
       staff_feature_content: {
         Args: {
