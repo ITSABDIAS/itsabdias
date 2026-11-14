@@ -2064,6 +2064,10 @@ export type Database = {
         Args: { _id: string; _reason?: string; _type: string }
         Returns: undefined
       }
+      staff_exam_policy: {
+        Args: { _exam_id: string; _uid: string }
+        Returns: Json
+      }
       staff_feature_content: {
         Args: {
           _featured: boolean
