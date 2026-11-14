@@ -4,6 +4,7 @@ import { Footer } from "./Footer";
 import { AnnouncementBanner } from "./AnnouncementBanner";
 import { useMySanction } from "@/hooks/useMySanction";
 import { useAuth } from "@/hooks/useAuth";
+import { BackButton } from "./BackButton";
 import { SanctionScreen, MuteBanner } from "./SanctionScreen";
 
 export function PageShell({ children }: { children: ReactNode }) {
@@ -30,6 +31,7 @@ export function PageShell({ children }: { children: ReactNode }) {
       <Navbar />
       <AnnouncementBanner />
       <main className="pt-16">
+        <BackButton />
         {!loading && sanction?.status === "muted" && (
           <div className="px-4 sm:px-6"><MuteBanner sanction={sanction} /></div>
         )}
