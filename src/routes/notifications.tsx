@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Bell, Check, CheckCheck, Trash2, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
@@ -36,6 +36,7 @@ function timeAgo(iso: string) {
 }
 
 function NotificationsPage() {
+  const router = useRouter();
   const { user, loading: authLoading } = useAuth();
   const [items, setItems] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
