@@ -9,6 +9,7 @@ import { RankBadge, RANK_PRIORITY, type RankSlug } from "@/components/RankBadge"
 import { FollowersDialog } from "@/components/FollowersDialog";
 import { PremiumName, PremiumAvatarRing } from "@/components/PremiumName";
 import { ReportMenu } from "@/components/ReportMenu";
+import { MembershipBanner } from "@/components/MembershipBanner";
 import { rewardById } from "@/lib/cosmetics";
 import { LevelCard } from "@/components/LevelCard";
 
@@ -188,6 +189,7 @@ function PublicProfilePage() {
             className="h-48 sm:h-64 w-full bg-gradient-to-br from-neon-purple/40 via-neon-blue/30 to-neon-cyan/40 relative overflow-hidden"
             style={profile.banner_url ? { backgroundImage: `url(${profile.banner_url})`, backgroundSize: "cover", backgroundPosition: "center" } : rewardById(profile.equipped_background) ? { background: rewardById(profile.equipped_background)!.style } : undefined}
           >
+            {!profile.banner_url && !profile.equipped_background && (roles.includes("plus") ? <MembershipBanner plan="plus" /> : (roles.includes("premium") || roles.includes("founder")) ? <MembershipBanner plan="premium" /> : null)}
             <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
           </div>
         </div>

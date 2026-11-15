@@ -165,3 +165,19 @@
     border: 1px solid oklch(0.7 0.2 270 / 0.2);
   }
 }
+
+/* Banners y marcos de membresía */
+@keyframes sweep { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes float-up { 0% { transform: translateY(0); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(-140px); opacity: 0; } }
+.banner-premium { background: radial-gradient(ellipse at 20% 0%, color-mix(in srgb, var(--premium) 55%, transparent), transparent 60%), linear-gradient(120deg, color-mix(in srgb, var(--premium) 18%, var(--background)), color-mix(in srgb, var(--premium) 45%, var(--background)) 50%, color-mix(in srgb, var(--premium) 12%, var(--background))); }
+.banner-plus { background: radial-gradient(ellipse at 15% 10%, color-mix(in srgb, var(--neon-cyan, #22d3ee) 45%, transparent), transparent 55%), radial-gradient(ellipse at 85% 30%, color-mix(in srgb, var(--neon-purple, #a855f7) 60%, transparent), transparent 60%), linear-gradient(135deg, color-mix(in srgb, #3b82f6 35%, var(--background)), color-mix(in srgb, #7c3aed 50%, var(--background))); }
+.banner-grid { background-image: linear-gradient(color-mix(in srgb, var(--foreground) 10%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--foreground) 10%, transparent) 1px, transparent 1px); background-size: 32px 32px; mask-image: linear-gradient(to bottom, transparent, black 40%, transparent); }
+.banner-sweep { background: linear-gradient(100deg, transparent 30%, color-mix(in srgb, var(--foreground) 25%, transparent) 50%, transparent 70%); animation: sweep 3.5s linear infinite; }
+.banner-particle { position: absolute; bottom: 0; width: 4px; height: 4px; border-radius: 9999px; background: currentColor; box-shadow: 0 0 8px currentColor; animation: float-up 4s linear infinite; }
+.prime-frame { position: relative; border-radius: 9999px; padding: 6px; }
+.prime-frame::before { content: ""; position: absolute; inset: -6px; border-radius: 9999px; background: conic-gradient(from 0deg, #22d3ee, #3b82f6, #a855f7, #22d3ee, #60a5fa, #22d3ee); animation: spin-slow 4s linear infinite; filter: drop-shadow(0 0 10px #3b82f6); -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 7px), black calc(100% - 6px)); mask: radial-gradient(farthest-side, transparent calc(100% - 7px), black calc(100% - 6px)); }
+.prime-frame::after { content: ""; position: absolute; inset: -14px; border-radius: 9999px; border: 2px dashed color-mix(in srgb, #60a5fa 70%, transparent); animation: spin-slow 12s linear infinite reverse; }
+.prime-wing { position: absolute; top: 50%; width: 26px; height: 46px; translate: 0 -50%; background: linear-gradient(180deg, #22d3ee, #3b82f6 50%, #7c3aed); clip-path: polygon(100% 0, 0 30%, 40% 50%, 0 70%, 100% 100%, 70% 50%); filter: drop-shadow(0 0 8px #3b82f6); z-index: 2; }
+.prime-crown { position: absolute; left: 50%; top: -22px; translate: -50% 0; width: 34px; height: 20px; background: linear-gradient(#93c5fd, #3b82f6); clip-path: polygon(0 100%, 0 30%, 25% 60%, 50% 0, 75% 60%, 100% 30%, 100% 100%); filter: drop-shadow(0 0 8px #3b82f6); z-index: 2; }
+.notif-update { border: 1px solid color-mix(in srgb, var(--premium) 70%, transparent); background: linear-gradient(135deg, color-mix(in srgb, var(--premium) 22%, var(--background)), var(--background) 60%, color-mix(in srgb, var(--premium) 14%, var(--background))); box-shadow: 0 0 28px color-mix(in srgb, var(--premium) 35%, transparent), inset 0 0 20px color-mix(in srgb, var(--premium) 12%, transparent); }

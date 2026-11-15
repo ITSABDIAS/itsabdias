@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Bell, Check, CheckCheck, Trash2, Loader2 } from "lucide-react";
+import { Bell, Check, CheckCheck, Trash2, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
@@ -36,6 +36,7 @@ function timeAgo(iso: string) {
 }
 
 function NotificationsPage() {
+  const router = useRouter();
   const { user, loading: authLoading } = useAuth();
   const [items, setItems] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
@@ -169,7 +170,28 @@ function NotificationsPage() {
           ) : (
             <ul className="space-y-3">
               {items.map((n) => {
-                const inner = (
+                const isUpdate = n.type === "update";
+                const inner = isUpdate ? (
+                  <div className="notif-update relative overflow-hidden rounded-xl p-6 sm:p-7">
+                    <div aria-hidden className="banner-sweep absolute inset-0 opacity-40" />
+                    <div className="relative flex items-start gap-4">
+                      <Sparkles className="h-10 w-10 shrink-0 text-premium" />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-display text-xs font-bold tracking-[0.3em] text-premium">NUEVA ACTUALIZACIÓN</span>
+                          {!n.read && <span className="h-2 w-2 rounded-full bg-premium animate-glow-pulse" />}
+                          <span className="ml-auto text-xs text-muted-foreground">{timeAgo(n.created_at)}</span>
+                        </div>
+                        <h4 className="mt-2 font-display text-xl font-bold text-premium sm:text-2xl">{n.title}</h4>
+                        {n.body && <p className="mt-2 text-foreground/85">{n.body}</p>}
+                        <div className="mt-4 flex gap-2">
+                          {!n.read && <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); markRead(n.id); }} className="rounded-md border border-premium/50 px-3 py-1 text-xs text-premium">Marcar leída</button>}
+                          <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); remove(n.id); }} className="rounded-md border border-border px-3 py-1 text-xs text-muted-foreground hover:text-destructive">Eliminar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
                   <div className={`flex gap-4 p-4 rounded-xl border transition-all ${
                     n.read
                       ? "bg-card/40 border-border"
@@ -208,7 +230,7 @@ function NotificationsPage() {
                 return (
                   <li key={n.id}>
                     {n.link ? (
-                      <a href={n.link} onClick={() => !n.read && markRead(n.id)} className="block">
+                      <a href={n.link} onClick={(e) => { e.preventDefault(); if (!n.read) markRead(n.id); router.history.push(n.link!); }} className="block">
                         {inner}
                       </a>
                     ) : (
