@@ -36,7 +36,14 @@ export function PremiumAvatarRing({
   children: ReactNode;
   className?: string;
 }) {
-  if (plus) return <div className={`relative rounded-full p-[2px] plus-avatar ${className}`}>{children}</div>;
+  if (plus) return (
+    <div className={`prime-frame ${className}`}>
+      <span className="prime-crown" />
+      <span className="prime-wing" style={{ left: -30 }} />
+      <span className="prime-wing" style={{ right: -30, transform: "scaleX(-1)" }} />
+      <div className="relative z-[1]">{children}</div>
+    </div>
+  );
   if (!premium) return <div className={className}>{children}</div>;
   return (
     <div
