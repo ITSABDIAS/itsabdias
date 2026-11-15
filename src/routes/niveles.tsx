@@ -14,6 +14,7 @@ import {
   rankFromLevel, staffTitle, type Metric,
 } from "@/lib/hunter";
 import { toast } from "sonner";
+import { LevelTrack } from "@/components/LevelTrack";
 import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/niveles")({
@@ -30,7 +31,6 @@ export const Route = createFileRoute("/niveles")({
   component: LevelsPage,
 });
 
-type Tab = "overview" | "missions" | "ranks" | "staff";
 type ProgressData = { xp: number; staff_xp: number; streak: number; last_daily: string | null };
 
 const XP_SOURCES = [
@@ -48,7 +48,6 @@ const STAFF_SOURCES = [
 function LevelsPage() {
   const { user, loading: authLoading } = useAuth();
   const { isStaff } = useMyRoles();
-  const [tab, setTab] = useState<Tab>("overview");
   const [progress, setProgress] = useState<ProgressData>({ xp: 0, staff_xp: 0, streak: 0, last_daily: null });
   const [stats, setStats] = useState<Record<string, number>>({});
   const [claimed, setClaimed] = useState<Set<string>>(new Set());
@@ -95,13 +94,6 @@ function LevelsPage() {
     toast.success(`+${data} EXP obtenida`);
     await load();
   };
-
-  const tabs: Array<{ key: Tab; label: string; icon: typeof Radar; hidden?: boolean }> = [
-    { key: "overview", label: "Resumen", icon: Radar },
-    { key: "missions", label: "Misiones", icon: Target },
-    { key: "ranks", label: "Rangos", icon: Crown },
-    { key: "staff", label: "Staff", icon: Shield, hidden: !isStaff },
-  ];
 
   return (
     <PageShell>
@@ -151,14 +143,11 @@ function LevelsPage() {
                 </div>
               </section>
 
-              <nav className="mb-7 grid grid-cols-3 gap-2 rounded-md border border-border bg-card p-1 sm:flex" aria-label="Secciones de niveles">
-                {tabs.filter((item) => !item.hidden).map(({ key, label, icon: Icon }) => <Button key={key} variant={tab === key ? "default" : "ghost"} onClick={() => setTab(key)} className="min-w-0"><Icon /> <span className="truncate">{label}</span></Button>)}
-              </nav>
-
-              {tab === "overview" && <Overview level={member.level} rankName={rank.name} completedMissions={completedMissions} nextReward={LEVEL_REWARDS.find((reward) => reward.level > member.level)} />}
-              {tab === "missions" && <Missions stats={stats} claimed={claimed} busy={busy} onClaim={claimMission} />}
-              {tab === "ranks" && <Ranks currentLevel={member.level} />}
-              {tab === "staff" && isStaff && <StaffProgress level={staff.level} pct={staff.pct} xp={progress.staff_xp} next={staff.next} />}
+              <Missions stats={stats} claimed={claimed} busy={busy} onClaim={claimMission} />
+              {user && <LevelTrack userId={user.id} level={member.level} />}
+              <div className="mt-10"><Overview level={member.level} rankName={rank.name} completedMissions={completedMissions} nextReward={LEVEL_REWARDS.find((reward) => reward.level > member.level)} /></div>
+              <div className="mt-10"><Ranks currentLevel={member.level} /></div>
+              {isStaff && <div className="mt-10"><StaffProgress level={staff.level} pct={staff.pct} xp={progress.staff_xp} next={staff.next} /></div>}
             </>
           )}
         </section>

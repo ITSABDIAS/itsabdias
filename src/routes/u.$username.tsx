@@ -9,6 +9,7 @@ import { RankBadge, RANK_PRIORITY, type RankSlug } from "@/components/RankBadge"
 import { FollowersDialog } from "@/components/FollowersDialog";
 import { PremiumName, PremiumAvatarRing } from "@/components/PremiumName";
 import { ReportMenu } from "@/components/ReportMenu";
+import { rewardById } from "@/lib/cosmetics";
 import { LevelCard } from "@/components/LevelCard";
 
 export const Route = createFileRoute("/u/$username")({
@@ -31,6 +32,8 @@ type Profile = {
   bio: string | null;
   avatar_url: string | null;
   banner_url: string | null;
+  equipped_frame: string | null;
+  equipped_background: string | null;
 };
 
 function PublicProfilePage() {
@@ -50,7 +53,7 @@ function PublicProfilePage() {
   const load = async () => {
     const { data: prof } = await supabase
       .from("profiles")
-      .select("id, username, bio, avatar_url, banner_url")
+      .select("id, username, bio, avatar_url, banner_url, equipped_frame, equipped_background")
       .ilike("username", username)
       .maybeSingle();
     if (!prof) {
@@ -183,7 +186,7 @@ function PublicProfilePage() {
         <div className="relative">
           <div
             className="h-48 sm:h-64 w-full bg-gradient-to-br from-neon-purple/40 via-neon-blue/30 to-neon-cyan/40 relative overflow-hidden"
-            style={profile.banner_url ? { backgroundImage: `url(${profile.banner_url})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}
+            style={profile.banner_url ? { backgroundImage: `url(${profile.banner_url})`, backgroundSize: "cover", backgroundPosition: "center" } : rewardById(profile.equipped_background) ? { background: rewardById(profile.equipped_background)!.style } : undefined}
           >
             <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
           </div>
@@ -194,6 +197,7 @@ function PublicProfilePage() {
           <div className={`glass rounded-2xl p-6 sm:p-8 ${isPrem ? "border-2 border-[#fbbf24]/60 shadow-[0_0_28px_rgba(251,191,36,0.25)]" : "neon-border"}`}>
             <div className="flex flex-col sm:flex-row items-start gap-6">
               <div className="-mt-20 shrink-0">
+                <div className="rounded-full p-1" style={rewardById(profile.equipped_frame) ? { background: rewardById(profile.equipped_frame)!.style } : undefined}>
                 <PremiumAvatarRing premium={isPrem} plus={isPlus}>
                   <div className="h-28 w-28 rounded-full bg-gradient-neon flex items-center justify-center overflow-hidden shadow-neon-purple ring-4 ring-background">
                     {profile.avatar_url ? (
@@ -203,6 +207,7 @@ function PublicProfilePage() {
                     )}
                   </div>
                 </PremiumAvatarRing>
+                </div>
               </div>
 
               <div className="flex-1 min-w-0">
