@@ -25,11 +25,10 @@ export function LevelTrack({ userId, level }: { userId: string; level: number })
   }, [level]);
 
   const equip = async (r: LevelReward) => {
-    const col = r.kind === "frame" ? "equipped_frame" : "equipped_background";
-    const key = r.kind === "frame" ? "frame" : "background";
+        const key = r.kind === "frame" ? "frame" : "background";
     const value = equipped[key] === r.id ? null : r.id;
     setBusy(r.id);
-    const { error } = await supabase.from("profiles").update({ [col]: value }).eq("id", userId);
+    const { error } = await supabase.from("profiles").update(r.kind === "frame" ? { equipped_frame: value } : { equipped_background: value }).eq("id", userId);
     setBusy(null);
     if (error) return toast.error(error.message);
     setEquipped((e) => ({ ...e, [key]: value }));
