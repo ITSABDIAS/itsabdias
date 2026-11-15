@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Bell, Check, CheckCheck, Trash2, Loader2 } from "lucide-react";
+import { Bell, Check, CheckCheck, Trash2, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { PageShell } from "@/components/PageShell";
 import { SectionTitle } from "@/components/SectionTitle";
