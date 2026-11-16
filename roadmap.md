@@ -1,5 +1,9 @@
 # Roadmap
 
+- [ ] Reunir banners, avatares y marcos desbloqueados en Editar perfil y proteger la retirada de subidas.
+- [ ] Añadir pase NEXUS gratis y exclusivo para Premium/Plus, con recompensas reales y misiones.
+- [ ] Mejorar búsqueda, lectura y envío de mensajes; verificar y anunciar la entrega.
+
 - [x] Añadir Plus a US$9.99/mes con comparativa honesta y diseño cuidado.
 - [x] Permitir al Founder conceder y retirar Plus con controles protegidos y notificaciones.
 - [x] Activar ventajas de Plus en NEXUS y perfiles; comprobar precios, concesión, preferencias persistentes y regreso a Premium.
