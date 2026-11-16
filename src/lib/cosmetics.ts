@@ -1,5 +1,9 @@
 // Recompensa por cada nivel (1-100). Marcos y fondos se pueden equipar en el perfil.
-export type RewardKind = "frame" | "background" | "rare";
+import sentinel from "@/assets/avatar-sentinel.jpg";
+import pilot from "@/assets/avatar-pilot.jpg";
+import prime from "@/assets/avatar-prime.jpg";
+import type { MembershipPlan } from "./membership";
+export type RewardKind = "frame" | "background" | "rare" | "avatar";
 export type LevelReward = { level: number; id: string; kind: RewardKind; name: string; style: string };
 
 const FRAME_NAMES = ["Circuito", "Pulso Neón", "Plasma", "Glitch", "Hexágono", "Rayo", "Cuántico", "Holograma", "Nebulosa", "Diamante", "Fénix", "Matriz", "Eclipse", "Aurora", "Vórtice", "Oro Prime", "Titanio", "Cristal", "Supernova", "Corona Prime"];
@@ -20,5 +24,31 @@ export const LEVEL_REWARDS_FULL: LevelReward[] = Array.from({ length: 100 }, (_,
 });
 
 export function rewardById(id: string | null | undefined) {
-  return id ? LEVEL_REWARDS_FULL.find((r) => r.id === id) : undefined;
+  return id ? ALL_COSMETICS.find((r) => r.id === id) : undefined;
+}
+
+export type Cosmetic = LevelReward & { image?: string; source?: "level" | "membership" | "pass"; track?: "free" | "elite"; tier?: number; plan?: "premium" | "plus" };
+export const AVATAR_REWARDS: Cosmetic[] = [
+  { id: "avatar-sentinel", level: 1, name: "Centinela NEXUS", kind: "avatar", image: sentinel, style: "var(--gradient-neon)" },
+  { id: "avatar-pilot", level: 10, name: "Piloto Cyber", kind: "avatar", image: pilot, style: "var(--gradient-plus)" },
+  { id: "avatar-prime", level: 30, name: "Soberano Prime", kind: "avatar", image: prime, style: "var(--gradient-neon)" },
+];
+export const MEMBERSHIP_REWARDS: Cosmetic[] = (["premium", "plus"] as const).flatMap((plan) => (["background", "frame"] as const).map((kind) => ({
+  id: `membership-${plan}-${kind === "background" ? "banner" : "frame"}`, level: 1, kind, plan, source: "membership" as const,
+  name: `${kind === "background" ? "Banner" : "Marco"} ${plan === "plus" ? "Prime Azul Plus" : "Dorado Premium"}`,
+  style: plan === "plus" ? "var(--gradient-neon)" : "var(--gradient-gold)",
+})));
+export const PASS_REWARDS: Cosmetic[] = Array.from({ length: 10 }, (_, i) => (["free", "elite"] as const).map((track) => {
+  const tier = i + 1; const kind = tier % 3 === 1 ? "avatar" : tier % 3 === 2 ? "background" : "frame";
+  return { id: `pass-${track}-${kind === "background" ? "bg" : kind}-${tier}`, level: 1, kind, source: "pass" as const, track, tier,
+    name: `${track === "elite" ? "Élite" : "Operación"} ${["Centinela", "Horizonte", "Órbita", "Piloto", "Eclipse", "Corona", "Soberano", "Portal", "Prime", "Leyenda"][i]}`,
+    image: kind === "avatar" ? [sentinel, pilot, prime][Math.floor(i / 3) % 3] : undefined,
+    style: track === "elite" ? "var(--gradient-gold)" : "var(--gradient-neon)",
+  };
+})).flat();
+export const ALL_COSMETICS: Cosmetic[] = [...LEVEL_REWARDS_FULL, ...AVATAR_REWARDS, ...MEMBERSHIP_REWARDS, ...PASS_REWARDS];
+export function cosmeticUnlocked(r: Cosmetic, level: number, missions: number, plan: MembershipPlan) {
+  if (r.source === "membership") return r.plan === "plus" ? plan === "plus" : plan !== "free";
+  if (r.source === "pass") return missions >= (r.tier ?? 0) * 2 && (r.track === "free" || plan !== "free");
+  return r.level <= level;
 }
