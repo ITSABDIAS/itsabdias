@@ -83,6 +83,7 @@
   --premium: #fbbf24;
   --plus: #38e8c6;
   --gradient-plus: linear-gradient(120deg, var(--plus), var(--neon-cyan), var(--foreground));
+  --gradient-gold: linear-gradient(135deg, var(--background), var(--premium), var(--background));
   --shadow-plus: 0 0 24px color-mix(in srgb, var(--plus) 22%, transparent);
 
   --gradient-neon: linear-gradient(135deg, oklch(0.75 0.22 240), oklch(0.65 0.28 295));
@@ -181,3 +182,6 @@
 .prime-wing { position: absolute; top: 50%; width: 26px; height: 46px; translate: 0 -50%; background: linear-gradient(180deg, #22d3ee, #3b82f6 50%, #7c3aed); clip-path: polygon(100% 0, 0 30%, 40% 50%, 0 70%, 100% 100%, 70% 50%); filter: drop-shadow(0 0 8px #3b82f6); z-index: 2; }
 .prime-crown { position: absolute; left: 50%; top: -22px; translate: -50% 0; width: 34px; height: 20px; background: linear-gradient(#93c5fd, #3b82f6); clip-path: polygon(0 100%, 0 30%, 25% 60%, 50% 0, 75% 60%, 100% 30%, 100% 100%); filter: drop-shadow(0 0 8px #3b82f6); z-index: 2; }
 .notif-update { border: 1px solid color-mix(in srgb, var(--premium) 70%, transparent); background: linear-gradient(135deg, color-mix(in srgb, var(--premium) 22%, var(--background)), var(--background) 60%, color-mix(in srgb, var(--premium) 14%, var(--background))); box-shadow: 0 0 28px color-mix(in srgb, var(--premium) 35%, transparent), inset 0 0 20px color-mix(in srgb, var(--premium) 12%, transparent); }
+@media (prefers-reduced-motion: reduce) {
+  .banner-sweep, .banner-particle, .prime-frame::before, .prime-frame::after { animation: none; }
+}

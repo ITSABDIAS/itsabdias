@@ -857,6 +857,7 @@ export type Database = {
           banner_url: string | null
           bio: string | null
           created_at: string
+          equipped_avatar: string | null
           equipped_background: string | null
           equipped_frame: string | null
           id: string
@@ -869,6 +870,7 @@ export type Database = {
           banner_url?: string | null
           bio?: string | null
           created_at?: string
+          equipped_avatar?: string | null
           equipped_background?: string | null
           equipped_frame?: string | null
           id: string
@@ -881,6 +883,7 @@ export type Database = {
           banner_url?: string | null
           bio?: string | null
           created_at?: string
+          equipped_avatar?: string | null
           equipped_background?: string | null
           equipped_frame?: string | null
           id?: string
@@ -1949,6 +1952,10 @@ export type Database = {
         Returns: Database["public"]["Enums"]["app_role"][]
       }
       claim_daily_xp: { Args: never; Returns: Json }
+      cosmetic_allowed: {
+        Args: { _id: string; _kind: string; _uid: string }
+        Returns: boolean
+      }
       create_notification: {
         Args: {
           _body?: string
